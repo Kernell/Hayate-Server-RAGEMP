@@ -49,6 +49,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="package.json" />
+    <Content Include="tsconfig.json">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="index.js" />

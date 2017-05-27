@@ -12,13 +12,17 @@
 
 import * as Command   from "../Command";
 import Console        from "../Entity/Console";
+import ManagerBase    from "./ManagerBase";
+import Server         from "../Server";
 
-export default class CommandManager
+export default class CommandManager extends ManagerBase
 {
 	private Commands : Array< Command.ConsoleCommand >;
 
-	constructor()
+	constructor( server : Server )
 	{
+		super( server );
+
 		this.Commands = new Array< Command.ConsoleCommand >();
 
 		this.Add( new Command.User( this ) );

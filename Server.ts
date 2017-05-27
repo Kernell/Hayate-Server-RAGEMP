@@ -10,6 +10,9 @@
 *
 *********************************************************/
 
+import "./SharedUtils";
+
+import ManagerBase    from "./Core/ManagerBase";
 import CommandManager from "./Core/CommandManager";
 import Console        from "./Entity/Console";
 
@@ -19,37 +22,51 @@ export default class Server
 	public static COUNTDOWN_SHUTDOWN = 1;
 	public static COUNTDOWN_RESTART  = 2;
 
-	private static CountDown        = 0;
-	private static CountDownType    = Server.COUNTDOWN_NONE;
+	private static CountDown         = 0;
+	private static CountDownType     = Server.COUNTDOWN_NONE;
 
-	private DoPulseTimer : NodeJS.Timer;
-	private DebugTicks : any;
-
-	private Managers : Array< any >;
+	private DoPulseTimer             : NodeJS.Timer;
+	private DebugTicks               : any;
+	private Managers                 : Array< ManagerBase >;
 
 	private CommandManager : CommandManager;
 
 	constructor()
 	{
-		this.Managers = new Array< any >();
+		this.Managers   = new Array< any >();
+		this.DebugTicks = {};
 
-		this.CommandManager = new CommandManager();
+		this.CommandManager = new CommandManager( this );
 
+		setTimeout( () => this.Initialize(), 500 );
+	}
+
+	public Initialize() : void
+	{
 		for( let manager of this.Managers )
 		{
 			let tick = new Date().getTime();
-				
+			
+			let name = ( manager.constructor.name + ":" ).pad( 70 );
+
 			if( manager.Init() )
 			{
-				Console.WriteLine( `Starting %-34s [  ${Console.FgGreen}OK${Console.Reset}  ]  %20s ms`, manager.constructor.name + ":", ( ( new Date().getTime() - tick ) / 1000 ).toFixed( 3 ) );
+				let tick_count = ( ( new Date().getTime() - tick ) / 1000 ).toFixed( 3 );
+
+				Console.WriteLine( `Starting %s [  ${Console.FgGreen}OK${Console.Reset}  ]  %s ms`, name, tick_count.pad( 5, ' ', true ) );
 			}
 			else
 			{
-				Console.WriteLine( `Starting %-34s [${Console.FgRed}FAILED${Console.Reset}]`, manager.constructor.name + ":" );
+				Console.WriteLine( `Starting %s [${Console.FgRed}FAILED${Console.Reset}]`, name );
 			}
 		}
 
 		this.DoPulseTimer = setInterval( () => this.DoPulse(), 1000 );
+	}
+
+	public RegisterManager( manager : ManagerBase )
+	{
+		this.Managers.push( manager );
 	}
 
 	private DoPulse() : void
@@ -60,9 +77,9 @@ export default class Server
 		for( let manager of this.Managers )
 		{
 			let tick2 = new Date().getTime();
-				
+			
 			manager.DoPulse( date );
-				
+			
 			this.DebugTicks[ manager.constructor.name ] = ( ( new Date().getTime() - tick2 ) / 1000 );
 		}
 

@@ -1,13 +1,15 @@
 {
 	"compilerOptions":
 	{
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
 		"module": "commonjs",
 		"noEmitOnError": true,
 		"noImplicitAny": false,
 		"outDir": "./bin",
 		"removeComments": false,
 		"sourceMap": true,
-		"target": "es5"
+		"target": "es2016"
 	},
 	"compileOnSave": true,
 	"exclude":

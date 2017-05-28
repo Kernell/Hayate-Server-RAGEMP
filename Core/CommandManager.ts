@@ -53,7 +53,7 @@ export default class CommandManager extends ManagerBase
 
 		if( command != null )
 		{
-			for( let i of argv )
+			for( let i in argv )
 			{
 				let int = parseFloat( argv[ i ] );
 

@@ -15,13 +15,15 @@ import { ManagerState } from "../SharedUtils/ManagerState";
 
 export default class ManagerBase
 {
-	protected List  : any;
-	public    State : ManagerState;
+	protected Dependency : ManagerBase;
+	protected List       : any;
+	public    State      : ManagerState;
 
 	constructor( server : Server )
 	{
 		server.RegisterManager( this );
 		
+		this.Dependency  = null;
 		this.List        = {};
 		this.State       = ManagerState.None;
 	}
@@ -64,7 +66,32 @@ export default class ManagerBase
 
 	public Init() : Promise< any >
 	{
-		return new Promise( ( resolve, reject ) => resolve() );
+		return new Promise(
+			( resolve, reject ) =>
+			{
+				if( this.Dependency != null )
+				{
+					let timeout = () =>
+					{
+						if( this.Dependency.GetState() == ManagerState.OK )
+						{
+							return resolve();
+						}
+
+						if( this.Dependency.GetState() == ManagerState.Error )
+						{
+							return reject();
+						}
+				
+						setTimeout( timeout, 100 );
+					};
+
+					return timeout();
+				}
+
+				return resolve();
+			}
+		);
 	}
 
 	public DoPulse( date : Date ) : void

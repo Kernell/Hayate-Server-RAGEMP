@@ -132,7 +132,7 @@ export default class CommandManager extends ManagerBase
 
 		if( !this.Execute( player, commandName, commandArgv ) )
 		{
-			player.outputChatBox( `${commandName}: command not found` );
+			player.outputChatBox( `<span color='color: #FF8800;'>${commandName}: command not found</span>` );
 		}
 	}
 

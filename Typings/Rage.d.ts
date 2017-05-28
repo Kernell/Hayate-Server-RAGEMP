@@ -558,13 +558,13 @@ declare namespace mp
 
 	export class players extends Pool
 	{
-		broadcast                 ( text : string ) : void;
-		broadcastInRange          ( position : Vector3, range : number, text : string ) : void;
-		broadcastInRange          ( position : Vector3, range : number, dimesion : number, text : string ) : void;
-		broadcastInDimension      ( dimesion : number, text : string ) : void;
-		call                      ( event : string, ...args : any[] ) : void;
-		callInRange               ( ...args : any[] ) : void;
-		callInDimension           ( ...args : any[] ) : void;
+		static broadcast                 ( text : string ) : void;
+		static broadcastInRange          ( position : Vector3, range : number, text : string ) : void;
+		static broadcastInRange          ( position : Vector3, range : number, dimesion : number, text : string ) : void;
+		static broadcastInDimension      ( dimesion : number, text : string ) : void;
+		static call                      ( event : string, ...args : any[] ) : void;
+		static callInRange               ( ...args : any[] ) : void;
+		static callInDimension           ( ...args : any[] ) : void;
 	}
 
 	export class vehicles extends Pool
@@ -574,7 +574,7 @@ declare namespace mp
 
 	export class objects extends Pool
 	{
-		new( objectHash : number, position : Vector3, rotation: Vector3 ) : Object
+		static new( objectHash : number, position : Vector3, rotation: Vector3 ) : Object
 	}
 
 	export class pickups extends Pool
@@ -583,9 +583,9 @@ declare namespace mp
 
 	export class blips extends Pool
 	{
-		new( position : Vector3 ) : Blip;
-		new( position : Vector3, radius : number ) : Blip;
-		new( attachedEntity : Entity ) : Blip;
+		static new( position : Vector3 ) : Blip;
+		static new( position : Vector3, radius : number ) : Blip;
+		static new( attachedEntity : Entity ) : Blip;
 	}
 
 	export class markers extends Pool
@@ -594,10 +594,10 @@ declare namespace mp
 
 	export class checkpoints extends Pool
 	{
-		new( type : Number, position : Vector3, rotation : Vector3, direction : Vector3, radius : number, red : number, green : number, blue : number, alpha : number ) : Checkpoint;
-		new( type : Number, position : Vector3, rotation : Vector3, direction : Vector3, radius : number, red : number, green : number, blue : number, alpha : number, visible : boolean ) : Checkpoint;
-		new( type : Number, position : Vector3, rotation : Vector3, direction : Vector3, radius : number, red : number, green : number, blue : number, alpha : number, dimension : number ) : Checkpoint;
-		new( type : Number, position : Vector3, rotation : Vector3, direction : Vector3, radius : number, red : number, green : number, blue : number, alpha : number, visible : boolean, dimension : number ) : Checkpoint;
+		static new( type : Number, position : Vector3, rotation : Vector3, direction : Vector3, radius : number, red : number, green : number, blue : number, alpha : number ) : Checkpoint;
+		static new( type : Number, position : Vector3, rotation : Vector3, direction : Vector3, radius : number, red : number, green : number, blue : number, alpha : number, visible : boolean ) : Checkpoint;
+		static new( type : Number, position : Vector3, rotation : Vector3, direction : Vector3, radius : number, red : number, green : number, blue : number, alpha : number, dimension : number ) : Checkpoint;
+		static new( type : Number, position : Vector3, rotation : Vector3, direction : Vector3, radius : number, red : number, green : number, blue : number, alpha : number, visible : boolean, dimension : number ) : Checkpoint;
 	}
 
 	export class events

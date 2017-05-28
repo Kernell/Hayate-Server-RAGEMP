@@ -31,6 +31,8 @@ export default class CommandManager extends ManagerBase
 		process.stdin.on( "keypress", ( chunk, key ) => this.OnKey ( chunk, key ) );
 
 		process.on( 'SIGINT', () => this.OnSigint() );
+
+		mp.events.add( { playerCommand: ( player, line ) => this.OnPlayerLine( player, line ) } );
 	}
 
 	protected Add( command : Command.ConsoleCommand ) : Boolean
@@ -51,6 +53,13 @@ export default class CommandManager extends ManagerBase
 
 		if( command != null )
 		{
+			for( let i of argv )
+			{
+				let int = parseFloat( argv[ i ] );
+
+				argv[ i ] = isNaN( int ) ? argv[ i ] : int;
+			}
+
 			command.Execute( player, argv );
 
 			return true;
@@ -114,7 +123,20 @@ export default class CommandManager extends ManagerBase
 		return null;
 	}
 
-	protected OnLine( input : String ) : void
+	protected OnPlayerLine( player : mp.Player, line : string )
+	{
+		let commandArgv = line.split( ' ' );
+		let commandName = commandArgv.shift();
+
+		let command = this.GetCommand( commandName );
+
+		if( !this.Execute( player, commandName, commandArgv ) )
+		{
+			player.outputChatBox( `${commandName}: command not found` );
+		}
+	}
+
+	protected OnLine( input : string ) : void
 	{
 		let player = new Console(); // TEST ONLY!!!
 

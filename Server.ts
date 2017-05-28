@@ -10,11 +10,15 @@
 *
 *********************************************************/
 
+import "reflect-metadata";
 import "./SharedUtils";
+import { ManagerState } from "./SharedUtils/ManagerState";
 
-import ManagerBase    from "./Core/ManagerBase";
-import CommandManager from "./Core/CommandManager";
-import Console        from "./Entity/Console";
+import Console          from "./Entity/Console";
+import ManagerBase      from "./Core/ManagerBase";
+import CommandManager   from "./Core/CommandManager";
+import DatabaseManager  from "./Core/DatabaseManager";
+import VehicleManager   from "./Core/VehicleManager";
 
 export default class Server
 {
@@ -29,14 +33,18 @@ export default class Server
 	private DebugTicks               : any;
 	private Managers                 : Array< ManagerBase >;
 
-	private CommandManager : CommandManager;
+	public DatabaseManager : DatabaseManager;
+	public CommandManager  : CommandManager;
+	public VehicleManager  : VehicleManager;
 
 	constructor()
 	{
 		this.Managers   = new Array< any >();
 		this.DebugTicks = {};
 
-		this.CommandManager = new CommandManager( this );
+		this.DatabaseManager = new DatabaseManager( this );
+		this.CommandManager  = new CommandManager( this );
+		this.VehicleManager  = new VehicleManager( this );
 
 		setTimeout( () => this.Initialize(), 500 );
 	}
@@ -46,19 +54,28 @@ export default class Server
 		for( let manager of this.Managers )
 		{
 			let tick = new Date().getTime();
-			
+
 			let name = ( manager.constructor.name + ":" ).pad( 70 );
 
-			if( manager.Init() )
-			{
-				let tick_count = ( ( new Date().getTime() - tick ) / 1000 ).toFixed( 3 );
+			manager.State = ManagerState.None;
 
-				Console.WriteLine( `Starting %s [  ${Console.FgGreen}OK${Console.Reset}  ]  %s ms`, name, tick_count.pad( 5, ' ', true ) );
-			}
-			else
-			{
-				Console.WriteLine( `Starting %s [${Console.FgRed}FAILED${Console.Reset}]`, name );
-			}
+			manager.Init().then(
+				( info ) =>
+				{
+					manager.State = ManagerState.OK;
+
+					let tick_count = ( ( new Date().getTime() - tick ) / 1000 ).toFixed( 3 );
+
+					Console.WriteLine( `Starting %s [  ${Console.FgGreen}OK${Console.Reset}  ]  %s ms`, name, tick_count.pad( 5, ' ', true ) );
+				}
+			).catch(
+				( error ) =>
+				{
+					manager.State = ManagerState.Error;
+
+					Console.WriteLine( `Starting %s [${Console.FgRed}FAILED${Console.Reset}]`, name );
+				}
+			);
 		}
 
 		this.DoPulseTimer = setInterval( () => this.DoPulse(), 1000 );

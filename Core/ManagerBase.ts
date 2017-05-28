@@ -11,16 +11,19 @@
 *********************************************************/
 
 import Server from "../Server";
+import { ManagerState } from "../SharedUtils/ManagerState";
 
 export default class ManagerBase
 {
-	protected List;
+	protected List  : any;
+	public    State : ManagerState;
 
 	constructor( server : Server )
 	{
 		server.RegisterManager( this );
 		
-		this.List = {};
+		this.List        = {};
+		this.State       = ManagerState.None;
 	}
 	
 	public DestroyAll() : void
@@ -48,15 +51,20 @@ export default class ManagerBase
 	{
 		return this.List[ id ];
 	}
+
+	public GetState() : ManagerState
+	{
+		return this.State;
+	}
 	
 	public GetAll()
 	{
 		return this.List;
 	}
 
-	public Init() : Boolean
+	public Init() : Promise< any >
 	{
-		return true;
+		return new Promise( ( resolve, reject ) => resolve() );
 	}
 
 	public DoPulse( date : Date ) : void

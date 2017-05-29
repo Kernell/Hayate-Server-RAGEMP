@@ -43,7 +43,7 @@ export default class Console extends Player
 
 	constructor()
 	{
-		super( 0, null );
+		super( null );
 	}
 
 	public GetID() : number
@@ -69,6 +69,11 @@ export default class Console extends Player
 	public GetUserName() : string
 	{
 		return "Console";
+	}
+
+	public OutputChatBox( text : string ) : void
+	{
+		console.log( text );
 	}
 
 	public static WriteLine( line : String, ...params : any[] ) : void

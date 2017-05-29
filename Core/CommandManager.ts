@@ -27,7 +27,8 @@ export default class CommandManager extends ManagerBase< Entity >
 
 		this.Commands = new Array< Command.ConsoleCommand >();
 
-		this.Add( new Command.User( this ) );
+		this.Add( new Command.User   ( this ) );
+		this.Add( new Command.Vehicle( this ) );
 
 		process.stdin.on( "data",     input          => this.OnLine( input.toString().trim() ) );
 		process.stdin.on( "keypress", ( chunk, key ) => this.OnKey ( chunk, key ) );
@@ -132,7 +133,7 @@ export default class CommandManager extends ManagerBase< Entity >
 
 		let command = this.GetCommand( commandName );
 
-		if( !this.Execute( player, commandName, commandArgv ) )
+		if( !this.Execute( Player.FindOrCreate< Player >( player ), commandName, commandArgv ) )
 		{
 			player.outputChatBox( `<span color='color: #FF8800;'>${commandName}: command not found</span>` );
 		}

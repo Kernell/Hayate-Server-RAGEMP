@@ -56,17 +56,26 @@ export default class Vehicle extends Entity
 	@ORM.Column( { type: "datetime", name: "deleted_at", nullable: true, default: null } )
 	protected deletedAt : string;
 
-	constructor( model, position, rotation, dimension, color, plate )
-	{
-		let id     = 0;
-		let entity = mp.vehicles.new( 123, position );
+	protected entity : mp.Vehicle;
 
-		super( id, entity );
+	constructor( model : number, position : mp.Vector3, rotation : mp.Vector3, dimension : number, color : any, plate : string )
+	{
+		super( mp.vehicles.new( model, position, rotation, dimension ) );
+
+		this.entity.rotation    = rotation;
+		this.entity.numberPlate = plate;
+
+		this.entity.setColourRGB( color.red, color.green, color.blue, 0, 0, 0 );
 	}
 
 	public GetPlate() : string
 	{
-		return this.plate;
+		return this.entity.numberPlate;
+	}
+
+	public SetPlate( text : string ) : void
+	{
+		this.entity.numberPlate = text;
 	}
 
 	public GetColor() : any

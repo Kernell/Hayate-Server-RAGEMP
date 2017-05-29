@@ -569,7 +569,7 @@ declare namespace mp
 
 	export class vehicles extends Pool
 	{
-		static new( hash : number, position : Vector3, heading ?: number, dimension ?: number ) : Vehicle;
+		static new( hash : number, position : Vector3, heading ?: Vector3, dimension ?: number ) : Vehicle;
 	}
 
 	export class objects extends Pool

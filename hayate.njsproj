@@ -61,6 +61,9 @@
     <Compile Include="index.js" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Command\Vehicle.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Core\DatabaseManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -104,6 +107,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SharedUtils.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="SharedUtils\IdentifiedPool.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SharedUtils\String.ts">

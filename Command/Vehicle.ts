@@ -13,20 +13,45 @@
 import { ConsoleCommand } from "./ConsoleCommand";
 import Player             from "../Entity/Player";
 import Console            from "../Entity/Console";
+import EVehicle           from "../Entity/Vehicle";
 import CommandManager     from "../Core/CommandManager";
 
-export class User extends ConsoleCommand
+export class Vehicle extends ConsoleCommand
 {
 	constructor( manager : CommandManager )
 	{
 		super( manager );
 
-		this.Name = "user";
+		this.Name = "vehicle";
 	}
 
 	public Execute( player : Player, args : any[] ) : Boolean
 	{
-		Console.WriteLine( Console.FgMagenta + "[%s] entered command /%s with args: %s" + Console.Reset, player.GetName(), this.GetName(), args.join( ', ' ) );
+		let option = args.shift();
+
+		switch( option )
+		{
+			case "spawn":
+			{
+				const position = new mp.Vector3( 192, 168, 0 );
+
+				console.log( position );
+
+				let vehicle = EVehicle.FindOrCreate< EVehicle >( mp.vehicles.new( mp.joaat( "sultan" ), position ) );
+				
+				vehicle.SetPlate( "TEST" );
+
+				player.OutputChatBox( "vehicle created, ID: " + vehicle.GetID() + " with number plate " + vehicle.GetPlate() );
+				
+				break;
+			}
+			default:
+			{
+				player.OutputChatBox( "Syntax: /" + this.Name + " <option>" );
+
+				break;
+			}
+		}
 
 		return true;
 	}

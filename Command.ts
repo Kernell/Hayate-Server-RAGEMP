@@ -12,3 +12,4 @@
 
 export * from "./Command/ConsoleCommand";
 export * from "./Command/User";
+export * from "./Command/Vehicle";

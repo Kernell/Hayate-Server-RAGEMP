@@ -10,19 +10,10 @@
 *
 *********************************************************/
 
-import * as ORM from "typeorm";
+import IdentifiedPool from "../SharedUtils/IdentifiedPool";
 
-export default class Entity
+export default class Entity extends IdentifiedPool
 {
-	protected id        : number;
-	protected entity    : mp.Entity;
-
-	constructor( id : number, entity : mp.Entity )
-	{
-		this.id     = id;
-		this.entity = entity;
-	}
-
 	public Destroy() : void
 	{
 		this.entity.destroy();
@@ -30,7 +21,7 @@ export default class Entity
 
 	public GetID() : number
 	{
-		return this.id;
+		return this.entity.id;
 	}
 
 	public GetType() : string

@@ -7,6 +7,10 @@
     <NodeExePath>..\..\server.exe</NodeExePath>
     <NodeExeArguments>
     </NodeExeArguments>
+    <DebuggerPort>
+    </DebuggerPort>
+    <ScriptArguments>
+    </ScriptArguments>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -57,7 +61,28 @@
     <Compile Include="index.js" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Core\DatabaseManager.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Core\IManager.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Core\ManagerBase.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Core\PlayerManager.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Core\VehicleManager.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Entity\Entity.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Entity\Player.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Entity\Vehicle.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Server.ts">
@@ -84,7 +109,7 @@
     <TypeScriptCompile Include="SharedUtils\String.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\Function.d.ts">
+    <TypeScriptCompile Include="Typings\Rage.d.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
@@ -92,8 +117,8 @@
     <Folder Include="Core\" />
     <Folder Include="Command\" />
     <Folder Include="Entity\" />
+    <Folder Include="Typings\" />
     <Folder Include="SharedUtils\" />
-    <Folder Include="Types\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />

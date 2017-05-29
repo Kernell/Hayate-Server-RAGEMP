@@ -10,7 +10,9 @@
 *
 *********************************************************/
 
-export default class Console //extends Player
+import Player from "./Player";
+
+export default class Console extends Player
 {
 	public static Reset      = "\x1b[0m";
 	
@@ -41,30 +43,30 @@ export default class Console //extends Player
 
 	constructor()
 	{
-		//super();
+		super( 0, null );
 	}
 
-	public GetID() : Number
+	public GetID() : number
 	{
 		return 0;
 	}
 	
-	public GetUserID() : Number
+	public GetUserID() : number
 	{
 		return 0;
 	}
 	
-	public IsLoggedIn() : Boolean
+	public IsLoggedIn() : boolean
 	{
 		return true;
 	}
 	
-	public GetName() : String
+	public GetName() : string
 	{
 		return "Console";
 	}
 	
-	public GetUserName() : String
+	public GetUserName() : string
 	{
 		return "Console";
 	}

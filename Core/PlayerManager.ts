@@ -1,0 +1,82 @@
+﻿/*********************************************************
+*
+*  Copyright © 2017, Raybit Games.
+*
+*  All Rights Reserved.
+*
+*  Redistribution and use in source and binary forms,
+*  with or without modification,
+*  is permitted only for authors.
+*
+*********************************************************/
+
+import Player           from "../Entity/Player";
+import Console          from "../Entity/Console";
+import Server           from "../Server";
+import ManagerBase      from "./ManagerBase";
+import DatabaseManager  from "./DatabaseManager";
+
+export default class PlayerManager extends ManagerBase< Player >
+{
+	constructor( server : Server )
+	{
+		super( server );
+
+		this.Dependency = server.DatabaseManager;
+	}
+
+	public Init() : Promise< any >
+	{
+		return super.Init().then(
+			() =>
+			{
+				mp.events.add(
+					{
+						playerJoin  : ( player )                     => this.OnPlayerJoin ( player ),
+						playerQuit  : ( player, reason, kickReason ) => this.OnPlayerQuit ( player, reason, kickReason ),
+						playerDeath : ( player, reason, killer )     => this.OnPlayerDeath( player, reason, killer ),
+						playerSpawn : ( player )                     => this.OnPlayerSpawn( player ),
+						playerChat  : ( player, text )               => this.OnPlayerChat ( player, text ),
+					}
+				);
+			}
+		);
+	}
+
+	private OnPlayerJoin( player : Player ) : void
+	{
+		player.SetModel( mp.joaat( "player_one" ) );
+
+		player.Spawn( new mp.Vector3( -425.517, 1123.620, 325.8544 ) );
+	}
+
+	private OnPlayerQuit( player : Player, reason : string, kickReason : string ) : void
+	{
+	}
+
+	private OnPlayerDeath( player : Player, reason : string, killer : mp.Player ) : void
+	{
+		player.Spawn( new mp.Vector3( -425.517, 1123.620, 325.8544 ) );
+	}
+
+	private OnPlayerSpawn( player : Player )
+	{
+	}
+
+	private OnPlayerChat( player : Player, text : string ) : void
+	{
+		text = text
+			.replace( /&/g, "&amp;" )
+			.replace( />/g, "&gt;" )
+			.replace( /</g, "&lt;" )
+			.replace( /"/g, "&quot;" )
+			.replace( /'/g, "&#039;" );
+
+		const line = `<span style='color: #E4C1C0;'>[Мир] ${player.GetName()}: ${text}</span>`;
+
+		for( let player of this.GetAll() )
+		{
+			( player as Player ).OutputChatBox( line );
+		}
+	}
+}

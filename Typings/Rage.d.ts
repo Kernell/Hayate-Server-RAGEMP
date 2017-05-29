@@ -18,13 +18,13 @@ declare namespace mp
 	// Generates arrays of hashes using arrays of strings. Those hashes could be used to set entity model
 	export function joaat( name : string[] ) : number[];
 
-	export interface Vector3
+	export class Vector3
 	{
-		x : number;
-		y : number;
-		z : number;
+		public x : number;
+		public y : number;
+		public z : number;
 
-		new( x : number, y : number, z : number ) : Vector3;
+		constructor( x : number, y : number, z : number );
 	}
 
 	export interface PlayerClothes

@@ -16,7 +16,7 @@ import Console        from "../Entity/Console";
 import Server         from "../Server";
 import ManagerBase    from "./ManagerBase";
 
-export default class DatabaseManager extends ManagerBase
+export default class DatabaseManager extends ManagerBase< any >
 {
 	private Hostname : string;
 	private Username : string;

@@ -11,12 +11,13 @@
 *********************************************************/
 
 import Server from "../Server";
-import { ManagerState } from "../SharedUtils/ManagerState";
+import { ManagerState, IManager } from "./IManager";
+import Entity from "../Entity/Entity";
 
-export default class ManagerBase
+export default class ManagerBase< TEntity extends Entity > implements IManager
 {
-	protected Dependency : ManagerBase;
-	protected List       : any;
+	protected Dependency : IManager;
+	protected List       : Map< number, TEntity >;
 	public    State      : ManagerState;
 
 	constructor( server : Server )
@@ -24,34 +25,33 @@ export default class ManagerBase
 		server.RegisterManager( this );
 		
 		this.Dependency  = null;
-		this.List        = {};
+		this.List        = new Map< number, TEntity >();
 		this.State       = ManagerState.None;
 	}
 	
 	public DestroyAll() : void
 	{
-		if( this.List )
+		for( let iter of this.List.values() )
 		{
-			for( let object of this.List )
-			{
-				object.Destroy();
-			}
+			iter.Destroy();
 		}
+
+		this.List.clear();
 	}
 	
-	public AddToList( object ) : void
+	public AddToList( object : TEntity ) : void
 	{
-		this.List[ object.GetID() ] = object;
+		this.List.set( object.GetID(), object );
 	}
 	
-	public RemoveFromList( object ) : void
+	public RemoveFromList( object : TEntity ) : void
 	{
-		this.List[ object.GetID() ] = null;
+		this.List.delete( object.GetID() );
 	}
 
-	public Get( id : number ) : void
+	public Get( id : number ) : TEntity
 	{
-		return this.List[ id ];
+		return this.List.get( id );
 	}
 
 	public GetState() : ManagerState
@@ -59,9 +59,9 @@ export default class ManagerBase
 		return this.State;
 	}
 	
-	public GetAll()
+	public GetAll() : IterableIterator< TEntity >
 	{
-		return this.List;
+		return this.List.values();
 	}
 
 	public Init() : Promise< any >

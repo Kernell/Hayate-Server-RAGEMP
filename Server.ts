@@ -12,12 +12,13 @@
 
 import "reflect-metadata";
 import "./SharedUtils";
-import { ManagerState } from "./SharedUtils/ManagerState";
+import { ManagerState, IManager } from "./Core/IManager";
 
 import Console          from "./Entity/Console";
 import ManagerBase      from "./Core/ManagerBase";
 import CommandManager   from "./Core/CommandManager";
 import DatabaseManager  from "./Core/DatabaseManager";
+import PlayerManager    from "./Core/PlayerManager";
 import VehicleManager   from "./Core/VehicleManager";
 
 export default class Server
@@ -31,10 +32,11 @@ export default class Server
 
 	private DoPulseTimer             : NodeJS.Timer;
 	private DebugTicks               : any;
-	private Managers                 : Array< ManagerBase >;
+	private Managers                 : Array< IManager >;
 
 	public DatabaseManager : DatabaseManager;
 	public CommandManager  : CommandManager;
+	public PlayerManager   : PlayerManager;
 	public VehicleManager  : VehicleManager;
 
 	constructor()
@@ -44,6 +46,7 @@ export default class Server
 
 		this.DatabaseManager = new DatabaseManager( this );
 		this.CommandManager  = new CommandManager( this );
+		this.PlayerManager   = new PlayerManager( this );
 		this.VehicleManager  = new VehicleManager( this );
 
 		setTimeout( () => this.Initialize(), 500 );
@@ -81,7 +84,7 @@ export default class Server
 		this.DoPulseTimer = setInterval( () => this.DoPulse(), 1000 );
 	}
 
-	public RegisterManager( manager : ManagerBase )
+	public RegisterManager( manager : IManager )
 	{
 		this.Managers.push( manager );
 	}

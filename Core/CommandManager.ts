@@ -11,11 +11,13 @@
 *********************************************************/
 
 import * as Command   from "../Command";
+import Entity         from "../Entity/Entity";
+import Player         from "../Entity/Player";
 import Console        from "../Entity/Console";
 import ManagerBase    from "./ManagerBase";
 import Server         from "../Server";
 
-export default class CommandManager extends ManagerBase
+export default class CommandManager extends ManagerBase< Entity >
 {
 	private Commands : Array< Command.ConsoleCommand >;
 
@@ -47,7 +49,7 @@ export default class CommandManager extends ManagerBase
 		return true;
 	}
 
-	protected Execute( player : any, commandName : String, argv : any[] ) : Boolean
+	protected Execute( player : Player, commandName : String, argv : any[] ) : Boolean
 	{
 		let command = this.GetCommand( commandName );
 

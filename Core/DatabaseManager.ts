@@ -31,9 +31,9 @@ export default class DatabaseManager extends ManagerBase< any >
 
 		this.Connection = null;
 
-		this.Hostname = "127.0.0.1";
+		this.Hostname = "91.201.41.35";
 		this.Username = "hayate_app";
-		this.Password = "W4WOHDfMoX2d2VYp";
+		this.Password = "QRLY5ZUWtwr87stj";
 		this.Database = "hayate_app";
 	}
 

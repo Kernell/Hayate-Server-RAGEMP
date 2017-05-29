@@ -23,6 +23,11 @@ export default class Entity
 		this.entity = entity;
 	}
 
+	public Destroy() : void
+	{
+		this.entity.destroy();
+	}
+
 	public GetID() : number
 	{
 		return this.id;

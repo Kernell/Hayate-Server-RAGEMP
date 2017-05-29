@@ -11,6 +11,7 @@
 *********************************************************/
 
 import CommandManager from "../Core/CommandManager";
+import Player from "../Entity/Player";
 
 export class ConsoleCommand
 {
@@ -27,7 +28,7 @@ export class ConsoleCommand
 		this.CaseSensitive = true;
 	}
 
-	public Execute( player : any, args : any[] ) : Boolean
+	public Execute( player : Player, args : any[] ) : Boolean
 	{
 		return false;
 	}

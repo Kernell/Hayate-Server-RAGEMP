@@ -35,13 +35,13 @@ export default class IdentifiedPool
 		this.Instances.find( i => i.entity == entity );
 	}
 
-	public static Create< T extends Entity >( entity : mp.Entity ) : T
+	public static Create( entity : mp.Entity ) : IdentifiedPool
 	{
-		return ( new Entity( entity ) ) as T;
+		return new this( entity );
 	}
 
-	public static FindOrCreate< T extends Entity >( entity : mp.Entity ) : T
+	public static FindOrCreate( entity : mp.Entity ) : IdentifiedPool
 	{
-		return this.Find( entity ) || this.Create< T >( entity );
+		return this.Find( entity ) || this.Create( entity );
 	}
 }

@@ -58,9 +58,20 @@ export default class Vehicle extends Entity
 
 	protected entity : mp.Vehicle;
 
-	constructor( model : number, position : mp.Vector3, rotation : mp.Vector3, dimension : number, color : any, plate : string )
+	constructor( entity : mp.Entity );
+
+	constructor( model : number, position : mp.Vector3, rotation : mp.Vector3, dimension : number, color : any, plate : string );
+
+	constructor( modelOrEntity : any, position ?: mp.Vector3, rotation ?: mp.Vector3, dimension ?: number, color ?: any, plate ?: string )
 	{
-		super( mp.vehicles.new( model, position, rotation, dimension ) );
+		if( position == null )
+		{
+			super( modelOrEntity );
+
+			return;
+		}
+
+		super( mp.vehicles.new( modelOrEntity, position, rotation, dimension ) );
 
 		this.entity.rotation    = rotation;
 		this.entity.numberPlate = plate;

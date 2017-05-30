@@ -37,7 +37,7 @@ export class Vehicle extends ConsoleCommand
 
 				console.log( position );
 
-				let vehicle = EVehicle.FindOrCreate( mp.vehicles.new( mp.joaat( "sultan" ), position ) );
+				let vehicle = EVehicle.FindOrCreate< EVehicle >( mp.vehicles.new( mp.joaat( "sultan" ), position ) );
 
 				vehicle.SetPlate( "TEST" );
 

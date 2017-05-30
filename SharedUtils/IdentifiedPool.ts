@@ -10,8 +10,6 @@
 *
 *********************************************************/
 
-import Entity from "../Entity/Entity";
-
 export default class IdentifiedPool
 {
 	protected static readonly Instances : Array< IdentifiedPool > = new Array< IdentifiedPool >();
@@ -32,18 +30,18 @@ export default class IdentifiedPool
 		this.entity = null;
 	}
 
-	public static Find( entity : mp.Entity ) : any
+	public static Find< T extends IdentifiedPool >( entity : mp.Entity ) : T
 	{
-		this.Instances.find( i => i.entity == entity );
+		return this.Instances.find( i => i.entity == entity ) as T;
 	}
 
-	public static Create( entity : mp.Entity ) : IdentifiedPool
+	public static Create< T extends IdentifiedPool >( entity : mp.Entity ) : T
 	{
-		return new this( entity );
+		return new this( entity ) as T;
 	}
 
-	public static FindOrCreate( entity : mp.Entity ) : IdentifiedPool
+	public static FindOrCreate< T extends IdentifiedPool >( entity : mp.Entity ) : T
 	{
-		return this.Find( entity ) || this.Create( entity );
+		return this.Find< T >( entity ) || this.Create< T >( entity );
 	}
 }

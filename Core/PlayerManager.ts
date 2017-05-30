@@ -32,11 +32,11 @@ export default class PlayerManager extends ManagerBase< Player >
 			{
 				mp.events.add(
 					{
-						playerJoin  : ( player )                     => this.OnPlayerJoin ( player ),
-						playerQuit  : ( player, reason, kickReason ) => this.OnPlayerQuit ( player, reason, kickReason ),
-						playerDeath : ( player, reason, killer )     => this.OnPlayerDeath( player, reason, killer ),
-						playerSpawn : ( player )                     => this.OnPlayerSpawn( player ),
-						playerChat  : ( player, text )               => this.OnPlayerChat ( player, text ),
+						playerJoin  : ( player )                     => this.OnPlayerJoin ( Player.FindOrCreate< Player >( player ) ),
+						playerQuit  : ( player, reason, kickReason ) => this.OnPlayerQuit ( Player.FindOrCreate< Player >( player ), reason, kickReason ),
+						playerDeath : ( player, reason, killer )     => this.OnPlayerDeath( Player.FindOrCreate< Player >( player ), reason, killer ),
+						playerSpawn : ( player )                     => this.OnPlayerSpawn( Player.FindOrCreate< Player >( player ) ),
+						playerChat  : ( player, text )               => this.OnPlayerChat ( Player.FindOrCreate< Player >( player ), text ),
 					}
 				);
 			}
@@ -52,6 +52,7 @@ export default class PlayerManager extends ManagerBase< Player >
 
 	private OnPlayerQuit( player : Player, reason : string, kickReason : string ) : void
 	{
+		player.Destroy();
 	}
 
 	private OnPlayerDeath( player : Player, reason : string, killer : mp.Player ) : void
@@ -76,7 +77,7 @@ export default class PlayerManager extends ManagerBase< Player >
 
 		for( let player of this.GetAll() )
 		{
-			( player as Player ).OutputChatBox( line );
+			player.OutputChatBox( line );
 		}
 	}
 }

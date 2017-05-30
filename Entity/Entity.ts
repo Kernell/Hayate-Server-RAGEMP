@@ -17,6 +17,8 @@ export default class Entity extends IdentifiedPool
 	public Destroy() : void
 	{
 		this.entity.destroy();
+
+		this.Dispose();
 	}
 
 	public GetID() : number

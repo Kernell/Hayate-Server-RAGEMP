@@ -25,9 +25,11 @@ export default class IdentifiedPool
 		IdentifiedPool.Instances.push( this );
 	}
 
-	protected Dispose( disposing : boolean ) : void
+	protected Dispose() : void
 	{
 		IdentifiedPool.Instances.slice( IdentifiedPool.Instances.indexOf( this ), 1 );
+
+		this.entity = null;
 	}
 
 	public static Find( entity : mp.Entity ) : any

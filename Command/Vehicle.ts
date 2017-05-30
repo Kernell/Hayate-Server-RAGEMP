@@ -25,23 +25,24 @@ export class Vehicle extends ConsoleCommand
 		this.Name = "vehicle";
 	}
 
-	public Execute( player : Player, args : any[] ) : Boolean
+	public Execute( player : Player, args : string[] ) : Boolean
 	{
-		let option : string = args.shift();
+		let option = args.shift();
+		let method = "Option_" + option;
 
-		if( this[ option ] )
+		if( this[ method ] )
 		{
-			this[ option ]( player, args );
+			this[ method ]( player, option, args );
 
 			return true;
 		}
 
-		player.OutputChatBox( "Syntax: /" + this.Name + " <option>" );
+		player.OutputChatBox( `Invalid option '${option}'` );
 
 		return true;
 	}
 
-	private spawn( player : Player, args : any[] ) : void
+	private Option_spawn( player : Player, option : string, args : any[] ) : void
 	{
 		let plate = "ADM000";
 		let color = { red: 255, green: 255, blue: 255 };
@@ -49,5 +50,10 @@ export class Vehicle extends ConsoleCommand
 		let vehicle = new EVehicle( mp.joaat( "sultan" ), player.GetPosition(), player.GetRotation(), player.GetDimension(), color, plate );
 
 		player.OutputChatBox( "vehicle created, ID: " + vehicle.GetID() );
+	}
+
+	private Option_undefined( player : Player, option : string, args : any[] )
+	{
+		player.OutputChatBox( "Syntax: /" + this.Name + " <option>" );
 	}
 }

@@ -56,13 +56,6 @@ export default class CommandManager extends ManagerBase< Entity >
 
 		if( command != null )
 		{
-			for( let i in argv )
-			{
-				let int = parseFloat( argv[ i ] );
-
-				argv[ i ] = isNaN( int ) ? argv[ i ] : int;
-			}
-
 			command.Execute( player, argv );
 
 			return true;

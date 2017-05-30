@@ -28,7 +28,7 @@ export class ConsoleCommand
 		this.CaseSensitive = true;
 	}
 
-	public Execute( player : Player, args : any[] ) : Boolean
+	public Execute( player : Player, args : string[] ) : Boolean
 	{
 		return false;
 	}

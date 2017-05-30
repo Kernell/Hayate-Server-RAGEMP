@@ -134,12 +134,15 @@ export default class CommandManager extends ManagerBase< Entity >
 
 	protected OnLine( input : string ) : void
 	{
+		if( input.length == 0 )
+		{
+			return;
+		}
+
 		let player = new Console(); // TEST ONLY!!!
 
 		let commandArgv = input.split( ' ' );
 		let commandName = commandArgv.shift();
-
-		let command = this.GetCommand( commandName );
 
 		if( !this.Execute( player, commandName, commandArgv ) )
 		{

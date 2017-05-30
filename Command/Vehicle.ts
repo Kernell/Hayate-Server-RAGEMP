@@ -27,32 +27,27 @@ export class Vehicle extends ConsoleCommand
 
 	public Execute( player : Player, args : any[] ) : Boolean
 	{
-		let option = args.shift();
+		let option : string = args.shift();
 
-		switch( option )
+		if( this[ option ] )
 		{
-			case "spawn":
-			{
-				const position = new mp.Vector3( 192, 168, 0 );
+			this[ option ]( player, args );
 
-				console.log( position );
-
-				let vehicle = EVehicle.FindOrCreate< EVehicle >( mp.vehicles.new( mp.joaat( "sultan" ), position ) );
-
-				vehicle.SetPlate( "TEST" );
-
-				player.OutputChatBox( "vehicle created, ID: " + vehicle.GetID() + " with number plate " + vehicle.GetPlate() );
-				
-				break;
-			}
-			default:
-			{
-				player.OutputChatBox( "Syntax: /" + this.Name + " <option>" );
-
-				break;
-			}
+			return true;
 		}
 
+		player.OutputChatBox( "Syntax: /" + this.Name + " <option>" );
+
 		return true;
+	}
+
+	private spawn( player : Player, args : any[] ) : void
+	{
+		let plate = "ADM000";
+		let color = { red: 255, green: 255, blue: 255 };
+
+		let vehicle = new EVehicle( mp.joaat( "sultan" ), player.GetPosition(), player.GetRotation(), player.GetDimension(), color, plate );
+
+		player.OutputChatBox( "vehicle created, ID: " + vehicle.GetID() );
 	}
 }

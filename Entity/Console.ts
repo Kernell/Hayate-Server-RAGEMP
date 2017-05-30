@@ -71,6 +71,21 @@ export default class Console extends Player
 		return "Console";
 	}
 
+	public GetPosition() : mp.Vector3
+	{
+		return new mp.Vector3( 0, 0, 0 );
+	}
+
+	public GetRotation() : mp.Vector3
+	{
+		return new mp.Vector3( 0, 0, 0 );
+	}
+
+	public GetDimension() : number
+	{
+		return 0;
+	}
+
 	public OutputChatBox( text : string ) : void
 	{
 		console.log( text );

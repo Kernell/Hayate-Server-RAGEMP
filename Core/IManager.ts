@@ -10,7 +10,7 @@
 *
 *********************************************************/
 
-import Entity from "../Entity/Entity";
+import { Entity } from "../Entity/Entity";
 
 export enum ManagerState
 {

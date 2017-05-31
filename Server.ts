@@ -14,7 +14,7 @@ import "reflect-metadata";
 import "./SharedUtils";
 import { ManagerState, IManager } from "./Core/IManager";
 
-import Console          from "./Entity/Console";
+import { Console }      from "./Entity/Console";
 import ManagerBase      from "./Core/ManagerBase";
 import CommandManager   from "./Core/CommandManager";
 import DatabaseManager  from "./Core/DatabaseManager";

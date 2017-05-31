@@ -11,8 +11,8 @@
 *********************************************************/
 
 import { ConsoleCommand } from "./ConsoleCommand";
-import Player             from "../Entity/Player";
-import Console            from "../Entity/Console";
+import { Player }         from "../Entity/Player";
+import { Console }        from "../Entity/Console";
 import CommandManager     from "../Core/CommandManager";
 
 export class User extends ConsoleCommand

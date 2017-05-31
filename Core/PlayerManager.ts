@@ -10,8 +10,8 @@
 *
 *********************************************************/
 
-import Player           from "../Entity/Player";
-import Console          from "../Entity/Console";
+import { Player }       from "../Entity/Player";
+import { Console }      from "../Entity/Console";
 import Server           from "../Server";
 import ManagerBase      from "./ManagerBase";
 import DatabaseManager  from "./DatabaseManager";

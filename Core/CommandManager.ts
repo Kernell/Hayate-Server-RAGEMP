@@ -11,13 +11,12 @@
 *********************************************************/
 
 import * as Command   from "../Command";
-import Entity         from "../Entity/Entity";
-import Player         from "../Entity/Player";
-import Console        from "../Entity/Console";
+import * as Entity    from "../Entity";
+import { Console }    from "../Entity/Console";
 import ManagerBase    from "./ManagerBase";
 import Server         from "../Server";
 
-export default class CommandManager extends ManagerBase< Entity >
+export default class CommandManager extends ManagerBase< Entity.Entity >
 {
 	private Commands : Array< Command.ConsoleCommand >;
 
@@ -50,7 +49,7 @@ export default class CommandManager extends ManagerBase< Entity >
 		return true;
 	}
 
-	protected Execute( player : Player, commandName : String, argv : any[] ) : Boolean
+	protected Execute( player : Entity.Player, commandName : String, argv : any[] ) : Boolean
 	{
 		let command = this.GetCommand( commandName );
 
@@ -126,7 +125,7 @@ export default class CommandManager extends ManagerBase< Entity >
 
 		let command = this.GetCommand( commandName );
 
-		if( !this.Execute( Player.FindOrCreate< Player >( player ), commandName, commandArgv ) )
+		if( !this.Execute( Entity.Player.FindOrCreate< Entity.Player >( player ), commandName, commandArgv ) )
 		{
 			player.outputChatBox( `<span color='color: #FF8800;'>${commandName}: command not found</span>` );
 		}

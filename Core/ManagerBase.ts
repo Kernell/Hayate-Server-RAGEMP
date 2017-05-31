@@ -12,7 +12,7 @@
 
 import Server from "../Server";
 import { ManagerState, IManager } from "./IManager";
-import Entity from "../Entity/Entity";
+import { Entity } from "../Entity/Entity";
 
 export default class ManagerBase< TEntity extends Entity > implements IManager
 {

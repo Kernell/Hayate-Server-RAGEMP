@@ -11,9 +11,8 @@
 *********************************************************/
 
 import { ConsoleCommand } from "./ConsoleCommand";
-import Player             from "../Entity/Player";
-import Console            from "../Entity/Console";
-import EVehicle           from "../Entity/Vehicle";
+import { Console }        from "../Entity/Console";
+import * as Entity        from "../Entity";
 import CommandManager     from "../Core/CommandManager";
 
 export class Vehicle extends ConsoleCommand
@@ -25,7 +24,7 @@ export class Vehicle extends ConsoleCommand
 		this.Name = "vehicle";
 	}
 
-	public Execute( player : Player, args : string[] ) : Boolean
+	public Execute( player : Entity.Player, args : string[] ) : Boolean
 	{
 		let option = args.shift();
 		let method = "Option_" + option;
@@ -42,17 +41,17 @@ export class Vehicle extends ConsoleCommand
 		return true;
 	}
 
-	private Option_spawn( player : Player, option : string, args : any[] ) : void
+	private Option_spawn( player : Entity.Player, option : string, args : any[] ) : void
 	{
 		let plate = "ADM000";
 		let color = { red: 255, green: 255, blue: 255 };
 
-		let vehicle = new EVehicle( mp.joaat( "sultan" ), player.GetPosition(), player.GetRotation(), player.GetDimension(), color, plate );
+		let vehicle = new Entity.Vehicle( mp.joaat( "sultan" ), player.GetPosition(), player.GetRotation(), player.GetDimension(), color, plate );
 
 		player.OutputChatBox( "vehicle created, ID: " + vehicle.GetID() );
 	}
 
-	private Option_undefined( player : Player, option : string, args : any[] )
+	private Option_undefined( player : Entity.Player, option : string, args : any[] )
 	{
 		player.OutputChatBox( "Syntax: /" + this.Name + " <option>" );
 	}

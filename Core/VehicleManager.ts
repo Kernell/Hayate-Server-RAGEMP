@@ -10,12 +10,11 @@
 *
 *********************************************************/
 
-import Console          from "../Entity/Console";
+import { Console }      from "../Entity/Console";
+import { Vehicle }      from "../Entity/Vehicle";
 import Server           from "../Server";
 import ManagerBase      from "./ManagerBase";
 import DatabaseManager  from "./DatabaseManager";
-import Vehicle          from "../Entity/Vehicle";
-
 
 export default class VehicleManager extends ManagerBase< Vehicle >
 {

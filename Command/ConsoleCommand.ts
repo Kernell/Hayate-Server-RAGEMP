@@ -11,7 +11,7 @@
 *********************************************************/
 
 import CommandManager from "../Core/CommandManager";
-import Player from "../Entity/Player";
+import { Player } from "../Entity/Player";
 
 export class ConsoleCommand
 {

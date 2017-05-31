@@ -79,6 +79,9 @@
     <TypeScriptCompile Include="Core\VehicleManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Entity.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Entity\Entity.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

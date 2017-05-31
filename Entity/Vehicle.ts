@@ -12,10 +12,10 @@
 
 import * as ORM       from "typeorm";
 
-import Entity from "./Entity";
+import { Entity } from "./Entity";
 
 @ORM.Entity( "vehicles" )
-export default class Vehicle extends Entity
+export class Vehicle extends Entity
 {
 	@ORM.PrimaryGeneratedColumn()
 	protected id  : number;

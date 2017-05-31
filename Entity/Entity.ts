@@ -12,7 +12,7 @@
 
 import IdentifiedPool from "../SharedUtils/IdentifiedPool";
 
-export default class Entity extends IdentifiedPool
+export class Entity extends IdentifiedPool
 {
 	public Destroy() : void
 	{

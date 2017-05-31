@@ -10,9 +10,9 @@
 *
 *********************************************************/
 
-import Player from "./Player";
+import { Player } from "./Player";
 
-export default class Console extends Player
+export class Console extends Player
 {
 	public static Reset      = "\x1b[0m";
 	

@@ -59,8 +59,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="index.js" />
+    <Compile Include="Typings\Globals\Color.js">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Typings\Color.d.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Command\Vehicle.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -126,6 +132,7 @@
     <Folder Include="Core\" />
     <Folder Include="Command\" />
     <Folder Include="Entity\" />
+    <Folder Include="Typings\Globals\" />
     <Folder Include="Typings\" />
     <Folder Include="SharedUtils\" />
   </ItemGroup>

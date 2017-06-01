@@ -44,7 +44,7 @@ export class Vehicle extends ConsoleCommand
 	private Option_spawn( player : Entity.Player, option : string, args : any[] ) : void
 	{
 		let plate = "ADM000";
-		let color = { red: 255, green: 255, blue: 255 };
+		let color = new Color();
 
 		let vehicle = new Entity.Vehicle( mp.joaat( "sultan" ), player.GetPosition(), player.GetRotation(), player.GetDimension(), color, plate );
 

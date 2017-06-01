@@ -46,12 +46,12 @@ export class Entity extends IdentifiedPool
 		return this.entity.alpha;
 	}
 
-	public GetPosition() : any
+	public GetPosition() : mp.Vector3
 	{
 		return this.entity.position;
 	}
 
-	public GetRotation() : any
+	public GetRotation() : mp.Vector3
 	{
 		return this.entity.rotation;
 	}

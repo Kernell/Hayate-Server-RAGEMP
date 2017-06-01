@@ -12,6 +12,7 @@
 
 import "reflect-metadata";
 import "./SharedUtils";
+import * as Config      from "nconf";
 import { ManagerState, IManager } from "./Core/IManager";
 
 import { Console }      from "./Entity/Console";
@@ -41,6 +42,16 @@ export default class Server
 
 	constructor()
 	{
+		Config.argv().env().defaults(
+			{
+				'NODE_ENV': 'development',
+			}
+		);
+
+		let path = __dirname.split( '\\' ).slice( 0, -1 ).join( '/' );
+		
+		Config.file( { file: `${path}/Config/${Config.get( 'NODE_ENV' )}.json` } );
+
 		this.Managers   = new Array< any >();
 		this.DebugTicks = {};
 

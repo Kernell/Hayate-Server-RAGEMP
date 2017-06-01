@@ -10,6 +10,7 @@
 *
 *********************************************************/
 
+import * as Config    from "nconf";
 import * as ORM       from "typeorm";
 import { Console }    from "../Entity/Console";
 import * as Entity    from "../Entity";
@@ -18,11 +19,6 @@ import ManagerBase    from "./ManagerBase";
 
 export default class DatabaseManager extends ManagerBase< any >
 {
-	private Hostname : string;
-	private Username : string;
-	private Password : string;
-	private Database : string;
-
 	private Connection : ORM.Connection;
 
 	constructor( server : Server )
@@ -30,11 +26,6 @@ export default class DatabaseManager extends ManagerBase< any >
 		super( server );
 
 		this.Connection = null;
-
-		this.Hostname = "91.201.41.35";
-		this.Username = "hayate_app";
-		this.Password = "QRLY5ZUWtwr87stj";
-		this.Database = "hayate_app";
 	}
 
 	public Init() : Promise< any >
@@ -43,16 +34,16 @@ export default class DatabaseManager extends ManagerBase< any >
 		{
 			return ORM.createConnection(
 				{
-					driver:
+					driver :
 					{
-						type       : "mysql",
-						port       : 3306,
-						host       : this.Hostname,
-						username   : this.Username,
-						password   : this.Password,
-						database   : this.Database
+						type       : Config.get( "database:driver" ),
+						port       : Config.get( "database:port" ),
+						host       : Config.get( "database:host" ),
+						username   : Config.get( "database:user" ),
+						password   : Config.get( "database:password" ),
+						database   : Config.get( "database:database" )
 					},
-					entities       :
+					entities :
 					[
 						Entity.User,
 						Entity.Character,

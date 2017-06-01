@@ -11,6 +11,8 @@
     </DebuggerPort>
     <ScriptArguments>
     </ScriptArguments>
+    <Environment>
+    </Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -52,6 +54,12 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="Config\development.json">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Config\production.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="package.json" />
     <Content Include="tsconfig.json">
       <SubType>Code</SubType>
@@ -138,6 +146,7 @@
     <Folder Include="Core\" />
     <Folder Include="Command\" />
     <Folder Include="Entity\" />
+    <Folder Include="Config\" />
     <Folder Include="Typings\Globals\" />
     <Folder Include="Typings\" />
     <Folder Include="SharedUtils\" />

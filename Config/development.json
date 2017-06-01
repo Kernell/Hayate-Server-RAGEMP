@@ -1,0 +1,11 @@
+﻿{
+    "database":
+    {
+        "driver": "mysql",
+        "host": "91.201.41.35",
+        "port": 3306,
+        "user": "hayate_dev",
+        "password": "QRLY5ZUWtwr87stj",
+        "database": "hayate_dev"
+    }
+}

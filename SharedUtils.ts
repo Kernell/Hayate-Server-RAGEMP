@@ -10,4 +10,5 @@
 *
 *********************************************************/
 
+import "./SharedUtils/Color";
 import "./SharedUtils/String";

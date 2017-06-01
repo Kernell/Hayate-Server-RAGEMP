@@ -12,7 +12,8 @@
 
 process._debugProcess( process.pid );
 
-require( "./Typings/Globals/Color" );
+// Костыль
+global.Color = function object() {};
 
 let Server = require( "./bin/Server" ).default;
 

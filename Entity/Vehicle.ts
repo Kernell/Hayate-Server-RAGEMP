@@ -33,7 +33,7 @@ export class Vehicle extends Entity
 	protected dimension : number;
 
 	@ORM.Column()
-	protected color : string;
+	protected color : Color;
 
 	@ORM.Column()
 	protected plate : string;
@@ -62,7 +62,7 @@ export class Vehicle extends Entity
 
 	constructor( model : number, position : mp.Vector3, rotation : mp.Vector3, dimension : number, color : any, plate : string );
 
-	constructor( modelOrEntity : any, position ?: mp.Vector3, rotation ?: mp.Vector3, dimension ?: number, color ?: any, plate ?: string )
+	constructor( modelOrEntity : any, position ?: mp.Vector3, rotation ?: mp.Vector3, dimension ?: number, color ?: Color, plate ?: string )
 	{
 		if( position == null )
 		{
@@ -76,7 +76,7 @@ export class Vehicle extends Entity
 		this.entity.rotation    = rotation;
 		this.entity.numberPlate = plate;
 
-		this.entity.setColourRGB( color.red, color.green, color.blue, 0, 0, 0 );
+		this.entity.setColourRGB( color.Red, color.Green, color.Blue, 0, 0, 0 );
 	}
 
 	public GetPlate() : string
@@ -89,7 +89,7 @@ export class Vehicle extends Entity
 		this.entity.numberPlate = text;
 	}
 
-	public GetColor() : any
+	public GetColor() : Color
 	{
 		return this.color;
 	}

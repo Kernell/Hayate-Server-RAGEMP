@@ -85,6 +85,9 @@
     <TypeScriptCompile Include="Core\VehicleManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Entity\Character.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Entity.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -92,6 +95,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Entity\Player.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Entity\User.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Entity\Vehicle.ts">

@@ -26,6 +26,11 @@ export class Entity extends IdentifiedPool
 		return this.entity.id;
 	}
 
+	public GetEntity() : mp.Entity
+	{
+		return this.entity;
+	}
+
 	public GetType() : string
 	{
 		return this.entity.type;

@@ -11,8 +11,8 @@
 *********************************************************/
 
 import * as ORM       from "typeorm";
-import { Vehicle }    from "../Entity/Vehicle";
 import { Console }    from "../Entity/Console";
+import * as Entity    from "../Entity";
 import Server         from "../Server";
 import ManagerBase    from "./ManagerBase";
 
@@ -54,7 +54,9 @@ export default class DatabaseManager extends ManagerBase< any >
 					},
 					entities       :
 					[
-						Vehicle,
+						Entity.User,
+						Entity.Character,
+						Entity.Vehicle,
 					],
 					autoSchemaSync : true,
 				}
@@ -62,6 +64,8 @@ export default class DatabaseManager extends ManagerBase< any >
 				( connection ) =>
 				{
 					this.Connection = connection;
+
+					this.Initialized();
 				}
 			).catch(
 				( error ) =>
@@ -79,5 +83,17 @@ export default class DatabaseManager extends ManagerBase< any >
 	public GetRepository< Entity >( entityClassOrName : ORM.ObjectType< Entity > | string ) : ORM.Repository< Entity >
 	{
 		return this.Connection.getRepository( entityClassOrName );
+	}
+
+	private async Initialized() : Promise< any >
+	{
+		let usersRepo = this.GetRepository( Entity.User );
+		let charsRepo = this.GetRepository( Entity.Character );
+
+		let user = await usersRepo.findOneById( 1, { alias: "user", leftJoinAndSelect: { characters: "user.characters" } } );
+		let char = await charsRepo.findOneById( 1, { alias: "char", leftJoinAndSelect: { user: "char.user" } } );
+
+		console.log( user.characters );
+		console.log( char.user );
 	}
 }

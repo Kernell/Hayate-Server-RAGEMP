@@ -69,7 +69,7 @@ export default class Server
 		{
 			let tick = new Date().getTime();
 
-			let name = ( manager.constructor.name + ":" ).pad( 70 );
+			let name = manager.constructor.name + ":";
 
 			manager.State = ManagerState.None;
 
@@ -78,9 +78,9 @@ export default class Server
 				{
 					manager.State = ManagerState.OK;
 
-					let tick_count = ( ( new Date().getTime() - tick ) / 1000 ).toFixed( 3 );
+					let tick_count = ( new Date().getTime() - tick ) / 1000;
 
-					Console.WriteLine( `Starting %s [  ${Console.FgGreen}OK${Console.Reset}  ]  %s ms`, name, tick_count.pad( 5, ' ', true ) );
+					Console.WriteLine( `Starting %-70s [  ${Console.FgGreen}OK${Console.Reset}  ] % 5.3f ms`, name, tick_count );
 				}
 			).catch(
 				( error ) =>

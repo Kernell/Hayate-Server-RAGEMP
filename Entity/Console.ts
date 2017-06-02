@@ -12,6 +12,8 @@
 
 import { Player } from "./Player";
 
+import * as printf from "printf";
+
 export class Console extends Player
 {
 	public static Reset      = "\x1b[0m";
@@ -93,6 +95,6 @@ export class Console extends Player
 
 	public static WriteLine( line : String, ...params : any[] ) : void
 	{
-		console.log( line, ...params );
+		console.log( printf( line, ...params ) );
 	}
 }

@@ -13,7 +13,7 @@
 process._debugProcess( process.pid );
 
 // Костыль
-global.VehicleModel = require( './bin/SharedUtils/VehicleModel' );
+global.VehicleModel = require( './bin/Types/VehicleModel' );
 
 global.Color = function object( red = 255, green = 255, blue = 255 )
 {

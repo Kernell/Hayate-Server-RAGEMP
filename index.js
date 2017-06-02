@@ -22,7 +22,6 @@ global.Color = function object( red = 255, green = 255, blue = 255 )
 	this.Blue  = blue;
 }
 
-
 let Server = require( "./bin/Server" ).default;
 
 new Server();

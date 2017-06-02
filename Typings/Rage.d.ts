@@ -10,6 +10,20 @@
 *
 *********************************************************/
 
+interface Vector3
+{
+	x : number;
+	y : number;
+	z : number;
+}
+
+interface Vector3Constructor
+{
+	new ( x ?: number, y ?: number, z ?: number ) : Vector3;
+}
+
+declare const Vector3 : Vector3Constructor;
+
 declare namespace mp
 {
 	// Generates hash using string. Those hashes could be used to set entity model
@@ -18,14 +32,7 @@ declare namespace mp
 	// Generates arrays of hashes using arrays of strings. Those hashes could be used to set entity model
 	export function joaat( name : string[] ) : number[];
 
-	export class Vector3
-	{
-		public x : number;
-		public y : number;
-		public z : number;
-
-		constructor( x : number, y : number, z : number );
-	}
+	
 
 	export interface PlayerClothes
 	{

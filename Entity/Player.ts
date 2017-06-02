@@ -26,7 +26,7 @@ export class Player extends Entity
 		this.entity.outputChatBox( text );
 	}
 
-	public Spawn( position : mp.Vector3 ) : void
+	public Spawn( position : Vector3 ) : void
 	{
 		this.entity.spawn( position );
 	}

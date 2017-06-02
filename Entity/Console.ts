@@ -73,14 +73,14 @@ export class Console extends Player
 		return "Console";
 	}
 
-	public GetPosition() : mp.Vector3
+	public GetPosition() : Vector3
 	{
-		return new mp.Vector3( 0, 0, 0 );
+		return new Vector3( 0, 0, 0 );
 	}
 
-	public GetRotation() : mp.Vector3
+	public GetRotation() : Vector3
 	{
-		return new mp.Vector3( 0, 0, 0 );
+		return new Vector3( 0, 0, 0 );
 	}
 
 	public GetDimension() : number

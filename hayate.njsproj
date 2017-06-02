@@ -69,7 +69,10 @@
     <Compile Include="index.js" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="SharedUtils\Color.ts">
+    <TypeScriptCompile Include="SharedUtils\Date.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Types\Color.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Command\Vehicle.ts">
@@ -135,7 +138,10 @@
     <TypeScriptCompile Include="SharedUtils\String.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SharedUtils\VehicleModel.ts">
+    <TypeScriptCompile Include="SharedUtils\Vector3.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Types\VehicleModel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Typings\Rage.d.ts">
@@ -147,6 +153,7 @@
     <Folder Include="Command\" />
     <Folder Include="Entity\" />
     <Folder Include="Config\" />
+    <Folder Include="Types\" />
     <Folder Include="Typings\" />
     <Folder Include="SharedUtils\" />
   </ItemGroup>

@@ -47,7 +47,7 @@ export default class PlayerManager extends ManagerBase< Player >
 	{
 		player.SetModel( mp.joaat( "player_one" ) );
 
-		player.Spawn( new mp.Vector3( -425.517, 1123.620, 325.8544 ) );
+		player.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ) );
 	}
 
 	private OnPlayerQuit( player : Player, reason : string, kickReason : string ) : void
@@ -57,7 +57,7 @@ export default class PlayerManager extends ManagerBase< Player >
 
 	private OnPlayerDeath( player : Player, reason : string, killer : mp.Player ) : void
 	{
-		player.Spawn( new mp.Vector3( -425.517, 1123.620, 325.8544 ) );
+		player.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ) );
 	}
 
 	private OnPlayerSpawn( player : Player )

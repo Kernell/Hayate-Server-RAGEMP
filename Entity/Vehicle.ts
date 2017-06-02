@@ -24,10 +24,10 @@ export class Vehicle extends Entity
 	protected model : VehicleModel;
 
 	@ORM.Column( "json" )
-	protected position : mp.Vector3;
+	protected position : Vector3;
 
 	@ORM.Column( "json" )
-	protected rotation : mp.Vector3;
+	protected rotation : Vector3;
 
 	@ORM.Column( "int" )
 	protected dimension : number;
@@ -39,10 +39,10 @@ export class Vehicle extends Entity
 	protected plate : string;
 
 	@ORM.Column( { name: "default_position", type: "json" } )
-	protected defaultPosition : mp.Vector3;
+	protected defaultPosition : Vector3;
 
 	@ORM.Column( { name: "default_rotation", type: "json" } )
-	protected defaultRotation : mp.Vector3;
+	protected defaultRotation : Vector3;
 
 	@ORM.Column( { name: "default_dimension", type: "int" } )
 	protected defaultDimension : number;
@@ -57,9 +57,9 @@ export class Vehicle extends Entity
 
 	constructor( entity : mp.Entity );
 
-	constructor( model : VehicleModel, position : mp.Vector3, rotation : mp.Vector3, dimension : number, color : Color, plate : string );
+	constructor( model : VehicleModel, position : Vector3, rotation : Vector3, dimension : number, color : Color, plate : string );
 
-	constructor( modelOrEntity : any, position ?: mp.Vector3, rotation ?: mp.Vector3, dimension ?: number, color ?: Color, plate ?: string )
+	constructor( modelOrEntity : any, position ?: Vector3, rotation ?: Vector3, dimension ?: number, color ?: Color, plate ?: string )
 	{
 		if( position == null )
 		{

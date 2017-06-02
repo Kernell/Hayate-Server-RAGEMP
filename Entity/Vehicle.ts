@@ -10,7 +10,7 @@
 *
 *********************************************************/
 
-import * as ORM       from "typeorm";
+import * as ORM from "typeorm";
 
 import { Entity } from "./Entity";
 
@@ -20,32 +20,32 @@ export class Vehicle extends Entity
 	@ORM.PrimaryGeneratedColumn()
 	protected id  : number;
 
-	@ORM.Column( "int" )
-	protected model : mp.VehicleModel;
+	@ORM.Column( "bigint" )
+	protected model : VehicleModel;
 
-	@ORM.Column()
-	protected position : Object;
+	@ORM.Column( "json" )
+	protected position : mp.Vector3;
 
-	@ORM.Column()
-	protected rotation : Object;
+	@ORM.Column( "json" )
+	protected rotation : mp.Vector3;
 
 	@ORM.Column( "int" )
 	protected dimension : number;
 
-	@ORM.Column()
+	@ORM.Column( "json" )
 	protected color : Color;
 
 	@ORM.Column()
 	protected plate : string;
 
-	@ORM.Column( { name: "default_position" } )
-	protected defaultPosition : Object;
+	@ORM.Column( { name: "default_position", type: "json" } )
+	protected defaultPosition : mp.Vector3;
 
-	@ORM.Column( { name: "default_rotation" } )
-	protected defaultRotation : Object;
+	@ORM.Column( { name: "default_rotation", type: "json" } )
+	protected defaultRotation : mp.Vector3;
 
 	@ORM.Column( { name: "default_dimension", type: "int" } )
-	protected defaultDimension : Object;
+	protected defaultDimension : number;
 
 	@ORM.CreateDateColumn( { name: "created_at" } )
 	protected createdAt : string;
@@ -57,7 +57,7 @@ export class Vehicle extends Entity
 
 	constructor( entity : mp.Entity );
 
-	constructor( model : mp.VehicleModel, position : mp.Vector3, rotation : mp.Vector3, dimension : number, color : Color, plate : string );
+	constructor( model : VehicleModel, position : mp.Vector3, rotation : mp.Vector3, dimension : number, color : Color, plate : string );
 
 	constructor( modelOrEntity : any, position ?: mp.Vector3, rotation ?: mp.Vector3, dimension ?: number, color ?: Color, plate ?: string )
 	{
@@ -80,7 +80,7 @@ export class Vehicle extends Entity
 		this.defaultRotation  = rotation;
 		this.defaultDimension = dimension;
 
-		this.entity.rotation    = this.rotation as mp.Vector3;
+		this.entity.rotation    = this.rotation;
 		this.entity.numberPlate = this.plate;
 
 		this.entity.setColourRGB( this.color.Red, this.color.Green, this.color.Blue, 0, 0, 0 );

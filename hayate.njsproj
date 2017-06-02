@@ -135,6 +135,9 @@
     <TypeScriptCompile Include="SharedUtils\String.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="SharedUtils\VehicleModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Typings\Rage.d.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

@@ -13,7 +13,13 @@
 process._debugProcess( process.pid );
 
 // Костыль
-global.Color = function object() {};
+global.Color = function object( red = 255, green = 255, blue = 255 )
+{
+	this.Red   = red;
+	this.Green = green;
+	this.Blue  = blue;
+}
+
 
 let Server = require( "./bin/Server" ).default;
 

@@ -21,13 +21,13 @@ export class Vehicle extends Entity
 	protected id  : number;
 
 	@ORM.Column( "int" )
-	protected model : number;
+	protected model : mp.VehicleModel;
 
 	@ORM.Column()
-	protected position : string;
+	protected position : Object;
 
 	@ORM.Column()
-	protected rotation : string;
+	protected rotation : Object;
 
 	@ORM.Column( "int" )
 	protected dimension : number;
@@ -39,16 +39,13 @@ export class Vehicle extends Entity
 	protected plate : string;
 
 	@ORM.Column( { name: "default_position" } )
-	protected defaultPosition : string;
+	protected defaultPosition : Object;
 
 	@ORM.Column( { name: "default_rotation" } )
-	protected defaultRotation : string;
-
-	@ORM.Column( { name: "default_interior", type: "int" } )
-	protected defaultInterior : number;
+	protected defaultRotation : Object;
 
 	@ORM.Column( { name: "default_dimension", type: "int" } )
-	protected defaultDimension : number;
+	protected defaultDimension : Object;
 
 	@ORM.CreateDateColumn( { name: "created_at" } )
 	protected createdAt : string;
@@ -60,7 +57,7 @@ export class Vehicle extends Entity
 
 	constructor( entity : mp.Entity );
 
-	constructor( model : number, position : mp.Vector3, rotation : mp.Vector3, dimension : number, color : any, plate : string );
+	constructor( model : mp.VehicleModel, position : mp.Vector3, rotation : mp.Vector3, dimension : number, color : Color, plate : string );
 
 	constructor( modelOrEntity : any, position ?: mp.Vector3, rotation ?: mp.Vector3, dimension ?: number, color ?: Color, plate ?: string )
 	{
@@ -73,10 +70,25 @@ export class Vehicle extends Entity
 
 		super( mp.vehicles.new( modelOrEntity, position, rotation, dimension ) );
 
-		this.entity.rotation    = rotation;
-		this.entity.numberPlate = plate;
+		this.model            = modelOrEntity;
+		this.position         = position;
+		this.rotation         = rotation;
+		this.dimension        = dimension;
+		this.color            = color;
+		this.plate            = plate;
+		this.defaultPosition  = position;
+		this.defaultRotation  = rotation;
+		this.defaultDimension = dimension;
 
-		this.entity.setColourRGB( color.Red, color.Green, color.Blue, 0, 0, 0 );
+		this.entity.rotation    = this.rotation as mp.Vector3;
+		this.entity.numberPlate = this.plate;
+
+		this.entity.setColourRGB( this.color.Red, this.color.Green, this.color.Blue, 0, 0, 0 );
+	}
+
+	public GetID() : number
+	{
+		return this.id;
 	}
 
 	public GetPlate() : string
@@ -86,7 +98,7 @@ export class Vehicle extends Entity
 
 	public SetPlate( text : string ) : void
 	{
-		this.entity.numberPlate = text;
+		this.plate = this.entity.numberPlate = text;
 	}
 
 	public GetColor() : Color

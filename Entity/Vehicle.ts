@@ -86,6 +86,16 @@ export class Vehicle extends Entity
 		this.entity.setColourRGB( this.color.Red, this.color.Green, this.color.Blue, 0, 0, 0 );
 	}
 
+	public Create() : void
+	{
+		this.entity = mp.vehicles.new( this.model, this.position, this.rotation, this.dimension );
+
+		this.entity.rotation    = this.rotation;
+		this.entity.numberPlate = this.plate;
+
+		this.entity.setColourRGB( this.color.Red, this.color.Green, this.color.Blue, 0, 0, 0 );
+	}
+
 	public GetID() : number
 	{
 		return this.id;

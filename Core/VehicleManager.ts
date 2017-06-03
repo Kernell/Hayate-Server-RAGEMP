@@ -37,22 +37,11 @@ export default class VehicleManager extends ManagerBase< Vehicle >
 
 				try
 				{
-					let vehicle = new Vehicle( VehicleModel.Elegy2, new Vector3( 192, 168, 0 ), new Vector3(), 0, new Color( 255, 0, 0 ), 'Lorem' )
-
-					Console.WriteLine( "Elegy2: 0x%X, %s", vehicle.GetModel(), vehicle.GetPosition() );
-
-					await this.Repository.persist( vehicle );
-
 					let vehicles = await this.Repository.find();
 
 					for( let vehicle of vehicles )
 					{
-						//let id       = vehicle.GetID();
-						//let model    = vehicle.GetModel();
-						//let position = vehicle.GetPosition();
-						//let color    = vehicle.GetColor();
-
-						//Console.WriteLine( "Vehicle ID: %d | model: %d | position: %d, %d, %d | color: %d, %d, %d", id, model, position.x, position.y, position.z, color.Red, color.Green, color.Blue );
+						vehicle.Create();
 					}
 				}
 				catch( e )

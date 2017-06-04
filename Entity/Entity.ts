@@ -14,10 +14,13 @@ import IdentifiedPool from "../SharedUtils/IdentifiedPool";
 
 export class Entity extends IdentifiedPool
 {
+	public IsValid() : boolean
+	{
+		return this.entity != null;
+	}
+
 	public Destroy() : void
 	{
-		this.entity.destroy();
-
 		this.Dispose();
 	}
 
@@ -51,6 +54,11 @@ export class Entity extends IdentifiedPool
 		return new Vector3( this.entity.position.x, this.entity.position.y, this.entity.position.z );
 	}
 
+	public SetPosition( position : Vector3 ) : void
+	{
+		this.entity.position = position;
+	}
+
 	public GetRotation() : Vector3
 	{
 		return new Vector3( this.entity.rotation.x, this.entity.rotation.y, this.entity.rotation.z );
@@ -59,6 +67,11 @@ export class Entity extends IdentifiedPool
 	public GetDimension() : number
 	{
 		return this.entity.dimension;
+	}
+
+	public SetDimension( dimension : number ) : void
+	{
+		this.entity.dimension = dimension;
 	}
 
 	public SetModel( model : number ) : void

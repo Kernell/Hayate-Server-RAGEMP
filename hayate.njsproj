@@ -57,6 +57,9 @@
     <Content Include="Config\development.json">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Config\interiors.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Config\production.json">
       <SubType>Code</SubType>
     </Content>
@@ -69,6 +72,12 @@
     <Compile Include="index.js" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Command\Interior.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Command\Player.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="SharedUtils\Date.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

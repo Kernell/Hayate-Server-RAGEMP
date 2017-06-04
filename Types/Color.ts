@@ -10,16 +10,18 @@
 *
 *********************************************************/
 
-interface Color extends Object
+class Color
 {
-	Red   : number;
-	Green : number;
-	Blue  : number;
+	public Red   : number;
+	public Green : number;
+	public Blue  : number;
+
+	public constructor( red : number = 255, green : number = 255, blue : number = 255 )
+	{
+		this.Red   = red;
+		this.Green = green;
+		this.Blue  = blue;
+	}
 }
 
-interface ColorConstructor extends ObjectConstructor
-{
-    new ( red ?: number, green ?: number, blue ?: number ) : Color;
-}
-
-declare const Color : ColorConstructor;
+module.exports = Color;

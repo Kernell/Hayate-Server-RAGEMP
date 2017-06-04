@@ -152,11 +152,11 @@ class Vector3 extends mp.Vector3
 
 	public Offset( distance : number, rotation : number )
 	{
-		return new Vector3( 
-			this.X + ( ( Math.cos( ( rotation + 90.0 ) * Math.PI / 180 ) ) * distance ), 
-			this.Y + ( ( Math.sin( ( rotation + 90.0 ) * Math.PI / 180 ) ) * distance ), 
-			this.Z
-		);
+		let x = this.X + ( ( Math.cos( ( rotation + 90.0 ) * Math.PI / 180.0 ) ) * distance );
+		let y = this.Y + ( ( Math.sin( ( rotation + 90.0 ) * Math.PI / 180.0 ) ) * distance );
+		let z = this.Z;
+
+		return new Vector3( x, y, z );
 	}
 
 	public Add( val : Vector3|number ) : Vector3

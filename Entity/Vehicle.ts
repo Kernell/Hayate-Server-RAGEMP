@@ -33,7 +33,7 @@ export class Vehicle extends Entity
 	protected dimension : number;
 
 	@ORM.Column( "json" )
-	protected color : Color;
+	protected color : VehicleColor;
 
 	@ORM.Column()
 	protected plate : string;
@@ -57,9 +57,9 @@ export class Vehicle extends Entity
 
 	constructor( entity : mp.Entity );
 
-	constructor( model : VehicleModel, position : Vector3, rotation : Vector3, dimension : number, color : Color, plate : string );
+	constructor( model : VehicleModel, position : Vector3, rotation : Vector3, dimension : number, color : VehicleColor, plate : string );
 
-	constructor( modelOrEntity : any, position ?: Vector3, rotation ?: Vector3, dimension ?: number, color ?: Color, plate ?: string )
+	constructor( modelOrEntity : any, position ?: Vector3, rotation ?: Vector3, dimension ?: number, color ?: VehicleColor, plate ?: string )
 	{
 		if( position == null )
 		{
@@ -83,17 +83,23 @@ export class Vehicle extends Entity
 		this.entity.rotation    = this.rotation;
 		this.entity.numberPlate = this.plate;
 
-		this.entity.setColourRGB( this.color.Red, this.color.Green, this.color.Blue, this.color.Red, this.color.Green, this.color.Blue );
+		let color1 = this.color[ 0 ];
+		let color2 = this.color[ 1 ];
+
+		this.entity.setColourRGB( color1.Red, color1.Green, color1.Blue, color2.Red, color2.Green, color2.Blue );
 	}
 
 	public Create() : void
 	{
-		this.entity = mp.vehicles.new( this.model, this.position, this.rotation, this.dimension );
+		this.entity = mp.vehicles.new( this.model, this.position, null, this.dimension );
 
 		this.entity.rotation    = this.rotation;
 		this.entity.numberPlate = this.plate;
+		
+		let color1 = this.color[ 0 ];
+		let color2 = this.color[ 1 ];
 
-		this.entity.setColourRGB( this.color.Red, this.color.Green, this.color.Blue, this.color.Red, this.color.Green, this.color.Blue );
+		this.entity.setColourRGB( color1.Red, color1.Green, color1.Blue, color2.Red, color2.Green, color2.Blue );
 	}
 
 	public GetID() : number
@@ -116,8 +122,18 @@ export class Vehicle extends Entity
 		this.plate = this.entity.numberPlate = text;
 	}
 
-	public GetColor() : Color
+	public GetColor() : VehicleColor
 	{
 		return this.color;
+	}
+
+	public SetColor( color : VehicleColor ) : void
+	{
+		this.color = color;
+
+		let color1 = this.color[ 0 ];
+		let color2 = this.color[ 1 ];
+
+		this.entity.setColourRGB( color1.Red, color1.Green, color1.Blue, color2.Red, color2.Green, color2.Blue );
 	}
 }

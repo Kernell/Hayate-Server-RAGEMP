@@ -150,6 +150,9 @@
     <TypeScriptCompile Include="Types\Vector3.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Types\VehicleColor.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Types\VehicleModel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

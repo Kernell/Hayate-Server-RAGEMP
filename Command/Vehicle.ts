@@ -75,7 +75,7 @@ export class Vehicle extends ConsoleCommand
 		let rotation  = player.GetRotation();
 		let position  = player.GetPosition().Offset( 2.5, rotation.Z );
 		let dimension = player.GetDimension();
-		let color     = new Color();
+		let color     = new VehicleColor();
 		let plate     = printf( "NULL %03d", -id );
 		
 		//position.Z -= 2.0;

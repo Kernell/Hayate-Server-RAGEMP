@@ -10,7 +10,8 @@
 *
 *********************************************************/
 
-import { Entity } from "./Entity";
+import { Entity }  from "./Entity";
+import { Vehicle } from "./Vehicle";
 
 export class Player extends Entity
 {
@@ -29,5 +30,20 @@ export class Player extends Entity
 	public Spawn( position : Vector3 ) : void
 	{
 		this.entity.spawn( position );
+	}
+
+	public GetRotation() : Vector3
+	{
+		return new Vector3( 0, 0, this.entity.heading );
+	}
+
+	public IsInVehicle() : boolean
+	{
+		return this.entity.vehicle != null;
+	}
+
+	public GetVehicle() : Vehicle
+	{
+		return Vehicle.FindOrCreate< Vehicle >( this.entity.vehicle );
 	}
 }

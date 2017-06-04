@@ -13,8 +13,8 @@
 process._debugProcess( process.pid );
 
 // Костыль
-global.Vector3      = require( './bin/Types/Vector3' );
-global.VehicleModel = require( './bin/Types/VehicleModel' );
+Vector3      = global.Vector3      = require( './bin/Types/Vector3' );
+VehicleModel = global.VehicleModel = require( './bin/Types/VehicleModel' );
 
 global.Color = function object( red = 255, green = 255, blue = 255 )
 {

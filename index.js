@@ -12,16 +12,24 @@
 
 process._debugProcess( process.pid );
 
-// Костыль
-Vector3      = global.Vector3      = require( './bin/Types/Vector3' );
-VehicleModel = global.VehicleModel = require( './bin/Types/VehicleModel' );
+const fs = require( 'fs' );
 
-global.Color = function object( red = 255, green = 255, blue = 255 )
-{
-	this.Red   = red;
-	this.Green = green;
-	this.Blue  = blue;
-}
+fs.readdirSync( './packages/hayate/bin/Types/' ).forEach(
+	( fileName ) =>
+    {
+		if( fileName.substr( fileName.length - 2, 2 ) != 'js' )
+        {
+			return;
+        }
+
+		let typeName = fileName.replace( /\.js$/i, '' );
+
+		global[ typeName ] = require( './bin/Types/' + fileName );
+    }
+);
+
+// Temp fix for old RAGE builds
+Vector3 = global[ "Vector3" ];
 
 let Server = require( "./bin/Server" ).default;
 

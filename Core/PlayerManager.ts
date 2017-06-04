@@ -40,24 +40,37 @@ export default class PlayerManager extends ManagerBase< Player >
 					}
 				);
 			}
+		).then(
+			() =>
+			{
+				for( let player of mp.players.toArray() )
+				{
+					this.OnPlayerJoin( Player.FindOrCreate< Player >( player ) );
+				}
+			}
 		);
 	}
 
 	private OnPlayerJoin( player : Player ) : void
 	{
-		player.SetModel( mp.joaat( "player_one" ) );
+		this.AddToList( player );
 
+		player.SetModel( mp.joaat( "player_one" ) );
 		player.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ) );
+		player.SetDimension( 0 );
 	}
 
 	private OnPlayerQuit( player : Player, reason : string, kickReason : string ) : void
 	{
+		this.RemoveFromList( player );
+
 		player.Destroy();
 	}
 
 	private OnPlayerDeath( player : Player, reason : string, killer : mp.Player ) : void
 	{
 		player.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ) );
+		player.SetDimension( 0 );
 	}
 
 	private OnPlayerSpawn( player : Player )

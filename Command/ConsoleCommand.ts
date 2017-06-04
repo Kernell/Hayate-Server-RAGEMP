@@ -10,19 +10,19 @@
 *
 *********************************************************/
 
-import CommandManager from "../Core/CommandManager";
+import Server     from "../Server";
 import { Player } from "../Entity/Player";
 
 export class ConsoleCommand
 {
-	protected Manager         : CommandManager;
+	protected Server          : Server;
 	protected Name            : String;
 	protected Restricted      : Boolean;
 	protected CaseSensitive   : Boolean;
 
-	constructor( manager : CommandManager )
+	constructor( server : Server )
 	{
-		this.Manager       = manager;
+		this.Server        = server;
 		this.Name          = "";
 		this.Restricted    = false;
 		this.CaseSensitive = true;

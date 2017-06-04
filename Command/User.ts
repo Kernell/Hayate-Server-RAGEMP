@@ -13,13 +13,13 @@
 import { ConsoleCommand } from "./ConsoleCommand";
 import { Player }         from "../Entity/Player";
 import { Console }        from "../Entity/Console";
-import CommandManager     from "../Core/CommandManager";
+import Server             from "../Server";
 
 export class User extends ConsoleCommand
 {
-	constructor( manager : CommandManager )
+	constructor( server : Server )
 	{
-		super( manager );
+		super( server );
 
 		this.Name = "user";
 	}

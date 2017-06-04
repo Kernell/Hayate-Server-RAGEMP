@@ -11,5 +11,7 @@
 *********************************************************/
 
 export * from "./Command/ConsoleCommand";
+export * from "./Command/Interior";
+export * from "./Command/Player";
 export * from "./Command/User";
 export * from "./Command/Vehicle";

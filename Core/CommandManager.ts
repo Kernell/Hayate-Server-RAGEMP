@@ -36,7 +36,11 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 
 		process.on( 'SIGINT', () => this.OnSigint() );
 
-		mp.events.add( { playerCommand: ( player, line ) => this.OnPlayerLine( player, line ) } );
+		mp.events.add(
+			{
+				playerCommand: ( player, line ) => this.OnPlayerLine( Entity.Player.FindOrCreate< Entity.Player >( player ), line ),
+			}
+		);
 	}
 
 	protected Add( command : Command.ConsoleCommand ) : Boolean
@@ -57,7 +61,19 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 
 		if( command != null )
 		{
-			command.Execute( player, argv );
+			new Promise(
+				( resolve, reject ) =>
+                {
+					command.Execute( player, argv );
+
+					resolve();
+                }
+			).catch(
+				( error ) =>
+                {
+					player.OutputChatBox( `<span style='color: #FF8800;'>${error}</span>` );
+                }
+			);
 
 			return true;
 		}
@@ -120,16 +136,16 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 		return null;
 	}
 
-	protected OnPlayerLine( player : mp.Player, line : string )
+	protected OnPlayerLine( player : Entity.Player, line : string )
 	{
 		let commandArgv = line.split( ' ' );
 		let commandName = commandArgv.shift();
 
 		let command = this.GetCommand( commandName );
-
-		if( !this.Execute( Entity.Player.FindOrCreate< Entity.Player >( player ), commandName, commandArgv ) )
+		
+		if( !this.Execute( player, commandName, commandArgv ) )
 		{
-			player.outputChatBox( `<span color='color: #FF8800;'>${commandName}: command not found</span>` );
+			player.OutputChatBox( `<span style='color: #FF8800;'>${commandName}: command not found</span>` );
 		}
 	}
 

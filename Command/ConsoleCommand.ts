@@ -30,7 +30,19 @@ export class ConsoleCommand
 
 	public Execute( player : Player, args : string[] ) : Boolean
 	{
-		return false;
+		let option = args.shift();
+		let method = "Option_" + option;
+
+		if( this[ method ] )
+		{
+			this[ method ]( player, option, args );
+
+			return true;
+		}
+
+		player.OutputChatBox( `Invalid option '${option}'` );
+
+		return true;
 	}
 
 	public GetName() : String

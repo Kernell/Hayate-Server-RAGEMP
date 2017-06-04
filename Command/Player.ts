@@ -26,23 +26,6 @@ export class Player extends ConsoleCommand
 		this.Name = "player";
 	}
 
-	public Execute( player : Entity.Player, args : string[] ) : Boolean
-	{
-		let option = args.shift();
-		let method = "Option_" + option;
-
-		if( this[ method ] )
-		{
-			this[ method ]( player, option, args );
-
-			return true;
-		}
-
-		player.OutputChatBox( `Invalid option '${option}'` );
-
-		return true;
-	}
-
 	private Option_model( player : Entity.Player, option : string, args : any[] ) : void
 	{
 		player.SetModel( parseInt( args[ 0 ] ) || mp.joaat( args[ 0 ] ) );

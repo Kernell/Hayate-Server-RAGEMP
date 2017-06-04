@@ -30,23 +30,6 @@ export class Interior extends ConsoleCommand
 		this.Name = "interior";
 	}
 
-	public Execute( player : Entity.Player, args : string[] ) : Boolean
-	{
-		let option = args.shift();
-		let method = "Option_" + option;
-
-		if( this[ method ] )
-		{
-			this[ method ]( player, option, args );
-
-			return true;
-		}
-
-		player.OutputChatBox( `Invalid option '${option}'` );
-
-		return true;
-	}
-
 	private Option_show( player : Entity.Player, option : string, args : any[] ) : void
 	{
 		let id = args.shift();

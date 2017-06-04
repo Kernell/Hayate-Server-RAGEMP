@@ -10,16 +10,18 @@
 *
 *********************************************************/
 
+import * as printf        from "printf";
+import * as Config        from "nconf";
 import { ConsoleCommand } from "./ConsoleCommand";
 import { Console }        from "../Entity/Console";
 import * as Entity        from "../Entity";
-import CommandManager     from "../Core/CommandManager";
+import Server             from "../Server";
 
 export class Vehicle extends ConsoleCommand
 {
-	constructor( manager : CommandManager )
+	constructor( server : Server )
 	{
-		super( manager );
+		super( server );
 
 		this.Name = "vehicle";
 	}
@@ -43,12 +45,54 @@ export class Vehicle extends ConsoleCommand
 
 	private Option_spawn( player : Entity.Player, option : string, args : any[] ) : void
 	{
-		let plate = "ADM000";
-		let color = new Color();
+		let name = args.shift();
 
-		let vehicle = new Entity.Vehicle( mp.joaat( "sultan" ), player.GetPosition(), player.GetRotation(), player.GetDimension(), color, plate );
+		let temp_max : number = Config.get( "vehicles:temp_max" );
 
-		player.OutputChatBox( "vehicle created, ID: " + vehicle.GetID() );
+		let id    : number = null;
+		let model : number = mp.joaat( name );
+
+		if( model == null )
+		{
+			throw new Error( "Модель с именем '" + name + "' не найдена" );
+		}
+
+		for( let i = -1; i > -temp_max; --i )
+		{
+			if( this.Server.VehicleManager.Get( i ) == null )
+			{
+				id = i;
+
+				break;
+			}
+		}
+
+		if( id == null )
+		{
+			throw new Error( "Недостаточно памяти для создания автомобиля" );
+		}
+
+		let rotation  = player.GetRotation();
+		let position  = player.GetPosition().Offset( 2.5, rotation.Z );
+		let dimension = player.GetDimension();
+		let color     = new Color();
+		let plate     = printf( "NULL %03d", -id );
+		
+		//position.Z -= 2.0;
+		rotation.Z += 90.0;
+
+		let vehicle = new Entity.Vehicle( model, position, rotation, dimension, color, plate );
+
+		if( !vehicle.IsValid() )
+		{
+			throw new Error( "Internal server error" );
+		}
+
+		vehicle[ "id" ] = id;
+
+		this.Server.VehicleManager.AddToList( vehicle );
+
+		player.OutputChatBox( vehicle.GetName() + " создан, ID: " + vehicle.GetID() );
 	}
 
 	private Option_undefined( player : Entity.Player, option : string, args : any[] )

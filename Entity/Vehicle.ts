@@ -68,7 +68,7 @@ export class Vehicle extends Entity
 			return;
 		}
 
-		super( mp.vehicles.new( modelOrEntity, position, rotation, dimension ) );
+		super( mp.vehicles.new( modelOrEntity, position, null, dimension ) );
 
 		this.model            = modelOrEntity;
 		this.position         = position;
@@ -83,7 +83,7 @@ export class Vehicle extends Entity
 		this.entity.rotation    = this.rotation;
 		this.entity.numberPlate = this.plate;
 
-		this.entity.setColourRGB( this.color.Red, this.color.Green, this.color.Blue, 0, 0, 0 );
+		this.entity.setColourRGB( this.color.Red, this.color.Green, this.color.Blue, this.color.Red, this.color.Green, this.color.Blue );
 	}
 
 	public Create() : void
@@ -93,12 +93,17 @@ export class Vehicle extends Entity
 		this.entity.rotation    = this.rotation;
 		this.entity.numberPlate = this.plate;
 
-		this.entity.setColourRGB( this.color.Red, this.color.Green, this.color.Blue, 0, 0, 0 );
+		this.entity.setColourRGB( this.color.Red, this.color.Green, this.color.Blue, this.color.Red, this.color.Green, this.color.Blue );
 	}
 
 	public GetID() : number
 	{
 		return this.id;
+	}
+
+	public GetName() : string
+	{
+		return VehicleModel[ this.entity.model ];
 	}
 
 	public GetPlate() : string

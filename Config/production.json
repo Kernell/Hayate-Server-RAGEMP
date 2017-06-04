@@ -7,5 +7,9 @@
 		"user": "hayate_prod",
 		"password": "7hU27BxWTw73RVte",
 		"database": "hayate_prod"
+	},
+	"vehicles":
+	{
+		"temp_max": 128
 	}
 }

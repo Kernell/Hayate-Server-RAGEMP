@@ -12,9 +12,11 @@
 
 import { Entity }     from "./Entity";
 import { Character }  from "./Character";
+import { User }       from "./User";
 
 export class Player extends Entity
 {
+	protected user   : User;
 	protected char   : Character;
 	protected entity : mp.Player;
 
@@ -30,6 +32,11 @@ export class Player extends Entity
 		this.char = new Character( this );
 	}
 
+	public GetUser() : User
+	{
+		return this.user;
+	}
+
 	public GetCharacter() : Character
 	{
 		return this.char;
@@ -43,5 +50,34 @@ export class Player extends Entity
 	public OutputChatBox( text : string ) : void
 	{
 		this.entity.outputChatBox( text );
+	}
+
+	public Invoke( hash : string, ...args : any[] ) : void
+	{
+		this.entity.invoke( hash, ...args );
+	}
+
+	public Call( eventName : string, ...args : any[] ) : void
+	{
+		this.entity.call( eventName, ...args );
+	}
+
+	public Notify( message : string ) : void
+	{
+		this.entity.notify( message );
+	}
+
+	public Login( user : User ) : void
+	{
+		this.user = user;
+
+		this.Call( "playerLogin", user.GetID() );
+	}
+
+	public Logout() : void
+	{
+		this.Call( "playerLogout", this.user.GetID() );
+
+		this.user = null;
 	}
 }

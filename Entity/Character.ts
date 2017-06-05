@@ -72,7 +72,12 @@ export class Character
 		}
 	}
 
-	public GetUserID() : User
+	public GetID() : number
+	{
+		return this.id;
+	}
+
+	public GetUser() : User
 	{
 		return this.user;
 	}
@@ -326,21 +331,6 @@ export class Character
 	public RemoveFromVehicle() : void
 	{
 		this.entity.removeFromVehicle();
-	}
-
-	public Invoke( hash : string, ...args : any[] ) : void
-	{
-		this.entity.invoke( hash, ...args );
-	}
-
-	public Call( eventName : string, ...args : any[] ) : void
-	{
-		this.entity.call( eventName, ...args );
-	}
-
-	public Notify( message : string ) : void
-	{
-		this.entity.notify( message );
 	}
 
 	public GetHeadBlend() : mp.PlayerBlend

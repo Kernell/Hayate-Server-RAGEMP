@@ -98,6 +98,11 @@ export class User
 		return this.characters;
 	}
 
+	public CheckPassword( password : string ) : boolean
+	{
+		return User.CheckPassword( password, this.password, this.salt );
+	}
+
 	public static GeneratePassword( length : number = 12, specialChars : boolean = false, extraSpecialChars : boolean = false ) : string
 	{
 		let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

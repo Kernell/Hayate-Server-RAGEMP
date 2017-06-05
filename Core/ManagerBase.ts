@@ -16,6 +16,7 @@ import { Entity } from "../Entity/Entity";
 
 export default class ManagerBase< TEntity extends Entity > implements IManager
 {
+	protected Server     : Server;
 	protected Dependency : IManager;
 	protected List       : Map< number, TEntity >;
 	public    State      : ManagerState;
@@ -24,6 +25,7 @@ export default class ManagerBase< TEntity extends Entity > implements IManager
 	{
 		server.RegisterManager( this );
 		
+		this.Server      = server;
 		this.Dependency  = null;
 		this.List        = new Map< number, TEntity >();
 		this.State       = ManagerState.None;

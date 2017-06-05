@@ -44,9 +44,19 @@ export class Entity extends IdentifiedPool
 		return this.entity.model;
 	}
 
+	public SetModel( model : number ) : void
+	{
+		this.entity.model = model;
+	}
+
 	public GetAlpha() : number
 	{
 		return this.entity.alpha;
+	}
+
+	public SetAlpha( alpha : number ) : void
+	{
+		this.entity.alpha = alpha;
 	}
 
 	public GetPosition() : Vector3
@@ -72,10 +82,5 @@ export class Entity extends IdentifiedPool
 	public SetDimension( dimension : number ) : void
 	{
 		this.entity.dimension = dimension;
-	}
-
-	public SetModel( model : number ) : void
-	{
-		this.entity.model = model;
 	}
 }

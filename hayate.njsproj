@@ -156,6 +156,15 @@
     <TypeScriptCompile Include="Types\VehicleModel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Types\Weapon.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Types\WeaponsComponent.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Types\WeaponsTint.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Typings\Rage.d.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

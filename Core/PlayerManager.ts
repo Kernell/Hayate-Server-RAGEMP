@@ -55,9 +55,7 @@ export default class PlayerManager extends ManagerBase< Player >
 	{
 		this.AddToList( player );
 
-		player.SetModel( mp.joaat( "player_one" ) );
-		player.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ) );
-		player.SetDimension( 0 );
+		player.OutputChatBox( "<span style='color: #FF8000;'>Use /login for sign in or /register to sign up</span>" );
 	}
 
 	private OnPlayerQuit( player : Player, reason : string, kickReason : string ) : void
@@ -69,8 +67,13 @@ export default class PlayerManager extends ManagerBase< Player >
 
 	private OnPlayerDeath( player : Player, reason : string, killer : mp.Player ) : void
 	{
-		player.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ) );
-		player.SetDimension( 0 );
+		let char = player.GetCharacter();
+
+		if( char )
+		{
+			char.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ) );
+			char.SetDimension( 0 );
+		}
 	}
 
 	private OnPlayerSpawn( player : Player )

@@ -35,7 +35,7 @@ export class Vehicle extends ConsoleCommand
 		let id    : number = null;
 		let model : number = mp.joaat( name );
 
-		if( model == null )
+		if( VehicleModel[ model ] == null )
 		{
 			throw new Error( "Модель с именем '" + name + "' не найдена" );
 		}

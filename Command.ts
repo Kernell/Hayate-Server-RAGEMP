@@ -16,3 +16,4 @@ export * from "./Command/Player";
 export * from "./Command/User";
 export * from "./Command/Vehicle";
 export * from "./Command/Login";
+export * from "./Command/Register";

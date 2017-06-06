@@ -42,6 +42,8 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 						playerTryLogin : ( player, login, password ) => this.OnPlayerTryLogin( Entity.Player.FindOrCreate< Entity.Player >( player ), login, password ),
 						playerLogin    : ( player, userId )          => this.OnPlayerLogin   ( Entity.Player.FindOrCreate< Entity.Player >( player ), userId ),
 						playerLogout   : ( player, userId )          => this.OnPlayerLogout  ( Entity.Player.FindOrCreate< Entity.Player >( player ), userId ),
+
+						playerRegister : ( player, name, login, password ) => this.OnPlayerRegister( Entity.Player.FindOrCreate< Entity.Player >( player ), name, login, password ),
 					}
 				);
 			}
@@ -163,5 +165,69 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 
 	private OnPlayerLogout( player : Entity.Player, userId : number ) : void
 	{
+	}
+
+	private async OnPlayerRegister( player : Entity.Player, name : string, email : string, password : string ) : Promise< void >
+	{
+		if( player.GetUser() )
+		{
+			return player.OutputChatBox( "Вы уже авторизованы" );
+		}
+
+		if( password.length < 8 || password.length > 32 )
+		{
+			return player.OutputChatBox( "Используйте пароль длинной от 6 до 32 символов" );
+		}
+
+		if( name.length < 3 || name.length > 12 )
+		{
+			return player.OutputChatBox( "Имя пользователя может быть от 3 до 12 символов" );
+		}
+
+		if( !Entity.User.IsValidName( name ) )
+		{
+			return player.OutputChatBox( "Имя пользователя содержит некорректные символы. Используйте символы латинского алфавита" );
+		}
+
+		if( !Entity.User.IsValidEmail( email ) )
+		{
+			return player.OutputChatBox( "Пожалуйста, введите корректный email" );
+		}
+
+		let repository = this.Server.DatabaseManager.GetRepository( Entity.User );
+
+		let countEmail = await repository.count( { email: email } );
+
+		if( countEmail != 0 )
+		{
+			return player.OutputChatBox( "Пользователь с этим email уже существует" );
+		}
+						
+		let countName  = await repository.count( { name: name } );
+
+		if( countName != 0 )
+		{
+			return player.OutputChatBox( "Этот имя пользователя уже занято, попробуйте другое" );
+		}
+
+		let user = new Entity.User();
+
+		user.SetName( name );
+		user.SetEmail( email );
+		user.SetPassword( password );
+
+		return repository.persist( user ).then(
+			( user ) =>
+			{
+				player.Login( user );
+			}
+		).catch(
+			( error : Error ) =>
+			{
+				console.log( error.stack );
+
+				player.OutputChatBox( "Произошла ошибка базы данных" );
+			}
+		);
 	}
 }

@@ -21,7 +21,7 @@ export class User
 	@ORM.PrimaryGeneratedColumn()
 	protected id  : number;
 
-	@ORM.Column()
+	@ORM.Column( { unique: true, length: 64 } )
 	protected name : string;
 
 	@ORM.Column( { unique: true, length: 64 } )
@@ -33,10 +33,10 @@ export class User
 	@ORM.Column()
 	protected salt : string;
 	
-	@ORM.CreateDateColumn( { name: "loggedin_at" } )
+	@ORM.Column( { type: "datetime", name: "loggedin_at" } )
 	protected loggedInAt : Date;
 
-	@ORM.CreateDateColumn( { name: "loggedout_at" } )
+	@ORM.Column( { type: "datetime", name: "loggedout_at" } )
 	protected loggedOutAt : Date;
 
 	@ORM.CreateDateColumn( { name: "created_at" } )
@@ -65,6 +65,17 @@ export class User
 		return this.email;
 	}
 
+	public SetEmail( email : string ) : void
+	{
+		this.email = email;
+	}
+
+	public SetPassword( password : string )
+	{
+		this.salt     = User.GenerateSalt();
+		this.password = User.HashPassword( password, this.salt );
+	}
+
 	public GetLoggedInDate() : Date
 	{
 		return this.loggedInAt;
@@ -82,7 +93,7 @@ export class User
 
 	public UpdateLoggedOutDate() : void
 	{
-		this.loggedInAt = new Date();
+		this.loggedOutAt = new Date();
 	}
 
 	public GetCreatedDate() : Date
@@ -121,11 +132,13 @@ export class User
 
 	public static GenerateSalt( length : number = 16 ) : string
 	{
+		let random = ( min : number, max : number ) : number => Math.floor( Math.random() * ( max - min ) ) + min;
+
 		let salt = "";
 			
 		for( let i = 1; i < length; ++i )
 		{
-			let rand = Math.floor( Math.random() * 127 ) + 33;
+			let rand = random( 33, 127 );
 
 			salt += String.fromCharCode( rand );
 		}
@@ -154,5 +167,27 @@ export class User
 		}
 			
 		return this.HashPassword( password, salt ) == passwordHashed;
+	}
+
+	public static IsValidEmail( email : string ) : boolean
+	{
+		if( email.length < 4 || email.length > 32 )
+		{
+			return false;
+		}
+
+		let regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+		return regexp.test( email ); 
+	}
+
+	public static IsValidName( name : string ) : boolean
+	{
+		if( name.length < 3 || name.length > 32 )
+		{
+			return false;
+		}
+
+		return !/[^A-Za-z]/.test( name );
 	}
 }

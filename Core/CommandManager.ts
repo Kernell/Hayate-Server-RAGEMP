@@ -36,6 +36,7 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 		this.Add( new Command.User     ( server ) );
 		this.Add( new Command.Vehicle  ( server ) );
 		this.Add( new Command.Login    ( server ) );
+		this.Add( new Command.Register ( server ) );
 
 		process.stdin.on( "data",     input          => this.OnLine( input.toString().trim() ) );
 		process.stdin.on( "keypress", ( chunk, key ) => this.OnKey ( chunk, key ) );

@@ -81,6 +81,7 @@
     <TypeScriptCompile Include="Command\Player.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Command\Register.ts" />
     <TypeScriptCompile Include="SharedUtils\Date.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

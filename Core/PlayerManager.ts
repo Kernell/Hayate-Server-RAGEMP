@@ -106,7 +106,7 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 	{
 		if( player.GetUser() )
 		{
-			return player.OutputChatBox( "Вы уже авторизированны" );
+			return player.OutputChatBox( "Вы уже авторизованы" );
 		}
 
 		let repository = this.Server.DatabaseManager.GetRepository( Entity.User );

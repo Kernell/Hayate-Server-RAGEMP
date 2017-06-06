@@ -53,6 +53,15 @@ export class Character
 	@ORM.Column( "float" )
 	protected health : number;
 
+	@ORM.Column( "float" )
+	protected armor : number;
+
+	@ORM.Column( { name: "eye_color", type: "int" } )
+	protected eyeColor : number;
+
+	@ORM.Column( { name: "hair_highlight_color", type: "int" } )
+	protected hairHighlightColor : number;
+
 	@ORM.CreateDateColumn( { name: "created_at" } )
 	protected createdAt : string;
 
@@ -111,7 +120,7 @@ export class Character
 
 	public SetModel( model : number ) : void
 	{
-		this.entity.model = model;
+		this.entity.model = this.model = model;
 	}
 
 	public GetAlpha() : number
@@ -161,7 +170,7 @@ export class Character
 
 	public SetHealth( health : number ) : void
 	{
-		this.entity.health = health;
+		this.entity.health = this.health = health;
 	}
 
 	public GetArmor() : number
@@ -171,7 +180,7 @@ export class Character
 
 	public SetArmor( armor : number ) : void
 	{
-		this.entity.armour = armor;
+		this.entity.armour = this.armor = armor;
 	}
 
 	public GetEyeColor() : number
@@ -181,7 +190,7 @@ export class Character
 
 	public SetEyeColor( eyeColor : number ) : void
 	{
-		this.entity.eyeColour = eyeColor;
+		this.entity.eyeColour = this.eyeColor = eyeColor;
 	}
 
 	public GetHairColor() : number
@@ -211,7 +220,7 @@ export class Character
 
 	public SetHairHighlightColor( hairHighlightColor : number ) : void
 	{
-		this.entity.hairHighlightColour = hairHighlightColor;
+		this.entity.hairHighlightColour = this.hairHighlightColor = hairHighlightColor;
 	}
 
 	public GetAction() : string
@@ -277,16 +286,6 @@ export class Character
 	public IsLeavingVehicle() : boolean
 	{
 		return this.entity.isLeavingVehicle;
-	}
-
-	public Kick( reason : string ) : void
-	{
-		this.entity.kick( reason );
-	}
-
-	public Ban( reason : string ) : void
-	{
-		this.entity.ban( reason );
 	}
 
 	public GiveWeapon( weapon : Weapon, ammo : number ) : void;

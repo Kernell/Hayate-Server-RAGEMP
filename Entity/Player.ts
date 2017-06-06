@@ -67,6 +67,16 @@ export class Player extends Entity
 		this.entity.notify( message );
 	}
 
+	public Kick( reason : string ) : void
+	{
+		this.entity.kick( reason );
+	}
+
+	public Ban( reason : string ) : void
+	{
+		this.entity.ban( reason );
+	}
+
 	public Login( user : User ) : void
 	{
 		this.user = user;

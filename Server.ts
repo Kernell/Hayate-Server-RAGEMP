@@ -83,11 +83,11 @@ export default class Server
 					Console.WriteLine( `Starting %-70s [  ${Console.FgGreen}OK${Console.Reset}  ] % 5.3f ms`, name, tick_count );
 				}
 			).catch(
-				( error ) =>
+				( error : Error ) =>
 				{
 					manager.State = ManagerState.Error;
 
-					Console.WriteLine( `Starting %s [${Console.FgRed}FAILED${Console.Reset}]`, name );
+					Console.WriteLine( `Starting %-70s [${Console.FgRed}FAILED${Console.Reset}]\n%s`, name, error.stack || error );
 				}
 			);
 		}

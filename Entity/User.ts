@@ -24,7 +24,7 @@ export class User
 	@ORM.Column()
 	protected name : string;
 
-	@ORM.Column()
+	@ORM.Column( { unique: true, length: 64 } )
 	protected email : string;
 
 	@ORM.Column()

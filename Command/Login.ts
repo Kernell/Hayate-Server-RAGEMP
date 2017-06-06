@@ -34,7 +34,7 @@ export class Login extends ConsoleCommand
 		let login = args.shift();
 		let pass  = args.shift();
 
-		player.Call( "playerTryLogin", login, pass );
+		mp.events.call( "playerTryLogin", player.GetEntity(), login, pass );
 
 		return true;
 	}

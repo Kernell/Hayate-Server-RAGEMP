@@ -71,12 +71,12 @@ export class Player extends Entity
 	{
 		this.user = user;
 
-		this.Call( "playerLogin", user.GetID() );
+		mp.events.call( "playerLogin", this.entity, user.GetID() );
 	}
 
 	public Logout() : void
 	{
-		this.Call( "playerLogout", this.user.GetID() );
+		mp.events.call( "playerLogout", this.entity, this.user.GetID() );
 
 		this.user = null;
 	}

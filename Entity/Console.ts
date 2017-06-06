@@ -53,16 +53,6 @@ export class Console extends Player
 		return 0;
 	}
 	
-	public GetUserID() : number
-	{
-		return 0;
-	}
-	
-	public IsLoggedIn() : boolean
-	{
-		return true;
-	}
-	
 	public GetName() : string
 	{
 		return "Console";

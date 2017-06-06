@@ -10,20 +10,25 @@
 *
 *********************************************************/
 
-import * as Command   from "../Command";
-import * as Entity    from "../Entity";
-import { Console }    from "../Entity/Console";
-import ManagerBase    from "./ManagerBase";
-import Server         from "../Server";
+import * as Command    from "../Command";
+import * as Entity     from "../Entity";
+import { Console }     from "../Entity/Console";
+import ManagerBase     from "./ManagerBase";
+import Server          from "../Server";
+import DatabaseManager from "./DatabaseManager";
 
 export default class CommandManager extends ManagerBase< Entity.Entity >
 {
+	private console  : Console;
 	private Commands : Array< Command.ConsoleCommand >;
 
 	constructor( server : Server )
 	{
 		super( server );
 
+		this.Dependency = server.DatabaseManager;
+
+		this.console  = new Console();
 		this.Commands = new Array< Command.ConsoleCommand >();
 
 		this.Add( new Command.Interior ( server ) );
@@ -40,6 +45,28 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 		mp.events.add(
 			{
 				playerCommand: ( player, line ) => this.OnPlayerLine( Entity.Player.FindOrCreate< Entity.Player >( player ), line ),
+			}
+		);
+	}
+
+	public Init() : Promise< any >
+	{
+		return super.Init().then(
+			() =>
+			{
+				let repository = ( this.Dependency as DatabaseManager ).GetRepository( Entity.User );
+
+				return repository.findOneById( 0 ).then(
+					( user : Entity.User ) =>
+					{
+						if( user == null )
+						{
+							throw new Error( "root user is undefined" );
+						}
+
+						this.console.Login( user );
+					}
+				);
 			}
 		);
 	}
@@ -157,12 +184,10 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 			return;
 		}
 
-		let player = new Console(); // TEST ONLY!!!
-
 		let commandArgv = input.split( ' ' );
 		let commandName = commandArgv.shift();
 
-		if( !this.Execute( player, commandName, commandArgv ) )
+		if( !this.Execute( this.console, commandName, commandArgv ) )
 		{
 			Console.WriteLine( `${Console.FgRed}%s: command not found${Console.Reset}`, commandName );
 		}

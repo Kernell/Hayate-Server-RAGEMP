@@ -87,7 +87,12 @@ export default class Server
 				{
 					manager.State = ManagerState.Error;
 
-					Console.WriteLine( `Starting %-70s [${Console.FgRed}FAILED${Console.Reset}]\n%s`, name, error.stack || error );
+					Console.WriteLine( `Starting %-70s [${Console.FgRed}FAILED${Console.Reset}]`, name );
+
+					if( error )
+					{
+						Console.WriteLine( '%s', error.stack || error );
+					}
 				}
 			);
 		}

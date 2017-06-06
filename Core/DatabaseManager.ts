@@ -56,13 +56,6 @@ export default class DatabaseManager extends ManagerBase< any >
 				{
 					this.Connection = connection;
 				}
-			).catch(
-				( error ) =>
-				{
-					Console.WriteLine( "MySQL: %s", error );
-
-					throw new Error( error );
-				}
 			);
 		}
 

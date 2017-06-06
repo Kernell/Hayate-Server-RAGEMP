@@ -23,9 +23,8 @@ export class Character
 	@ORM.PrimaryGeneratedColumn()
 	protected id  : number;
 	
-	@ORM.ManyToOne( type => User, user => user.characters )
-	@ORM.JoinColumn( { name: "user_id" } )
-	public user : User = null;
+	@ORM.Column( "int" )
+	public user_id : number;
 
 	@ORM.Column( "int" )
 	protected level : number;
@@ -75,11 +74,6 @@ export class Character
 	public GetID() : number
 	{
 		return this.id;
-	}
-
-	public GetUser() : User
-	{
-		return this.user;
 	}
 
 	public GetName() : string

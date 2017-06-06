@@ -45,9 +45,6 @@ export class User
 	@ORM.Column( { type: "datetime", name: "deleted_at", nullable: true, default: null } )
 	protected deletedAt : Date;
 
-	@ORM.OneToMany( type => Character, character => character.user )
-    public characters : Character[] = [];
-
 	public GetID() : number
 	{
 		return this.id;
@@ -91,11 +88,6 @@ export class User
 	public GetCreatedDate() : Date
 	{
 		return this.createdAt
-	}
-
-	public GetCharacters() : Character[]
-	{
-		return this.characters;
 	}
 
 	public CheckPassword( password : string ) : boolean

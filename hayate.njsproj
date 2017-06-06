@@ -75,6 +75,9 @@
     <TypeScriptCompile Include="Command\Interior.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Command\Login.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Command\Player.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

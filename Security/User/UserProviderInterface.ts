@@ -10,10 +10,8 @@
 *
 *********************************************************/
 
-export * from "./Entity/Console";
-export * from "./Entity/Character";
-export * from "./Entity/Entity";
-export * from "./Entity/Player";
-export * from "./Entity/User";
-export * from "./Entity/UserAuth";
-export * from "./Entity/Vehicle";
+interface UserProviderInterface
+{
+	LoadUserByUsername( name  : string ) : Promise< UserInterface >;
+	LoadUserByLogin   ( login : string ) : Promise< UserInterface >;
+}

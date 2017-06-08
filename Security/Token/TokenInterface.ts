@@ -10,10 +10,13 @@
 *
 *********************************************************/
 
-export * from "./Entity/Console";
-export * from "./Entity/Character";
-export * from "./Entity/Entity";
-export * from "./Entity/Player";
-export * from "./Entity/User";
-export * from "./Entity/UserAuth";
-export * from "./Entity/Vehicle";
+interface TokenInterface
+{
+	GetUser           () : UserInterface;
+	SetUser           ( user : UserInterface|string ) : void;
+	GetUsername       () : string;
+	IsAuthenticated   () : boolean;
+	SetAuthenticated  ( authenticated : boolean ) : void;
+	GetCredentials    () : string;
+	RemoveCredentials () : void;
+}

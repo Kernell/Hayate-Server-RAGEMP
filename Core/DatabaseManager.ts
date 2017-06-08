@@ -46,6 +46,7 @@ export default class DatabaseManager extends ManagerBase< any >
 					entities :
 					[
 						Entity.User,
+						Entity.UserAuth,
 						Entity.Character,
 						Entity.Vehicle,
 					],

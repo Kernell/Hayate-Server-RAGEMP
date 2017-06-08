@@ -10,10 +10,11 @@
 *
 *********************************************************/
 
-export * from "./Entity/Console";
-export * from "./Entity/Character";
-export * from "./Entity/Entity";
-export * from "./Entity/Player";
-export * from "./Entity/User";
-export * from "./Entity/UserAuth";
-export * from "./Entity/Vehicle";
+interface AuthenticationProviderInterface
+{
+	Authenticate( token : TokenInterface ) : Promise< TokenInterface >;
+
+	RetrieveUser( username : string, token : TokenInterface ) : Promise< UserInterface >;
+
+	Supports( token : TokenInterface ) : boolean;
+}

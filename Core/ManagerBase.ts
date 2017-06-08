@@ -11,13 +11,12 @@
 *********************************************************/
 
 import Server from "../Server";
-import { ManagerState, IManager } from "./IManager";
 import { Entity } from "../Entity/Entity";
 
-export default class ManagerBase< TEntity extends Entity > implements IManager
+export default class ManagerBase< TEntity extends Entity > implements ManagerInterface
 {
 	protected Server     : Server;
-	protected Dependency : IManager;
+	protected Dependency : ManagerInterface;
 	protected List       : Map< number, TEntity >;
 	public    State      : ManagerState;
 

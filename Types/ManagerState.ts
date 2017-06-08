@@ -10,10 +10,11 @@
 *
 *********************************************************/
 
-export * from "./Entity/Console";
-export * from "./Entity/Character";
-export * from "./Entity/Entity";
-export * from "./Entity/Player";
-export * from "./Entity/User";
-export * from "./Entity/UserAuth";
-export * from "./Entity/Vehicle";
+enum ManagerState
+{
+	None,
+	OK,
+	Error,
+}
+
+module.exports = ManagerState;

@@ -82,6 +82,54 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Command\Register.ts" />
+    <TypeScriptCompile Include="Entity\EntityInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Entity\UserAuth.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\Authentication\AuthenticationManagerInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\Authentication\AuthenticationProvider.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\Authentication\AuthenticationProviderInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\Authentication\AuthenticationProviderManager.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\Encoders\PasswordEncoderInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\Encoders\UserPasswordEncoder.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\Token\TokenInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\Token\UsernamePasswordToken.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\User\UserInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\User\UserProvider.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\User\UserProviderInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\Validator\UserEmailValidator.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\Validator\UserNameValidator.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\Validator\UserPasswordValidator.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="SharedUtils\Date.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -94,7 +142,7 @@
     <TypeScriptCompile Include="Core\DatabaseManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Core\IManager.ts">
+    <TypeScriptCompile Include="Core\ManagerInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Core\ManagerBase.ts">
@@ -151,6 +199,9 @@
     <TypeScriptCompile Include="SharedUtils\String.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Types\ManagerState.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Types\Vector3.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -178,6 +229,12 @@
     <Folder Include="Command\" />
     <Folder Include="Entity\" />
     <Folder Include="Config\" />
+    <Folder Include="Security\" />
+    <Folder Include="Security\Encoders\" />
+    <Folder Include="Security\Authentication\" />
+    <Folder Include="Security\Token\" />
+    <Folder Include="Security\User\" />
+    <Folder Include="Security\Validator\" />
     <Folder Include="Types\" />
     <Folder Include="Typings\" />
     <Folder Include="SharedUtils\" />

@@ -10,23 +10,38 @@
 *
 *********************************************************/
 
-import * as Entity      from "../Entity";
-import Server           from "../Server";
-import ManagerBase      from "./ManagerBase";
-import DatabaseManager  from "./DatabaseManager";
+import * as Entity                       from "../Entity";
+import Server                            from "../Server";
+import ManagerBase                       from "./ManagerBase";
+import DatabaseManager                   from "./DatabaseManager";
+import { UserProvider }                  from "../Security/User/UserProvider";
+import { AuthenticationProviderManager } from "../Security/Authentication/AuthenticationProviderManager";
+import { AuthenticationProvider }        from "../Security/Authentication/AuthenticationProvider";
+import { UsernamePasswordToken }         from "../Security/Token/UsernamePasswordToken";
 
 export default class PlayerManager extends ManagerBase< Entity.Player >
 {
+	private authenticationManager : AuthenticationProviderManager;
+
 	constructor( server : Server )
 	{
 		super( server );
 
 		this.Dependency = server.DatabaseManager;
+		this.authenticationManager = null;
 	}
 
 	public Init() : Promise< any >
 	{
 		return super.Init().then(
+			() =>
+			{
+				let repository   = this.Server.DatabaseManager.GetRepository( Entity.User );
+				let userProvider = new UserProvider( repository );
+
+				this.authenticationManager = new AuthenticationProviderManager( [ new AuthenticationProvider( userProvider ) ], true );
+			}
+		).then(
 			() =>
 			{
 				mp.events.add(
@@ -111,22 +126,17 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 			return player.OutputChatBox( "Вы уже авторизованы" );
 		}
 
-		let repository = this.Server.DatabaseManager.GetRepository( Entity.User );
+		let token = new UsernamePasswordToken( login, password );
 
-		repository.findOne( { email: login } ).then(
-			( user : Entity.User ) =>
+		this.authenticationManager.Authenticate( token ).then(
+			( token : TokenInterface ) =>
 			{
-				if( user == null )
-				{
-					return player.OutputChatBox( "Неверный логин или пароль" );
-				}
-
-				if( !user.CheckPassword( password ) )
-				{
-					return player.OutputChatBox( "Неверный логин или пароль" );
-				}
-
-				player.Login( user );
+				player.Login( token.GetUser() as Entity.User );
+			}
+		).catch(
+			( error : Error ) =>
+			{
+				return player.OutputChatBox( error.message );
 			}
 		);
 	}
@@ -184,15 +194,15 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 			return player.OutputChatBox( "Имя пользователя может быть от 3 до 12 символов" );
 		}
 
-		if( !Entity.User.IsValidName( name ) )
-		{
-			return player.OutputChatBox( "Имя пользователя содержит некорректные символы. Используйте символы латинского алфавита" );
-		}
+		//if( !Entity.User.IsValidName( name ) )
+		//{
+		//	return player.OutputChatBox( "Имя пользователя содержит некорректные символы. Используйте символы латинского алфавита" );
+		//}
 
-		if( !Entity.User.IsValidEmail( email ) )
-		{
-			return player.OutputChatBox( "Пожалуйста, введите корректный email" );
-		}
+		//if( !Entity.User.IsValidEmail( email ) )
+		//{
+		//	return player.OutputChatBox( "Пожалуйста, введите корректный email" );
+		//}
 
 		let repository = this.Server.DatabaseManager.GetRepository( Entity.User );
 

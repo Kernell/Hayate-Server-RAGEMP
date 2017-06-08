@@ -10,10 +10,19 @@
 *
 *********************************************************/
 
-export * from "./Entity/Console";
-export * from "./Entity/Character";
-export * from "./Entity/Entity";
-export * from "./Entity/Player";
-export * from "./Entity/User";
-export * from "./Entity/UserAuth";
-export * from "./Entity/Vehicle";
+export class UserNameValidator
+{
+	public constructor()
+	{
+	}
+
+	public Validate( value : string ) : boolean
+	{
+		if( value.length < 3 || value.length > 32 )
+		{
+			return false;
+		}
+
+		return !/[^A-Za-z]/.test( value );
+	}
+}

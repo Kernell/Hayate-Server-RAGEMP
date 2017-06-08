@@ -10,10 +10,14 @@
 *
 *********************************************************/
 
-export * from "./Entity/Console";
-export * from "./Entity/Character";
-export * from "./Entity/Entity";
-export * from "./Entity/Player";
-export * from "./Entity/User";
-export * from "./Entity/UserAuth";
-export * from "./Entity/Vehicle";
+export class UserPasswordValidator
+{
+	public constructor()
+	{
+	}
+
+	public Validate( value : string ) : boolean
+	{
+		return value.length >= 8 && value.length <= 64;
+	}
+}

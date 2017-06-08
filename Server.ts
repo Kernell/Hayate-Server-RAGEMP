@@ -13,7 +13,6 @@
 import "reflect-metadata";
 import "./SharedUtils";
 import * as Config      from "nconf";
-import { ManagerState, IManager } from "./Core/IManager";
 
 import { Console }      from "./Entity/Console";
 import ManagerBase      from "./Core/ManagerBase";
@@ -33,7 +32,7 @@ export default class Server
 
 	private DoPulseTimer             : NodeJS.Timer;
 	private DebugTicks               : any;
-	private Managers                 : Array< IManager >;
+	private Managers                 : Array< ManagerInterface >;
 
 	public DatabaseManager : DatabaseManager;
 	public CommandManager  : CommandManager;
@@ -100,7 +99,7 @@ export default class Server
 		this.DoPulseTimer = setInterval( () => this.DoPulse(), 1000 );
 	}
 
-	public RegisterManager( manager : IManager )
+	public RegisterManager( manager : ManagerInterface )
 	{
 		this.Managers.push( manager );
 	}

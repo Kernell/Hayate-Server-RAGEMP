@@ -18,6 +18,9 @@ import { UserProvider }                  from "../Security/User/UserProvider";
 import { AuthenticationProviderManager } from "../Security/Authentication/AuthenticationProviderManager";
 import { AuthenticationProvider }        from "../Security/Authentication/AuthenticationProvider";
 import { UsernamePasswordToken }         from "../Security/Token/UsernamePasswordToken";
+import { UserEmailValidator }            from "../Security/Validator/UserEmailValidator";
+import { UserNameValidator }             from "../Security/Validator/UserNameValidator";
+import { UserPasswordValidator }         from "../Security/Validator/UserPasswordValidator";
 
 export default class PlayerManager extends ManagerBase< Entity.Player >
 {
@@ -184,25 +187,20 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 			return player.OutputChatBox( "Вы уже авторизованы" );
 		}
 
-		if( password.length < 8 || password.length > 32 )
+		let validatorEmail = new UserEmailValidator();
+		let validatorName  = new UserNameValidator();
+		let validatorPassw = new UserPasswordValidator();
+
+		try
 		{
-			return player.OutputChatBox( "Используйте пароль длинной от 6 до 32 символов" );
+			validatorName.Validate( name );
+			validatorEmail.Validate( email );
+			validatorPassw.Validate( password );
 		}
-
-		if( name.length < 3 || name.length > 12 )
+		catch( e )
 		{
-			return player.OutputChatBox( "Имя пользователя может быть от 3 до 12 символов" );
+			return player.OutputChatBox( e );
 		}
-
-		//if( !Entity.User.IsValidName( name ) )
-		//{
-		//	return player.OutputChatBox( "Имя пользователя содержит некорректные символы. Используйте символы латинского алфавита" );
-		//}
-
-		//if( !Entity.User.IsValidEmail( email ) )
-		//{
-		//	return player.OutputChatBox( "Пожалуйста, введите корректный email" );
-		//}
 
 		let repository = this.Server.DatabaseManager.GetRepository( Entity.User );
 

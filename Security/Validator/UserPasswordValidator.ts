@@ -18,6 +18,11 @@ export class UserPasswordValidator
 
 	public Validate( value : string ) : boolean
 	{
-		return value.length >= 8 && value.length <= 64;
+		if( value.length < 6 || value.length > 64 )
+		{
+			throw new Error( "Используйте пароль длинной от 6 до 32 символов" );
+		}
+
+		return true;
 	}
 }

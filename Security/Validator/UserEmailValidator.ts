@@ -20,11 +20,16 @@ export class UserEmailValidator
 	{
 		if( value.length < 4 || value.length > 32 )
 		{
-			return false;
+			throw new Error( "Пожалуйста, введите корректный email" );
 		}
 
 		let regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-		return regexp.test( value ); 
+		if( !regexp.test( value ) )
+		{
+			throw new Error( "Пожалуйста, введите корректный email" );
+		}
+
+		return true; 
 	}
 }

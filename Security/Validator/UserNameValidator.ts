@@ -20,9 +20,14 @@ export class UserNameValidator
 	{
 		if( value.length < 3 || value.length > 32 )
 		{
-			return false;
+			throw new Error( "Имя пользователя может быть от 3 до 12 символов" );
 		}
 
-		return !/[^A-Za-z]/.test( value );
+		if( /[^A-Za-z]/.test( value ) )
+		{
+			throw new Error( "Имя пользователя содержит некорректные символы. Используйте символы латинского алфавита" );
+		}
+
+		return true;
 	}
 }

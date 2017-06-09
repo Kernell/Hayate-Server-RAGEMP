@@ -72,6 +72,9 @@
     <Compile Include="index.js" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Command\Character.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Command\Interior.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

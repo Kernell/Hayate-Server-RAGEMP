@@ -22,16 +22,35 @@ import { UserEmailValidator }            from "../Security/Validator/UserEmailVa
 import { UserNameValidator }             from "../Security/Validator/UserNameValidator";
 import { UserPasswordValidator }         from "../Security/Validator/UserPasswordValidator";
 
+type EventCallback = ( ...params : any[] ) => Promise< any >;
+type EventType     = { name: string, callback: Function };
+type EventsArray   = [ EventType ];
+
 export default class PlayerManager extends ManagerBase< Entity.Player >
 {
 	private authenticationManager : AuthenticationProviderManager;
+	private events : EventsArray;
 
 	constructor( server : Server )
 	{
 		super( server );
 
+		this.events = [] as EventsArray;
 		this.Dependency = server.DatabaseManager;
 		this.authenticationManager = null;
+
+		// Native events
+		this.RegisterEvent( "playerJoin",     this.OnPlayerJoin );
+		this.RegisterEvent( "playerQuit",     this.OnPlayerQuit );
+		this.RegisterEvent( "playerDeath",    this.OnPlayerDeath );
+		this.RegisterEvent( "playerSpawn",    this.OnPlayerDeath ); 
+		this.RegisterEvent( "playerChat",     this.OnPlayerChat );
+				
+		// Gamemode events
+		this.RegisterEvent( "playerTryLogin", this.OnPlayerTryLogin );
+		this.RegisterEvent( "playerLogin",    this.OnPlayerLogin );
+		this.RegisterEvent( "playerLogout",   this.OnPlayerLogout );
+		this.RegisterEvent( "playerRegister", this.OnPlayerRegister );
 	}
 
 	public Init() : Promise< any >
@@ -47,23 +66,10 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		).then(
 			() =>
 			{
-				mp.events.add(
-					{
-						// Native events
-						playerJoin  : ( player )                     => this.OnPlayerJoin ( Entity.Player.FindOrCreate< Entity.Player >( player ) ),
-						playerQuit  : ( player, reason, kickReason ) => this.OnPlayerQuit ( Entity.Player.FindOrCreate< Entity.Player >( player ), reason, kickReason ),
-						playerDeath : ( player, reason, killer )     => this.OnPlayerDeath( Entity.Player.FindOrCreate< Entity.Player >( player ), reason, killer ),
-						playerSpawn : ( player )                     => this.OnPlayerSpawn( Entity.Player.FindOrCreate< Entity.Player >( player ) ),
-						playerChat  : ( player, text )               => this.OnPlayerChat ( Entity.Player.FindOrCreate< Entity.Player >( player ), text ),
-
-						// Gamemode events
-						playerTryLogin : ( player, login, password ) => this.OnPlayerTryLogin( Entity.Player.FindOrCreate< Entity.Player >( player ), login, password ),
-						playerLogin    : ( player, userId )          => this.OnPlayerLogin   ( Entity.Player.FindOrCreate< Entity.Player >( player ), userId ),
-						playerLogout   : ( player, userId )          => this.OnPlayerLogout  ( Entity.Player.FindOrCreate< Entity.Player >( player ), userId ),
-
-						playerRegister : ( player, name, login, password ) => this.OnPlayerRegister( Entity.Player.FindOrCreate< Entity.Player >( player ), name, login, password ),
-					}
-				);
+				for( let event of this.events )
+				{
+					mp.events.add( event.name, event.callback );
+				}
 			}
 		).then(
 			() =>
@@ -76,21 +82,63 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		);
 	}
 
-	private OnPlayerJoin( player : Entity.Player ) : void
+	private RegisterEvent( event : string, handler: EventCallback )
+	{
+		let e = { name: event, callback: ( player, ...params : any[] ) => this.EventHandler( event, handler, Entity.Player.FindOrCreate< Entity.Player >( player ), ...params ) };
+
+		this.events.push( e );
+	}
+
+	private EventHandler( event : string, handler: EventCallback, source : Entity.Player, ...params : any[] )
+	{
+		let new_params = [];
+
+		for( let param of params )
+		{
+			let value = param;
+
+			if( typeof param == "object" && param.type != null )
+			{
+				let type = param.type[ 0 ].toUpperCase() + param.type.substr( 1, param.type.length );
+
+				value = Entity[ type ].FindOrCreate( param );
+			}
+
+			new_params.push( value );
+		}
+
+		let promise = handler.call( this, source, ...new_params );
+
+		if( promise != null )
+		{
+			promise.catch(
+				( e : Error ) =>
+				{
+					source.OutputChatBox( e.message );
+				}
+			);
+		}
+	}
+
+	private OnPlayerJoin( player : Entity.Player ) : Promise< any >
 	{
 		this.AddToList( player );
 
 		player.OutputChatBox( "<span style='color: #FF8000;'>Use /login for sign in or /register to sign up</span>" );
+
+		return null;
 	}
 
-	private OnPlayerQuit( player : Entity.Player, reason : string, kickReason : string ) : void
+	private OnPlayerQuit( player : Entity.Player, reason : string, kickReason : string ) : Promise< any >
 	{
 		this.RemoveFromList( player );
 
 		player.Destroy();
+	
+		return null;
 	}
 
-	private OnPlayerDeath( player : Entity.Player, reason : string, killer : mp.Player ) : void
+	private OnPlayerDeath( player : Entity.Player, reason : string, killer : mp.Player ) : Promise< any >
 	{
 		let char = player.GetCharacter();
 
@@ -99,13 +147,16 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 			char.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ) );
 			char.SetDimension( 0 );
 		}
+
+		return null;
 	}
 
-	private OnPlayerSpawn( player : Entity.Player )
+	private OnPlayerSpawn( player : Entity.Player ) : Promise< any >
 	{
+		return null;
 	}
 
-	private OnPlayerChat( player : Entity.Player, text : string ) : void
+	private OnPlayerChat( player : Entity.Player, text : string ) : Promise< any >
 	{
 		text = text
 			.replace( /&/g, "&amp;" )
@@ -120,31 +171,28 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		{
 			player.OutputChatBox( line );
 		}
+
+		return null;
 	}
 
-	private OnPlayerTryLogin( player : Entity.Player, login : string, password : string ) : void
+	private OnPlayerTryLogin( player : Entity.Player, login : string, password : string ) : Promise< any >
 	{
 		if( player.GetUser() )
 		{
-			return player.OutputChatBox( "Вы уже авторизованы" );
+			throw new Error( "Вы уже авторизованы" );
 		}
 
 		let token = new UsernamePasswordToken( login, password );
 
-		this.authenticationManager.Authenticate( token ).then(
+		return this.authenticationManager.Authenticate( token ).then(
 			( token : TokenInterface ) =>
 			{
 				player.Login( token.GetUser() as Entity.User );
 			}
-		).catch(
-			( error : Error ) =>
-			{
-				return player.OutputChatBox( error.message );
-			}
 		);
 	}
 
-	private OnPlayerLogin( player : Entity.Player, userId : number ) : void
+	private OnPlayerLogin( player : Entity.Player, userId : number ) : Promise< any >
 	{
 		for( let p of this.List.values() )
 		{
@@ -158,7 +206,7 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 
 		let repository = this.Server.DatabaseManager.GetRepository( Entity.Character );
 
-		repository.find( { user_id: userId } ).then(
+		return repository.find( { user_id: userId } ).then(
 			( characters : Entity.Character[] ) =>
 			{
 				player.OutputChatBox( "Используйте /char create [name] [lastname] для создания персонажа" );
@@ -176,8 +224,9 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		);
 	}
 
-	private OnPlayerLogout( player : Entity.Player, userId : number ) : void
+	private OnPlayerLogout( player : Entity.Player, userId : number ) : Promise< void >
 	{
+		return null;
 	}
 
 	private async OnPlayerRegister( player : Entity.Player, name : string, email : string, password : string ) : Promise< void >

@@ -45,7 +45,7 @@ export class Console extends Player
 
 	constructor()
 	{
-		super( null );
+		super( { type: "console" } as mp.Entity );
 	}
 
 	public GetID() : number

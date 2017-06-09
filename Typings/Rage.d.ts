@@ -608,7 +608,7 @@ declare namespace mp
 	export class events
 	{
 		// Register event handlers
-		static add( events : any ) : void;
+		static add( ...events : any[] ) : void;
 
 		// Calls registered event handlers
 		static call( name : string, ...args : any[] ) : void;

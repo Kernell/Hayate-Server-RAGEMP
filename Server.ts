@@ -59,7 +59,7 @@ export default class Server
 		this.PlayerManager   = new PlayerManager( this );
 		this.VehicleManager  = new VehicleManager( this );
 
-		setTimeout( () => this.Initialize(), 500 );
+		this.Initialize();
 	}
 
 	public Initialize() : void

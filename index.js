@@ -31,6 +31,12 @@ fs.readdirSync( './packages/hayate/bin/Types/' ).forEach(
 // Temp fix for old RAGE builds
 Vector3 = global[ "Vector3" ];
 
-let Server = require( "./bin/Server" ).default;
+setTimeout(
+	() => 
+	{
+		let Server = require( "./bin/Server" ).default;
 
-new Server();
+		new Server();
+	},
+	100
+);

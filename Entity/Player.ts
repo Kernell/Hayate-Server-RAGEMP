@@ -12,11 +12,10 @@
 
 import { Entity }     from "./Entity";
 import { Character }  from "./Character";
-import { User }       from "./User";
 
 export class Player extends Entity
 {
-	protected user   : User;
+	protected user   : UserInterface;
 	protected char   : Character;
 	protected entity : mp.Player;
 
@@ -32,7 +31,7 @@ export class Player extends Entity
 		this.char = new Character( this );
 	}
 
-	public GetUser() : User
+	public GetUser() : UserInterface
 	{
 		return this.user;
 	}
@@ -77,7 +76,7 @@ export class Player extends Entity
 		this.entity.ban( reason );
 	}
 
-	public Login( user : User ) : void
+	public Login( user : UserInterface ) : void
 	{
 		this.user = user;
 

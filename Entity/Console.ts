@@ -83,6 +83,21 @@ export class Console extends Player
 		console.log( text );
 	}
 
+	public Login( user : UserInterface ) : void
+	{
+		this.user = user;
+	}
+
+	public Logout() : void
+	{
+		this.user = null;
+	}
+
+	public static Write( buffer : string, ...params : any[] ) : void
+	{
+		process.stdout.write( printf( buffer, ...params ) );
+	}
+
 	public static WriteLine( line : String, ...params : any[] ) : void
 	{
 		console.log( printf( line, ...params ) );

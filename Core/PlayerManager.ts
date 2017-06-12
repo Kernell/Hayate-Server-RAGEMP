@@ -187,7 +187,7 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		return this.authenticationManager.Authenticate( token ).then(
 			( token : TokenInterface ) =>
 			{
-				player.Login( token.GetUser() as Entity.User );
+				player.Login( token.GetUser() );
 			}
 		);
 	}
@@ -203,6 +203,15 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 				break;
 			}
 		}
+
+		let userAuth = new Entity.UserAuth();
+
+		userAuth.SetUserID( userId );
+		userAuth.SetIP( player.GetIP() );
+		userAuth.SetDeviceID( "null" );
+		userAuth.SetToken( new GUID().toString() );
+
+		this.Server.DatabaseManager.GetRepository( Entity.UserAuth ).persist( userAuth );
 
 		let repository = this.Server.DatabaseManager.GetRepository( Entity.Character );
 

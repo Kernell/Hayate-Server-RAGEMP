@@ -31,12 +31,6 @@ export class User implements UserInterface
 	@ORM.Column()
 	protected salt : string;
 	
-	@ORM.Column( { type: "datetime", name: "loggedin_at" } )
-	protected loggedInAt : Date;
-
-	@ORM.Column( { type: "datetime", name: "loggedout_at" } )
-	protected loggedOutAt : Date;
-
 	@ORM.CreateDateColumn( { name: "created_at" } )
 	protected createdAt : Date;
 
@@ -86,26 +80,6 @@ export class User implements UserInterface
 	public SetSalt( salt : string )
 	{
 		this.salt = salt;
-	}
-
-	public GetLoggedInDate() : Date
-	{
-		return this.loggedInAt;
-	}
-
-	public UpdateLoggedInDate() : void
-	{
-		this.loggedInAt = new Date();
-	}
-
-	public GetLoggedOutDate() : Date
-	{
-		return this.loggedOutAt;
-	}
-
-	public UpdateLoggedOutDate() : void
-	{
-		this.loggedOutAt = new Date();
 	}
 
 	public GetCreatedDate() : Date

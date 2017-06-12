@@ -17,7 +17,5 @@ interface UserInterface
 	GetEmail           () : string;
 	GetPassword        () : string;
 	GetSalt            () : string;
-	GetLoggedInDate    () : Date;
-	GetLoggedOutDate   () : Date;
 	GetCreatedDate     () : Date;
 }

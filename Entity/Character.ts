@@ -14,11 +14,10 @@ import * as ORM from "typeorm";
 
 import { Entity } from "./Entity";
 import { Player } from "./Player";
-import { User }   from "./User";
 import { Vehicle } from "./Vehicle";
 
 @ORM.Entity( "characters" )
-export class Character
+export class Character implements CharacterInterface
 {
 	@ORM.PrimaryGeneratedColumn()
 	protected id  : number;
@@ -233,7 +232,7 @@ export class Character
 		return this.entity.vehicle != null;
 	}
 
-	public GetVehicle() : Vehicle
+	public GetVehicle() : VehicleInterface
 	{
 		return this.entity.vehicle ? Vehicle.FindOrCreate< Vehicle >( this.entity.vehicle ) : null;
 	}
@@ -306,7 +305,7 @@ export class Character
 		this.entity.setProp( prop, drawable, texture );
 	}
 
-	public PutIntoVehicle( vehicle : Vehicle, seat : number ) : void
+	public PutIntoVehicle( vehicle : VehicleInterface, seat : number ) : void
 	{
 		this.entity.putIntoVehicle( vehicle.GetEntity() as mp.Vehicle, seat );
 	}

@@ -15,7 +15,7 @@ import * as ORM from "typeorm";
 import { Entity } from "./Entity";
 
 @ORM.Entity( "vehicles" )
-export class Vehicle extends Entity
+export class Vehicle extends Entity implements VehicleInterface
 {
 	@ORM.PrimaryGeneratedColumn()
 	protected id  : number;

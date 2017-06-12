@@ -11,7 +11,6 @@
 *********************************************************/
 
 import * as ORM          from "typeorm";
-import { Character }     from "./Character";
 
 @ORM.Entity( "users" )
 export class User implements UserInterface

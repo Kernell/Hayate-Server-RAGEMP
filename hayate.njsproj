@@ -91,6 +91,12 @@
     <TypeScriptCompile Include="Entity\UserAuth.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Game\Character\CharacterInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Game\Vehicle\VehicleInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Security\Authentication\AuthenticationManagerInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -202,6 +208,9 @@
     <TypeScriptCompile Include="SharedUtils\String.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Types\GUID.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Types\ManagerState.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -232,6 +241,9 @@
     <Folder Include="Command\" />
     <Folder Include="Entity\" />
     <Folder Include="Config\" />
+    <Folder Include="Game\" />
+    <Folder Include="Game\Character\" />
+    <Folder Include="Game\Vehicle\" />
     <Folder Include="Security\" />
     <Folder Include="Security\Encoders\" />
     <Folder Include="Security\Authentication\" />

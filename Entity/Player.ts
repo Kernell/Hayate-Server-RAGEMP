@@ -11,12 +11,11 @@
 *********************************************************/
 
 import { Entity }     from "./Entity";
-import { Character }  from "./Character";
 
 export class Player extends Entity
 {
 	protected user   : UserInterface;
-	protected char   : Character;
+	protected char   : CharacterInterface;
 	protected entity : mp.Player;
 
 	public constructor( entity : mp.Entity )
@@ -26,19 +25,19 @@ export class Player extends Entity
 		this.char = null;
 	}
 
-	public CreateCharacter( id )
-	{
-		this.char = new Character( this );
-	}
-
 	public GetUser() : UserInterface
 	{
 		return this.user;
 	}
 
-	public GetCharacter() : Character
+	public GetCharacter() : CharacterInterface
 	{
 		return this.char;
+	}
+
+	public SetCharacter( char : CharacterInterface )
+	{
+		this.char = char;
 	}
 
 	public GetName() : string

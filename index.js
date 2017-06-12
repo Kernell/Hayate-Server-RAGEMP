@@ -14,19 +14,21 @@ process._debugProcess( process.pid );
 
 const fs = require( 'fs' );
 
-fs.readdirSync( './packages/hayate/bin/Types/' ).forEach(
-	( fileName ) =>
+let include = ( fileName ) =>
+{
+	if( fileName.substr( fileName.length - 2, 2 ) != 'js' )
     {
-		if( fileName.substr( fileName.length - 2, 2 ) != 'js' )
-        {
-			return;
-        }
-
-		let typeName = fileName.replace( /\.js$/i, '' );
-
-		global[ typeName ] = require( './bin/Types/' + fileName );
+		return;
     }
-);
+
+	let typeName = fileName.replace( /\.js$/i, '' );
+
+	global[ typeName ] = require( './bin/Types/' + fileName );
+}
+
+include( 'IdentifiedPool.js' );
+
+fs.readdirSync( './packages/hayate/bin/Types/' ).forEach( include );
 
 // Temp fix for old RAGE builds
 Vector3 = global[ "Vector3" ];

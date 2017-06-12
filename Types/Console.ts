@@ -12,7 +12,7 @@
 
 const printf = require( "printf" );
 
-class Console implements PlayerInterface
+class Console extends IdentifiedPool implements PlayerInterface
 {
 	public static Reset      = "\x1b[0m";
 	
@@ -41,12 +41,17 @@ class Console implements PlayerInterface
 	public static BgCyan     = "\x1b[46m";
 	public static BgWhite    = "\x1b[47m";
 
-	private type : string;
 	private user : UserInterface;
 
 	constructor()
 	{
-		this.type = "console";
+		let entity =
+		{
+			id   : 0,
+			type : "console"
+		};
+
+		super( entity as mp.Entity );
 	}
 
 	public Destroy() : void
@@ -61,12 +66,12 @@ class Console implements PlayerInterface
 
 	public GetEntity() : mp.Entity
 	{
-		return null;
+		return this.entity;
 	}
 
 	public GetType() : string
 	{
-		return this.type;
+		return this.entity.type;
 	}
 
 	public GetModel() : number
@@ -89,7 +94,7 @@ class Console implements PlayerInterface
 
 	public GetID() : number
 	{
-		return 0;
+		return this.entity.id;
 	}
 	
 	public GetName() : string

@@ -208,7 +208,7 @@
     <TypeScriptCompile Include="SharedUtils.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SharedUtils\IdentifiedPool.ts">
+    <TypeScriptCompile Include="Types\IdentifiedPool.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SharedUtils\String.ts">

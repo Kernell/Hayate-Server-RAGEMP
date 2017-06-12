@@ -10,7 +10,7 @@
 *
 *********************************************************/
 
-export default class IdentifiedPool
+class IdentifiedPool
 {
 	protected static readonly Instances : Array< IdentifiedPool > = new Array< IdentifiedPool >();
 
@@ -45,3 +45,5 @@ export default class IdentifiedPool
 		return this.Find< T >( entity ) || this.Create< T >( entity );
 	}
 }
+
+module.exports = IdentifiedPool;

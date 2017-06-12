@@ -10,8 +10,6 @@
 *
 *********************************************************/
 
-import IdentifiedPool from "../SharedUtils/IdentifiedPool";
-
 export class Entity extends IdentifiedPool implements EntityInterface
 {
 	public IsValid() : boolean

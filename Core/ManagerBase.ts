@@ -12,7 +12,6 @@
 
 import Server from "../Server";
 import { Entity } from "../Entity/Entity";
-import { Player } from "../Entity/Player";
 
 type EventCallback = ( ...params : any[] ) => Promise< any >;
 type EventType     = { name: string, callback: Function };
@@ -40,16 +39,23 @@ export default class ManagerBase< TEntity extends Entity > implements ManagerInt
 
 	protected RegisterEvent( event : string, handler: EventCallback )
 	{
+		let callback = ( player : mp.Entity, ...params : any[] ) =>
+		{
+			let type = player.type == "console" ? Console : Entity[ player.type ];
+
+			this.EventHandler( event, handler, type.FindOrCreate( player ), ...params );
+		};
+
 		let e =
 		{
 			name: event,
-			callback: ( player, ...params : any[] ) => this.EventHandler( event, handler, Player.FindOrCreate< Player >( player ), ...params )
+			callback: callback,
 		};
 
 		this.events.push( e );
 	}
 
-	protected EventHandler( event : string, handler: EventCallback, source : Player, ...params : any[] )
+	protected EventHandler( event : string, handler: EventCallback, source : PlayerInterface, ...params : any[] )
 	{
 		let new_params = [];
 

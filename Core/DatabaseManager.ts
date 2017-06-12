@@ -12,7 +12,6 @@
 
 import * as Config    from "nconf";
 import * as ORM       from "typeorm";
-import { Console }    from "../Entity/Console";
 import * as Entity    from "../Entity";
 import Server         from "../Server";
 import ManagerBase    from "./ManagerBase";

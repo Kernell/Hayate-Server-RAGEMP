@@ -10,11 +10,9 @@
 *
 *********************************************************/
 
-import { Player } from "./Player";
+const printf = require( "printf" );
 
-import * as printf from "printf";
-
-export class Console extends Player
+class Console implements PlayerInterface
 {
 	public static Reset      = "\x1b[0m";
 	
@@ -43,9 +41,50 @@ export class Console extends Player
 	public static BgCyan     = "\x1b[46m";
 	public static BgWhite    = "\x1b[47m";
 
+	private type : string;
+	private user : UserInterface;
+
 	constructor()
 	{
-		super( { type: "console" } as mp.Entity );
+		this.type = "console";
+	}
+
+	public Destroy() : void
+	{
+		throw new Error();
+	}
+
+	public IsValid() : boolean
+	{
+		return true;
+	}
+
+	public GetEntity() : mp.Entity
+	{
+		return null;
+	}
+
+	public GetType() : string
+	{
+		return this.type;
+	}
+
+	public GetModel() : number
+	{
+		return 0;
+	}
+
+	public SetModel() : void
+	{
+	}
+
+	public GetAlpha() : number
+	{
+		return 255;
+	}
+
+	public SetAlpha( alpha : number ) : void
+	{
 	}
 
 	public GetID() : number
@@ -58,9 +97,19 @@ export class Console extends Player
 		return "Console";
 	}
 	
-	public GetUserName() : string
+	public GetUser() : UserInterface
 	{
-		return "Console";
+		return this.user;
+	}
+
+	public GetPing() : number
+	{
+		return 0;
+	}
+
+	public GetIP() : string
+	{
+		return "127.0.0.1";
 	}
 
 	public GetPosition() : Vector3
@@ -68,14 +117,26 @@ export class Console extends Player
 		return new Vector3( 0, 0, 0 );
 	}
 
+	public SetPosition( position : Vector3 ) : void
+	{
+	}
+
 	public GetRotation() : Vector3
 	{
 		return new Vector3( 0, 0, 0 );
 	}
 
+	public SetRotation( rotation : Vector3 ) : void
+	{
+	}
+
 	public GetDimension() : number
 	{
 		return 0;
+	}
+
+	public SetDimension( dimension : number ) : void
+	{
 	}
 
 	public OutputChatBox( text : string ) : void
@@ -103,3 +164,5 @@ export class Console extends Player
 		console.log( printf( line, ...params ) );
 	}
 }
+
+module.exports = Console;

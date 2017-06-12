@@ -11,7 +11,6 @@
 *********************************************************/
 
 import Server     from "../Server";
-import { Player } from "../Entity/Player";
 
 export class ConsoleCommand
 {
@@ -28,7 +27,7 @@ export class ConsoleCommand
 		this.CaseSensitive = true;
 	}
 
-	public Execute( player : Player, args : string[] ) : Boolean
+	public Execute( player : PlayerInterface, args : string[] ) : Boolean
 	{
 		let option = args.shift();
 		let method = "Option_" + option;

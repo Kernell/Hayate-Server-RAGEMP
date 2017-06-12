@@ -13,7 +13,6 @@
 import * as printf        from "printf";
 import * as Config        from "nconf";
 import { ConsoleCommand } from "./ConsoleCommand";
-import { Console }        from "../Entity/Console";
 import * as Entity        from "../Entity";
 import Server             from "../Server";
 
@@ -30,7 +29,7 @@ export class Interior extends ConsoleCommand
 		this.Name = "interior";
 	}
 
-	private Option_show( player : Entity.Player, option : string, args : any[] ) : void
+	private Option_show( player : PlayerInterface, option : string, args : any[] ) : void
 	{
 		let id = args.shift();
 
@@ -46,7 +45,7 @@ export class Interior extends ConsoleCommand
 		}
 	}
 
-	private Option_undefined( player : Entity.Player, option : string, args : any[] )
+	private Option_undefined( player : PlayerInterface, option : string, args : any[] )
 	{
 		player.OutputChatBox( "Syntax: /" + this.Name + " <option>" );
 	}

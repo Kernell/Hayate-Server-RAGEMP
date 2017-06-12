@@ -13,7 +13,6 @@
 import * as printf        from "printf";
 import * as Config        from "nconf";
 import { ConsoleCommand } from "./ConsoleCommand";
-import { Console }        from "../Entity/Console";
 import * as Entity        from "../Entity";
 import Server             from "../Server";
 
@@ -26,7 +25,7 @@ export class Vehicle extends ConsoleCommand
 		this.Name = "vehicle";
 	}
 
-	private Option_spawn( player : Entity.Player, option : string, args : any[] ) : void
+	private Option_spawn( player : PlayerInterface, option : string, args : any[] ) : void
 	{
 		let name = args.shift();
 
@@ -61,7 +60,6 @@ export class Vehicle extends ConsoleCommand
 		let color     = new VehicleColor();
 		let plate     = printf( "NULL %03d", -id );
 		
-		//position.Z -= 2.0;
 		rotation.Z += 90.0;
 
 		let vehicle = new Entity.Vehicle( model, position, rotation, dimension, color, plate );
@@ -78,7 +76,7 @@ export class Vehicle extends ConsoleCommand
 		player.OutputChatBox( vehicle.GetName() + " создан, ID: " + vehicle.GetID() );
 	}
 
-	private Option_undefined( player : Entity.Player, option : string, args : any[] )
+	private Option_undefined( player : PlayerInterface, option : string, args : any[] )
 	{
 		player.OutputChatBox( "Syntax: /" + this.Name + " <option>" );
 	}

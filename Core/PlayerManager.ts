@@ -22,20 +22,14 @@ import { UserEmailValidator }            from "../Security/Validator/UserEmailVa
 import { UserNameValidator }             from "../Security/Validator/UserNameValidator";
 import { UserPasswordValidator }         from "../Security/Validator/UserPasswordValidator";
 
-type EventCallback = ( ...params : any[] ) => Promise< any >;
-type EventType     = { name: string, callback: Function };
-type EventsArray   = [ EventType ];
-
 export default class PlayerManager extends ManagerBase< Entity.Player >
 {
 	private authenticationManager : AuthenticationProviderManager;
-	private events : EventsArray;
 
 	constructor( server : Server )
 	{
 		super( server );
 
-		this.events = [] as EventsArray;
 		this.Dependency = server.DatabaseManager;
 		this.authenticationManager = null;
 
@@ -66,58 +60,12 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		).then(
 			() =>
 			{
-				for( let event of this.events )
-				{
-					mp.events.add( event.name, event.callback );
-				}
-			}
-		).then(
-			() =>
-			{
 				for( let player of mp.players.toArray() )
 				{
 					this.OnPlayerJoin( Entity.Player.FindOrCreate< Entity.Player >( player ) );
 				}
 			}
 		);
-	}
-
-	private RegisterEvent( event : string, handler: EventCallback )
-	{
-		let e = { name: event, callback: ( player, ...params : any[] ) => this.EventHandler( event, handler, Entity.Player.FindOrCreate< Entity.Player >( player ), ...params ) };
-
-		this.events.push( e );
-	}
-
-	private EventHandler( event : string, handler: EventCallback, source : Entity.Player, ...params : any[] )
-	{
-		let new_params = [];
-
-		for( let param of params )
-		{
-			let value = param;
-
-			if( typeof param == "object" && param.type != null )
-			{
-				let type = param.type[ 0 ].toUpperCase() + param.type.substr( 1, param.type.length );
-
-				value = Entity[ type ].FindOrCreate( param );
-			}
-
-			new_params.push( value );
-		}
-
-		let promise = handler.call( this, source, ...new_params );
-
-		if( promise != null )
-		{
-			promise.catch(
-				( e : Error ) =>
-				{
-					source.OutputChatBox( e.message );
-				}
-			);
-		}
 	}
 
 	private OnPlayerJoin( player : Entity.Player ) : Promise< any >

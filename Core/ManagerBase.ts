@@ -12,9 +12,15 @@
 
 import Server from "../Server";
 import { Entity } from "../Entity/Entity";
+import { Player } from "../Entity/Player";
+
+type EventCallback = ( ...params : any[] ) => Promise< any >;
+type EventType     = { name: string, callback: Function };
+type EventsArray   = [ EventType ];
 
 export default class ManagerBase< TEntity extends Entity > implements ManagerInterface
 {
+	private events       : EventsArray;
 	protected Server     : Server;
 	protected Dependency : ManagerInterface;
 	protected List       : Map< number, TEntity >;
@@ -28,6 +34,50 @@ export default class ManagerBase< TEntity extends Entity > implements ManagerInt
 		this.Dependency  = null;
 		this.List        = new Map< number, TEntity >();
 		this.State       = ManagerState.None;
+
+		this.events      = [] as EventsArray;
+	}
+
+	protected RegisterEvent( event : string, handler: EventCallback )
+	{
+		let e =
+		{
+			name: event,
+			callback: ( player, ...params : any[] ) => this.EventHandler( event, handler, Player.FindOrCreate< Player >( player ), ...params )
+		};
+
+		this.events.push( e );
+	}
+
+	protected EventHandler( event : string, handler: EventCallback, source : Player, ...params : any[] )
+	{
+		let new_params = [];
+
+		for( let param of params )
+		{
+			let value = param;
+
+			if( typeof param == "object" && param.type != null )
+			{
+				let type = param.type[ 0 ].toUpperCase() + param.type.substr( 1, param.type.length );
+
+				value = Entity[ type ].FindOrCreate( param );
+			}
+
+			new_params.push( value );
+		}
+
+		let promise = handler.call( this, source, ...new_params );
+
+		if( promise != null )
+		{
+			promise.catch(
+				( e : Error ) =>
+				{
+					source.OutputChatBox( e.message );
+				}
+			);
+		}
 	}
 	
 	public DestroyAll() : void
@@ -91,6 +141,14 @@ export default class ManagerBase< TEntity extends Entity > implements ManagerInt
 				}
 
 				return resolve();
+			}
+		).then(
+			() =>
+			{
+				for( let event of this.events )
+				{
+					mp.events.add( event.name, event.callback );
+				}
 			}
 		);
 	}

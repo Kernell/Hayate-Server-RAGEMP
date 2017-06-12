@@ -11,8 +11,6 @@
 *********************************************************/
 
 import { ConsoleCommand } from "./ConsoleCommand";
-import { Player }         from "../Entity/Player";
-import { Console }        from "../Entity/Console";
 import Server             from "../Server";
 
 export class Register extends ConsoleCommand
@@ -24,7 +22,7 @@ export class Register extends ConsoleCommand
 		this.Name = "register";
 	}
 
-	public Execute( player : Player, args : any[] ) : Boolean
+	public Execute( player : PlayerInterface, args : any[] ) : Boolean
 	{
 		if( args.length < 3 )
 		{

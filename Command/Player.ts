@@ -13,7 +13,6 @@
 import * as printf        from "printf";
 import * as Config        from "nconf";
 import { ConsoleCommand } from "./ConsoleCommand";
-import { Console }        from "../Entity/Console";
 import * as Entity        from "../Entity";
 import Server             from "../Server";
 
@@ -26,12 +25,12 @@ export class Player extends ConsoleCommand
 		this.Name = "player";
 	}
 
-	private Option_model( player : Entity.Player, option : string, args : any[] ) : void
+	private Option_model( player : PlayerInterface, option : string, args : any[] ) : void
 	{
 		player.SetModel( parseInt( args[ 0 ] ) || mp.joaat( args[ 0 ] ) );
 	}
 
-	private Option_clothes( player : Entity.Player, option : string, args : any[] ): void
+	private Option_clothes( player : PlayerInterface, option : string, args : any[] ): void
 	{
 		if( args.length < 3 )
 		{
@@ -48,7 +47,7 @@ export class Player extends ConsoleCommand
 		player[ "entity" ].setClothes( componentNumber, drawable, texture, palette );
 	}
 
-	private Option_prop( player : Entity.Player, option : string, args : any[] ): void
+	private Option_prop( player : PlayerInterface, option : string, args : any[] ): void
 	{
 		if( args.length < 3 )
 		{
@@ -64,7 +63,7 @@ export class Player extends ConsoleCommand
 		player[ "entity" ].setProp( prop, drawable, texture );
 	}
 
-	private Option_haircolor( player : Entity.Player, option : string, args : any[] ): void
+	private Option_haircolor( player : PlayerInterface, option : string, args : any[] ): void
 	{
 		if( args.length < 2 )
 		{
@@ -79,7 +78,7 @@ export class Player extends ConsoleCommand
 		player[ "entity" ].setHairColour( firstColor, secondColor );
 	}
 
-	private Option_undefined( player : Entity.Player, option : string, args : any[] )
+	private Option_undefined( player : PlayerInterface, option : string, args : any[] )
 	{
 		player.OutputChatBox( "Syntax: /" + this.Name + " <option>" );
 	}

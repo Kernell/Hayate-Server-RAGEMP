@@ -12,7 +12,6 @@
 
 import * as Command    from "../Command";
 import * as Entity     from "../Entity";
-import { Console }     from "../Entity/Console";
 import ManagerBase     from "./ManagerBase";
 import Server          from "../Server";
 import DatabaseManager from "./DatabaseManager";
@@ -85,7 +84,7 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 		return true;
 	}
 
-	protected Execute( player : Entity.Player, commandName : String, argv : any[] ) : Boolean
+	protected Execute( player : PlayerInterface, commandName : String, argv : any[] ) : Boolean
 	{
 		let command = this.GetCommand( commandName );
 

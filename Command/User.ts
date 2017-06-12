@@ -11,8 +11,6 @@
 *********************************************************/
 
 import { ConsoleCommand } from "./ConsoleCommand";
-import { Player }         from "../Entity/Player";
-import { Console }        from "../Entity/Console";
 import Server             from "../Server";
 
 export class User extends ConsoleCommand
@@ -24,7 +22,7 @@ export class User extends ConsoleCommand
 		this.Name = "user";
 	}
 
-	public Execute( player : Player, args : any[] ) : Boolean
+	public Execute( player : PlayerInterface, args : any[] ) : Boolean
 	{
 		Console.WriteLine( Console.FgMagenta + "[%s] entered command /%s with args: %s" + Console.Reset, player.GetName(), this.GetName(), args.join( ', ' ) );
 

@@ -88,10 +88,16 @@
     <TypeScriptCompile Include="Entity\EntityInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Entity\PlayerInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Entity\UserAuth.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Game\Character\CharacterInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Game\Character\CharacterManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Game\Vehicle\VehicleInterface.ts">
@@ -196,7 +202,7 @@
     <TypeScriptCompile Include="Core\CommandManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Entity\Console.ts">
+    <TypeScriptCompile Include="Types\Console.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SharedUtils.ts">

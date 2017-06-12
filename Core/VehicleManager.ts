@@ -11,7 +11,6 @@
 *********************************************************/
 
 import * as ORM         from "typeorm";
-import { Console }      from "../Entity/Console";
 import { Vehicle }      from "../Entity/Vehicle";
 import Server           from "../Server";
 import ManagerBase      from "./ManagerBase";

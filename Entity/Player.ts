@@ -12,7 +12,7 @@
 
 import { Entity }     from "./Entity";
 
-export class Player extends Entity
+export class Player extends Entity implements PlayerInterface
 {
 	protected user   : UserInterface;
 	protected char   : CharacterInterface;

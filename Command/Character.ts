@@ -11,8 +11,6 @@
 *********************************************************/
 
 import { ConsoleCommand } from "./ConsoleCommand";
-import { Console }        from "../Entity/Console";
-import * as Entity        from "../Entity";
 import Server             from "../Server";
 
 export class Character extends ConsoleCommand
@@ -24,7 +22,7 @@ export class Character extends ConsoleCommand
 		this.Name = "char";
 	}
 
-	private Option_login( player : Entity.Player, option : string, args : any[] ) : void
+	private Option_login( player : PlayerInterface, option : string, args : any[] ) : void
 	{
 		let id = Number( args.shift() ) || null;
 
@@ -36,7 +34,7 @@ export class Character extends ConsoleCommand
 		mp.events.call( "playerCharacterSelect", player.GetEntity(), id );
 	}
 
-	private Option_create( player : Entity.Player, option : string, args : any[] ) : void
+	private Option_create( player : PlayerInterface, option : string, args : any[] ) : void
 	{
 		if( args.length < 2 )
 		{
@@ -49,7 +47,7 @@ export class Character extends ConsoleCommand
 		mp.events.call( "playerCharacterCreate", player.GetEntity(), name, lastname );
 	}
 
-	private Option_undefined( player : Entity.Player, option : string, args : any[] )
+	private Option_undefined( player : PlayerInterface, option : string, args : any[] )
 	{
 		player.OutputChatBox( "Syntax: /" + this.Name + " <option>" );
 	}

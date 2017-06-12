@@ -46,6 +46,16 @@ export class Player extends Entity
 		return this.entity.name;
 	}
 
+	public GetPing() : number
+	{
+		return this.entity.ping;
+	}
+
+	public GetIP() : string
+	{
+		return this.entity.ip;
+	}
+
 	public OutputChatBox( text : string ) : void
 	{
 		this.entity.outputChatBox( text );

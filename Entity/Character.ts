@@ -248,16 +248,6 @@ export class Character
 		return this.entity.weapon;
 	}
 
-	public GetPing() : number
-	{
-		return this.entity.ping;
-	}
-
-	public GetIP() : string
-	{
-		return this.entity.ip;
-	}
-
 	public IsAiming() : boolean
 	{
 		return this.entity.isAiming;

@@ -21,7 +21,7 @@ String.prototype.pad = function( num : number, char : string = ' ', left : boole
 
 	for( let i = this.length; i < num; ++i )
 	{
-		spaces += " ";
+		spaces += char;
 	}
 
 	if( left )

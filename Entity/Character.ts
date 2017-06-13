@@ -19,6 +19,8 @@ import { Vehicle } from "./Vehicle";
 @ORM.Entity( "characters" )
 export class Character implements CharacterInterface
 {
+	public static readonly MONEY_MAX = 0xFFFFFFFF;
+
 	@ORM.PrimaryGeneratedColumn()
 	protected id  : number;
 	
@@ -160,6 +162,40 @@ export class Character implements CharacterInterface
 	public SetRotation( rotation : Vector3 ) : void
 	{
 		this.entity.heading = rotation.Z;
+	}
+
+	public SetMoney( money : number ) : void
+	{
+		this.money = money;
+	}
+
+	public GetMoney() : number
+	{
+		return this.money;
+	}
+
+	public TakeMoney( value : number ) : boolean
+	{
+		if( this.money >= value )
+		{
+			this.money -= value;
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public GiveMoney( value : number ) : boolean
+	{
+		if( this.money + value <= Character.MONEY_MAX )
+		{
+			this.money += value;
+			
+			return true;
+		}
+
+		return false;
 	}
 
 	public GetHealth() : number

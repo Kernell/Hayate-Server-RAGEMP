@@ -26,7 +26,12 @@ export class CharacterNameValidator
 			throw new Error( "Имя персонажа содержит некорректные символы" );
 		}
 
-		if( !/[^A-Z]/.test( name ) == !/[^А-Я]/.test( name ) )
+		if( !/[^0-9]/.test( name ) )
+		{
+			throw new Error( "Имя персонажа не может состоять только из чисел" );
+		}
+
+		if( !/[^A-Z0-9]/.test( name ) == !/[^А-Я0-9]/.test( name ) )
 		{
 			throw new Error( "Имя персонажа может быть только на одном языке" );
 		}

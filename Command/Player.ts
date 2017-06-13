@@ -27,11 +27,25 @@ export class Player extends ConsoleCommand
 
 	private Option_model( player : PlayerInterface, option : string, args : any[] ) : void
 	{
-		player.SetModel( parseInt( args[ 0 ] ) || mp.joaat( args[ 0 ] ) );
+		let char = player.GetCharacter();
+
+		if( char == null )
+		{
+			return;
+		}
+
+		char.SetModel( parseInt( args[ 0 ] ) || mp.joaat( args[ 0 ] ) );
 	}
 
 	private Option_clothes( player : PlayerInterface, option : string, args : any[] ): void
 	{
+		let char = player.GetCharacter();
+
+		if( char == null )
+		{
+			return;
+		}
+
 		if( args.length < 3 )
 		{
 			player.OutputChatBox( "Syntax: /" + this.Name + " clothes [component] [drawable] [texture] [palette = 0]" );
@@ -44,11 +58,18 @@ export class Player extends ConsoleCommand
 		let texture         : number = parseInt( args.shift() );
 		let palette         : number = parseInt( args.shift() ) || 0;
 
-		player[ "entity" ].setClothes( componentNumber, drawable, texture, palette );
+		char.SetClothes( componentNumber, drawable, texture, palette );
 	}
 
 	private Option_prop( player : PlayerInterface, option : string, args : any[] ): void
 	{
+		let char = player.GetCharacter();
+
+		if( char == null )
+		{
+			return;
+		}
+
 		if( args.length < 3 )
 		{
 			player.OutputChatBox( "Syntax: /" + this.Name + " prop [prop] [drawable] [texture]" );
@@ -60,11 +81,18 @@ export class Player extends ConsoleCommand
 		let drawable : number = parseInt( args.shift() );
 		let texture  : number = parseInt( args.shift() );
 
-		player[ "entity" ].setProp( prop, drawable, texture );
+		char.SetProp( prop, drawable, texture );
 	}
 
 	private Option_haircolor( player : PlayerInterface, option : string, args : any[] ): void
 	{
+		let char = player.GetCharacter();
+
+		if( char == null )
+		{
+			return;
+		}
+
 		if( args.length < 2 )
 		{
 			player.OutputChatBox( "Syntax: /" + this.Name + " haircolor [first] [second]" );
@@ -75,7 +103,7 @@ export class Player extends ConsoleCommand
 		let firstColor  : number = parseInt( args.shift() );
 		let secondColor : number = parseInt( args.shift() );
 
-		player[ "entity" ].setHairColour( firstColor, secondColor );
+		char.SetHairColor( firstColor, secondColor );
 	}
 
 	private Option_undefined( player : PlayerInterface, option : string, args : any[] )

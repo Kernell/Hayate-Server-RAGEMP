@@ -12,6 +12,9 @@
 
 interface PlayerInterface extends EntityInterface
 {
+	GetCharacter() : CharacterInterface;
+	SetCharacter( char : CharacterInterface );
+
 	GetID() : number;
 	GetName() : string;
 	GetUser() : UserInterface;

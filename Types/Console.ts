@@ -92,6 +92,15 @@ class Console extends IdentifiedPool implements PlayerInterface
 	{
 	}
 
+	public GetCharacter() : CharacterInterface
+	{
+		return null;
+	}
+
+	public SetCharacter( char : CharacterInterface )
+	{
+	}
+
 	public GetID() : number
 	{
 		return this.entity.id;

@@ -220,6 +220,7 @@
     <TypeScriptCompile Include="Types\ManagerState.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Types\Ped.ts" />
     <TypeScriptCompile Include="Types\Vector3.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

@@ -45,9 +45,6 @@ export class Character implements CharacterInterface
 	@ORM.Column()
 	protected name : string;
 	
-	@ORM.Column()
-	protected lastname : string;
-	
 	@ORM.Column( "bigint" )
 	protected money : number;
 	
@@ -91,22 +88,9 @@ export class Character implements CharacterInterface
 		return this.name;
 	}
 
-	public GetLastName() : string
+	public SetName( name : string ) : void
 	{
-		return this.lastname;
-	}
-
-	public GetFullName() : string
-	{
-		return this.name + " " + this.lastname;
-	}
-
-	public SetName( name : string, lastname : string ) : void
-	{
-		this.name     = name;
-		this.lastname = lastname;
-
-		this.entity.name = this.name +  " " + this.lastname;
+		this.entity.name = this.name = name;
 	}
 
 	public Spawn( position : Vector3 ) : void

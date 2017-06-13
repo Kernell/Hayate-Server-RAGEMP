@@ -135,6 +135,9 @@
     <TypeScriptCompile Include="Security\User\UserProviderInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Security\Validator\CharacterNameValidator.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Security\Validator\UserEmailValidator.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

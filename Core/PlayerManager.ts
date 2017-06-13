@@ -174,7 +174,7 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 
 					for( let char of characters )
 					{
-						player.OutputChatBox( `ID: ${char.GetID()}, Name: ${char.GetFullName()}` );
+						player.OutputChatBox( `ID: ${char.GetID()}, Name: ${char.GetName()}` );
 					}
 				}
 			}

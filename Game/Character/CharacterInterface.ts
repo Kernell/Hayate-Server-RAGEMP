@@ -14,8 +14,6 @@ interface CharacterInterface
 {
 	GetID() : number;
 	GetName() : string;
-	GetLastName() : string;
-	GetFullName() : string;
 	SetName( name : string, lastname : string ) : void;
 	Spawn( position : Vector3 ) : void;
 	GetModel() : number;

@@ -10,16 +10,26 @@
 *
 *********************************************************/
 
+import * as ORM         from "typeorm";
 import Server           from "../../Server";
 import ManagerBase      from "../../Core/ManagerBase";
-import { Entity }       from "../../Entity/Entity";
-import { Player }       from "../../Entity/Player";
+import DatabaseManager  from "../../Core/DatabaseManager";
+import * as Entity      from "../../Entity";
 
-export class CharacterManager extends ManagerBase< Entity >
+import { CharacterNameValidator } from "../../Security/Validator/CharacterNameValidator";
+
+export class CharacterManager extends ManagerBase< Entity.Entity >
 {
+	protected nameValidator : CharacterNameValidator;
+	protected repository : ORM.Repository< CharacterInterface >;
+
 	public constructor( server : Server )
 	{
 		super( server );
+
+		this.Dependency    = server.DatabaseManager;
+		this.repository    = null;
+		this.nameValidator = new CharacterNameValidator();
 
 		this.RegisterEvent( "playerCharacterCreate", this.OnCreate );
 		this.RegisterEvent( "playerCharacterSelect", this.OnSelect );
@@ -27,22 +37,48 @@ export class CharacterManager extends ManagerBase< Entity >
 		this.RegisterEvent( "playerCharacterLogout", this.OnLogout );
 	}
 
-	public OnCreate( player : Player, name : string, surname : string ) : Promise< any >
+	public Init() : Promise< any >
+	{
+		return super.Init().then(
+			() =>
+			{
+				this.repository = ( this.Dependency as DatabaseManager ).GetRepository( Entity.Character );
+			}
+		);
+	}
+
+	protected GetRepository() : ORM.Repository< CharacterInterface >
+	{
+		return this.repository;
+	}
+
+	public async OnCreate( player : PlayerInterface, name : string ) : Promise< any >
+	{
+		this.nameValidator.Validate( name );
+
+		let chars = await this.repository.count( { name: name } );
+
+		if( chars > 0 )
+		{
+			throw new Error( "Персонаж с таким именем уже существует" );
+		}
+
+		Console.WriteLine( "Created character, ID: %d, Name %q", 0, name );
+
+		return null;
+	}
+
+	public async OnSelect( player : PlayerInterface, characterId : number ) : Promise< any >
 	{
 		return null;
 	}
 
-	public OnSelect( player : Player, characterId : number ) : Promise< any >
+	public async OnLogin( player : PlayerInterface, characterId : number ) : Promise< any >
 	{
 		return null;
 	}
 
-	public OnLogin( player : Player, characterId : number ) : Promise< any >
-	{
-		return null;
-	}
-
-	public OnLogout( player : Player ) : Promise< any >
+	public async OnLogout( player : PlayerInterface ) : Promise< any >
 	{
 		return null;
 	}

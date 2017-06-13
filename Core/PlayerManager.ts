@@ -166,7 +166,7 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		return repository.find( { user_id: userId } ).then(
 			( characters : Entity.Character[] ) =>
 			{
-				player.OutputChatBox( "Используйте /char create [name] [lastname] для создания персонажа" );
+				player.OutputChatBox( "Используйте /char create [name] для создания персонажа" );
 
 				if( characters.length != 0 )
 				{

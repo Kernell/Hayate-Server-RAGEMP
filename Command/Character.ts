@@ -36,15 +36,14 @@ export class Character extends ConsoleCommand
 
 	private Option_create( player : PlayerInterface, option : string, args : any[] ) : void
 	{
-		if( args.length < 2 )
+		if( args.length < 1 )
 		{
-			throw new Error( "Syntax: /char create [name] [lastname]" );
+			throw new Error( "Syntax: /char create [name]" );
 		}
 
-		let name     = args.shift();
-		let lastname = args.shift();
+		let name = args.shift();
 
-		mp.events.call( "playerCharacterCreate", player.GetEntity(), name, lastname );
+		mp.events.call( "playerCharacterCreate", player.GetEntity(), name );
 	}
 
 	private Option_undefined( player : PlayerInterface, option : string, args : any[] )

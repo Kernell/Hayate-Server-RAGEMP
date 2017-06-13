@@ -11,8 +11,7 @@
     </DebuggerPort>
     <ScriptArguments>
     </ScriptArguments>
-    <Environment>
-    </Environment>
+    <Environment>NODE_ENV=development</Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>

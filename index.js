@@ -10,7 +10,10 @@
 *
 *********************************************************/
 
-process._debugProcess( process.pid );
+if( process.env.NODE_ENV == 'development' )
+{
+	process._debugProcess( process.pid );
+}
 
 const fs = require( 'fs' );
 

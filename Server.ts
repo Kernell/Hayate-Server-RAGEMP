@@ -113,6 +113,13 @@ export default class Server implements ServerInterface
 			let promise = new Promise(
 				( resolve, reject ) =>
 				{
+					if( manager.State != ManagerState.OK )
+					{
+						resolve();
+
+						return;
+					}
+
 					let tick = new Date().getTime();
 
 					let name = manager.constructor.name + ":";

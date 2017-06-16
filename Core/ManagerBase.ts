@@ -10,7 +10,8 @@
 *
 *********************************************************/
 
-import { Entity } from "../Entity/Entity";
+import { EventEmitter } from "events";
+import { Entity }       from "../Entity/Entity";
 
 type EventCallback = ( ...params : any[] ) => Promise< any >;
 type EventType     = { name: string, callback: Function };

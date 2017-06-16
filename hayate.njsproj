@@ -160,7 +160,7 @@
     <TypeScriptCompile Include="SharedUtils\Date.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\Color.ts">
+    <TypeScriptCompile Include="Globals\Color.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Command\Vehicle.ts">
@@ -214,44 +214,44 @@
     <TypeScriptCompile Include="Core\CommandManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\Console.ts">
+    <TypeScriptCompile Include="Globals\Console.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SharedUtils.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\IdentifiedPool.ts">
+    <TypeScriptCompile Include="Globals\IdentifiedPool.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SharedUtils\String.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\GUID.ts">
+    <TypeScriptCompile Include="Globals\GUID.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\ManagerState.ts">
+    <TypeScriptCompile Include="Globals\ManagerState.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\Ped.ts" />
-    <TypeScriptCompile Include="Types\Permission.ts">
+    <TypeScriptCompile Include="Globals\Ped.ts" />
+    <TypeScriptCompile Include="Globals\Permission.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\Vector3.ts">
+    <TypeScriptCompile Include="Globals\Vector3.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\VehicleColor.ts">
+    <TypeScriptCompile Include="Globals\VehicleColor.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\VehicleModel.ts">
+    <TypeScriptCompile Include="Globals\VehicleModel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\Weapon.ts">
+    <TypeScriptCompile Include="Globals\Weapon.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\WeaponsComponent.ts">
+    <TypeScriptCompile Include="Globals\WeaponsComponent.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Types\WeaponsTint.ts">
+    <TypeScriptCompile Include="Globals\WeaponsTint.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Typings\Rage.d.ts">
@@ -272,7 +272,7 @@
     <Folder Include="Security\Token\" />
     <Folder Include="Security\User\" />
     <Folder Include="Security\Validator\" />
-    <Folder Include="Types\" />
+    <Folder Include="Globals\" />
     <Folder Include="Typings\" />
     <Folder Include="SharedUtils\" />
   </ItemGroup>

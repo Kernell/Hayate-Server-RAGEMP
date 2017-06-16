@@ -26,12 +26,12 @@ let include = ( fileName ) =>
 
 	let typeName = fileName.replace( /\.js$/i, '' );
 
-	global[ typeName ] = require( './bin/Types/' + fileName );
+	global[ typeName ] = require( './bin/Globals/' + fileName );
 }
 
 include( 'IdentifiedPool.js' );
 
-fs.readdirSync( './packages/hayate/bin/Types/' ).forEach( include );
+fs.readdirSync( './packages/hayate/bin/Globals/' ).forEach( include );
 
 // Temp fix for old RAGE builds
 Vector3 = global[ "Vector3" ];

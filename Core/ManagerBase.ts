@@ -158,6 +158,11 @@ export default class ManagerBase< TEntity extends Entity > implements ManagerInt
 		);
 	}
 
+	public Stop() : Promise< any >
+	{
+		return new Promise( ( resolve, reject ) => resolve() );
+	}
+
 	public DoPulse( date : Date ) : void
 	{
 	}

@@ -64,10 +64,12 @@ export default class Server implements ServerInterface
 
 		new CharacterManager( this );
 
-		this.Initialize();
+		this.StartAll();
+	
+		this.DoPulseTimer = setInterval( () => this.DoPulse(), 1000 );
 	}
 
-	public Initialize() : void
+	private StartAll() : void
 	{
 		for( let manager of this.Managers )
 		{
@@ -100,13 +102,52 @@ export default class Server implements ServerInterface
 				}
 			);
 		}
-
-		this.DoPulseTimer = setInterval( () => this.DoPulse(), 1000 );
 	}
 
-	public RegisterManager( manager : ManagerInterface )
+	private StopAll() : Promise< any >
 	{
-		this.Managers.push( manager );
+		let promises = [];
+
+		for( let manager of this.Managers )
+		{
+			let promise = new Promise(
+				( resolve, reject ) =>
+				{
+					let tick = new Date().getTime();
+
+					let name = manager.constructor.name + ":";
+
+					manager.Stop().then(
+						( info ) =>
+						{
+							manager.State = ManagerState.None;
+
+							let tick_count = ( new Date().getTime() - tick ) / 1000;
+
+							Console.WriteLine( `Stopping %-70s [  ${Console.FgGreen}OK${Console.Reset}  ] % 5.3f ms`, name, tick_count );
+
+							resolve();
+						}
+					).catch(
+						( error : Error ) =>
+						{
+							Console.WriteLine( `Stopping %-70s [${Console.FgRed}FAILED${Console.Reset}]`, name );
+
+							if( error )
+							{
+								Console.WriteLine( '%s', error.stack || error );
+							}
+
+							resolve();
+						}
+					);
+				}
+			);
+
+			promises.push( promise );
+		}
+
+		return Promise.all( promises );
 	}
 
 	private DoPulse() : void
@@ -116,6 +157,11 @@ export default class Server implements ServerInterface
 
 		for( let manager of this.Managers )
 		{
+			if( manager.GetState() != ManagerState.OK )
+			{
+				continue;
+			}
+
 			let tick2 = new Date().getTime();
 			
 			manager.DoPulse( date );
@@ -152,12 +198,19 @@ export default class Server implements ServerInterface
 
 		this.DebugTicks[ "DoPulse" ] = ( ( new Date().getTime() - tick ) / 1000 );
 	}
+	
+	public RegisterManager( manager : ManagerInterface )
+	{
+		this.Managers.push( manager );
+	}
 
 	public Restart() : void
 	{
+		this.StopAll().then( () => this.StartAll() );
 	}
 
 	public Shutdown() : void
 	{
+		this.StopAll().then( () => setTimeout( () => process.exit(), 2000 ) );
 	}
 }

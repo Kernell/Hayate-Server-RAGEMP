@@ -21,5 +21,6 @@ interface ManagerInterface
 	GetState      ()                           : ManagerState;
 	GetAll        ()                           : IterableIterator< EntityInterface >;
 	Init          ()                           : Promise< any >;
+	Stop          ()                           : Promise< any >;
 	DoPulse       ( date : Date )              : void;
 }

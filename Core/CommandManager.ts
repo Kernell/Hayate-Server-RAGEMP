@@ -17,8 +17,9 @@ import DatabaseManager from "./DatabaseManager";
 
 export default class CommandManager extends ManagerBase< Entity.Entity >
 {
-	private console  : Console;
-	private Commands : Array< Command.ConsoleCommand >;
+	private shudownTick : number = 0;
+	private console     : Console;
+	private Commands    : Array< Command.ConsoleCommand >;
 
 	constructor( server : ServerInterface )
 	{
@@ -200,6 +201,19 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 
 	protected OnSigint()
 	{
-		process.exit();
+		let tick = new Date().getTime();
+
+		if( tick - this.shudownTick < 1000 )
+		{
+			Console.WriteLine( "\nCtrl-C pressed. Server shutting down!\n" );
+
+			setTimeout( () => this.Server.Shutdown(), 1000 );
+		}
+		else
+		{
+			this.shudownTick = tick;
+
+			Console.WriteLine( "To shutdown, press Ctrl-C again" );
+		}
 	}
 }

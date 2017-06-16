@@ -25,11 +25,11 @@ export class CharacterManager extends ManagerBase< Entity.Entity >
 	private nameValidator   : CharacterNameValidator               = null;
 	private repository      : ORM.Repository< CharacterInterface > = null;
 
-	public constructor( server : Server )
+	public constructor( server : ServerInterface )
 	{
 		super( server );
 
-		this.database      = server.DatabaseManager;
+		this.database      = server.DatabaseManager as DatabaseManager;
 		this.Dependency    = server.DatabaseManager;
 		this.nameValidator = new CharacterNameValidator();
 

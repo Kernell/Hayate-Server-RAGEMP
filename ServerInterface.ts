@@ -18,7 +18,6 @@ interface ServerInterface
 	UserManager      : ManagerInterface;
 	VehicleManager   : ManagerInterface;
 
-	Initialize       () : void;
 	RegisterManager  ( manager : ManagerInterface ) : void;
 	Restart          () : void;
 	Shutdown         () : void;

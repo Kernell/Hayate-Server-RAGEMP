@@ -25,7 +25,7 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		this.RegisterEvent( "playerJoin",     this.OnPlayerJoin );
 		this.RegisterEvent( "playerQuit",     this.OnPlayerQuit );
 		this.RegisterEvent( "playerDeath",    this.OnPlayerDeath );
-		this.RegisterEvent( "playerSpawn",    this.OnPlayerDeath ); 
+		this.RegisterEvent( "playerSpawn",    this.OnPlayerSpawn ); 
 		this.RegisterEvent( "playerChat",     this.OnPlayerChat );
 	}
 
@@ -53,6 +53,8 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 
 	private OnPlayerQuit( player : Entity.Player, reason : string, kickReason : string ) : Promise< any >
 	{
+		mp.events.call( "playerCharacterLogout", player.GetEntity() );
+
 		this.RemoveFromList( player );
 
 		player.Destroy();
@@ -60,14 +62,13 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		return null;
 	}
 
-	private OnPlayerDeath( player : Entity.Player, reason : string, killer : mp.Player ) : Promise< any >
+	private OnPlayerDeath( player : Entity.Player, reason : string, killer : Entity.Player ) : Promise< any >
 	{
-		let char = player.GetCharacter();
+		const char = player.GetCharacter();
 
 		if( char )
 		{
-			char.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ) );
-			char.SetDimension( 0 );
+			char.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ), new Vector3(), 0 );
 		}
 
 		return null;

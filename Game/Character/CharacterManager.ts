@@ -11,6 +11,7 @@
 *********************************************************/
 
 import * as ORM         from "typeorm";
+import * as Config      from "nconf";
 import Server           from "../../Server";
 import ManagerBase      from "../../Core/ManagerBase";
 import DatabaseManager  from "../../Core/DatabaseManager";
@@ -20,15 +21,16 @@ import { CharacterNameValidator } from "../../Security/Validator/CharacterNameVa
 
 export class CharacterManager extends ManagerBase< Entity.Entity >
 {
-	protected nameValidator : CharacterNameValidator;
-	protected repository : ORM.Repository< CharacterInterface >;
+	private database        : DatabaseManager                      = null;
+	private nameValidator   : CharacterNameValidator               = null;
+	private repository      : ORM.Repository< CharacterInterface > = null;
 
 	public constructor( server : Server )
 	{
 		super( server );
 
+		this.database      = server.DatabaseManager;
 		this.Dependency    = server.DatabaseManager;
-		this.repository    = null;
 		this.nameValidator = new CharacterNameValidator();
 
 		this.RegisterEvent( "playerCharacterCreate", this.OnCreate );
@@ -42,7 +44,7 @@ export class CharacterManager extends ManagerBase< Entity.Entity >
 		return super.Init().then(
 			() =>
 			{
-				this.repository = ( this.Dependency as DatabaseManager ).GetRepository( Entity.Character );
+				this.repository = this.database.GetRepository( Entity.Character );
 			}
 		);
 	}
@@ -56,6 +58,18 @@ export class CharacterManager extends ManagerBase< Entity.Entity >
 	{
 		this.nameValidator.Validate( name );
 
+		let user = player.GetUser();
+
+		if( !user.IsGranted( Permission.UnlimitedCharacters ) )
+		{
+			let chars = await this.repository.count( { user_id: user.GetID() } );
+
+			if( chars > Config.get( "characters:max_per_user" ) )
+			{
+				throw new Error( "Вы не можете создавать больше персонажей" );
+			}
+		}
+
 		let chars = await this.repository.count( { name: name } );
 
 		if( chars > 0 )
@@ -63,13 +77,29 @@ export class CharacterManager extends ManagerBase< Entity.Entity >
 			throw new Error( "Персонаж с таким именем уже существует" );
 		}
 
-		Console.WriteLine( "Created character, ID: %d, Name %q", 0, name );
+		let char = new Entity.Character( player );
 
-		return null;
+		char.SetUser( user );
+		char.SetName( name );
+
+		return this.repository.persist( char ).then( char => this.OnSelect( player, char ) );
 	}
 
-	public async OnSelect( player : PlayerInterface, characterId : number ) : Promise< any >
+	public async OnSelect( player : PlayerInterface, character : CharacterInterface|number ) : Promise< any >
 	{
+		if( typeof character == "number" )
+		{
+			character = await this.repository.findOneById( character );
+
+			character.SetPlayer( player );
+		}
+
+		player.SetCharacter( character );
+
+		character.Spawn();
+
+		mp.events.call( "playerCharacterLogin", player.GetEntity(), character.GetID() );
+
 		return null;
 	}
 

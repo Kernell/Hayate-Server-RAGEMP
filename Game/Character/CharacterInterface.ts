@@ -14,8 +14,9 @@ interface CharacterInterface
 {
 	GetID() : number;
 	GetName() : string;
+	SetPlayer( player : PlayerInterface ) : void;
 	SetName( name : string, lastname : string ) : void;
-	Spawn( position : Vector3 ) : void;
+	Spawn( position ?: Vector3, rotation ?: Vector3, dimension ?: number ) : void;
 	GetModel() : number;
 	SetModel( model : number ) : void;
 	GetAlpha() : number;

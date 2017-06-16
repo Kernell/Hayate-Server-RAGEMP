@@ -13,8 +13,8 @@
 import * as ORM from "typeorm";
 
 import { Entity } from "./Entity";
-import { Player } from "./Player";
 import { Vehicle } from "./Vehicle";
+import { User } from "./User";
 
 @ORM.Entity( "characters" )
 export class Character implements CharacterInterface
@@ -24,41 +24,42 @@ export class Character implements CharacterInterface
 	@ORM.PrimaryGeneratedColumn()
 	protected id  : number;
 	
-	@ORM.Column( "int" )
-	public user_id : number;
+	@ORM.ManyToOne( type => User )
+	@ORM.JoinColumn( { name: "user_id" } )
+	protected user : User;
 
 	@ORM.Column( "int" )
-	protected level : number;
+	protected level : number = 1;
 
 	@ORM.Column( "int" )
-	protected model : number;
+	protected model : number = Ped.Player_Zero;
 
-	@ORM.Column()
-	protected position : string;
+	@ORM.Column( "json" )
+	protected position : Vector3 = new Vector3( -435.517, 1123.620, 325.8544 );
 
-	@ORM.Column()
-	protected rotation : string;
+	@ORM.Column( "json" )
+	protected rotation : Vector3 = new Vector3();
 
 	@ORM.Column( "int" )
-	protected dimension : number;
+	protected dimension : number = 0;
 
 	@ORM.Column()
 	protected name : string;
 	
 	@ORM.Column( "bigint" )
-	protected money : number;
+	protected money : number = 0;
 	
 	@ORM.Column( "float" )
-	protected health : number;
+	protected health : number = 1000;
 
 	@ORM.Column( "float" )
-	protected armor : number;
+	protected armor : number = 0;
 
 	@ORM.Column( { name: "eye_color", type: "int" } )
-	protected eyeColor : number;
+	protected eyeColor : number = 0;
 
 	@ORM.Column( { name: "hair_highlight_color", type: "int" } )
-	protected hairHighlightColor : number;
+	protected hairHighlightColor : number = 0;
 
 	@ORM.CreateDateColumn( { name: "created_at" } )
 	protected createdAt : string;
@@ -66,16 +67,21 @@ export class Character implements CharacterInterface
 	@ORM.Column( { type: "datetime", name: "deleted_at", nullable: true, default: null } )
 	protected deletedAt : string;
 
-	protected entity : mp.Player = null;
-	protected player : Player    = null;
+	protected entity : mp.Player       = null;
+	protected player : PlayerInterface = null;
 
-	public constructor( player : Player )
+	public constructor( player : PlayerInterface )
 	{
 		if( player )
 		{
-			this.player = player;
-			this.entity = player.GetEntity() as mp.Player;
+			this.SetPlayer( player );
 		}
+	}
+
+	public SetPlayer( player : PlayerInterface ) : void
+	{
+		this.player = player;
+		this.entity = player.GetEntity() as mp.Player;
 	}
 
 	public GetID() : number
@@ -88,22 +94,52 @@ export class Character implements CharacterInterface
 		return this.name;
 	}
 
+	public GetUser() : UserInterface
+	{
+		return this.user;
+	}
+
+	public SetUser( user : UserInterface ) : void
+	{
+		this.user = user as User;
+	}
+	
 	public SetName( name : string ) : void
 	{
 		this.entity.name = this.name = name;
 	}
 
-	public Spawn( position : Vector3 ) : void
+	public GetLevel() : number
 	{
-		this.entity.spawn( position );
+		return this.level;
 	}
 
-	public GetModel() : number
+	public SetLevel( level : number ) : void
+	{
+		this.level = level;
+	}
+
+	public Spawn( position ?: Vector3, rotation ?: Vector3, dimension ?: number ) : void
+	{
+		this.entity.spawn( this.position = position || this.position );
+
+		this.entity.heading   = ( rotation || this.rotation ).Z;
+		this.entity.dimension = dimension || this.dimension;
+
+		this.entity.name                = this.name;
+		this.entity.model               = this.model;
+		this.entity.health              = this.health;
+		this.entity.armour              = this.armor;
+		this.entity.eyeColour           = this.eyeColor;
+		this.entity.hairHighlightColour = this.hairHighlightColor;
+	}
+
+	public GetModel() : Ped
 	{
 		return this.entity.model;
 	}
 
-	public SetModel( model : number ) : void
+	public SetModel( model : Ped ) : void
 	{
 		this.entity.model = this.model = model;
 	}
@@ -125,7 +161,7 @@ export class Character implements CharacterInterface
 
 	public SetPosition( position : Vector3 ) : void
 	{
-		this.entity.position = position;
+		this.entity.position = this.position = position;
 	}
 
 	public GetDimension() : number
@@ -135,7 +171,7 @@ export class Character implements CharacterInterface
 
 	public SetDimension( dimension : number ) : void
 	{
-		this.entity.dimension = dimension;
+		this.entity.dimension = this.dimension = dimension;
 	}
 
 	public GetRotation() : Vector3
@@ -145,7 +181,7 @@ export class Character implements CharacterInterface
 
 	public SetRotation( rotation : Vector3 ) : void
 	{
-		this.entity.heading = rotation.Z;
+		this.entity.heading = ( this.rotation = rotation ).Z;
 	}
 
 	public SetMoney( money : number ) : void

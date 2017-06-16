@@ -84,6 +84,10 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Command\Register.ts" />
+    <TypeScriptCompile Include="Globals\Event.ts">
+      <SubType>Code</SubType>
+      <TestFramework>ExportRunner</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Security\User\UserManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

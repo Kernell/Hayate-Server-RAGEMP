@@ -32,7 +32,7 @@ export class Register extends ConsoleCommand
 		let email    = args.shift();
 		let password = args.shift();
 
-		mp.events.call( "playerRegister", player.GetEntity(), name, email, password );
+		Event.Call( "playerRegister", player, name, email, password );
 
 		return true;
 	}

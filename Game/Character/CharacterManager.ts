@@ -85,7 +85,7 @@ export class CharacterManager extends ManagerBase< Entity.Entity >
 		return this.repository.persist( char ).then( char => this.OnSelect( player, char ) );
 	}
 
-	public async OnSelect( player : PlayerInterface, character : CharacterInterface|number ) : Promise< any >
+	public async OnSelect( player : PlayerInterface, character : CharacterInterface ) : Promise< any >
 	{
 		if( typeof character == "number" )
 		{
@@ -98,20 +98,18 @@ export class CharacterManager extends ManagerBase< Entity.Entity >
 
 		character.Spawn();
 
-		mp.events.call( "playerCharacterLogin", player.GetEntity(), character.GetID() );
+		Event.Call( "playerCharacterLogin", player.GetEntity(), character.GetID() );
 
 		return null;
 	}
 
-	public async OnLogin( player : PlayerInterface, characterId : number ) : Promise< any >
+	public async OnLogin( player : PlayerInterface, character : CharacterInterface ) : Promise< any >
 	{
 		return null;
 	}
 
-	public async OnLogout( player : PlayerInterface ) : Promise< any >
+	public async OnLogout( player : PlayerInterface, character : CharacterInterface ) : Promise< any >
 	{
-		let character = player.GetCharacter();
-
 		character.SetPosition( player.GetPosition() );
 		character.SetRotation( player.GetRotation() );
 		character.SetDimension( player.GetDimension() );

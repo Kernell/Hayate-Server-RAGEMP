@@ -10,7 +10,6 @@
 *
 *********************************************************/
 
-import { EventEmitter } from "events";
 import { Entity }       from "../Entity/Entity";
 
 type EventCallback = ( ...params : any[] ) => Promise< any >;
@@ -38,6 +37,22 @@ export default class ManagerBase< TEntity extends Entity > implements ManagerInt
 	}
 
 	protected RegisterEvent( event : string, handler: EventCallback )
+	{
+		let callback = ( player : PlayerInterface, ...params : any[] ) =>
+		{
+			this.EventHandler( event, handler, player, ...params );
+		};
+
+		let e =
+		{
+			name: event,
+			callback: callback,
+		};
+
+		this.events.push( e );
+	}
+
+	protected WrapEvent( event : string, handler: EventCallback )
 	{
 		let callback = ( player : mp.Entity, ...params : any[] ) =>
 		{
@@ -153,7 +168,7 @@ export default class ManagerBase< TEntity extends Entity > implements ManagerInt
 			{
 				for( let event of this.events )
 				{
-					mp.events.add( event.name, event.callback );
+					Event.AddListener( event.name, event.callback );
 				}
 			}
 		);

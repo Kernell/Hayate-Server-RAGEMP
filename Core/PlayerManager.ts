@@ -22,11 +22,11 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 
 		this.Dependency = server.UserManager;
 
-		this.RegisterEvent( "playerJoin",     this.OnPlayerJoin );
-		this.RegisterEvent( "playerQuit",     this.OnPlayerQuit );
-		this.RegisterEvent( "playerDeath",    this.OnPlayerDeath );
-		this.RegisterEvent( "playerSpawn",    this.OnPlayerSpawn ); 
-		this.RegisterEvent( "playerChat",     this.OnPlayerChat );
+		this.WrapEvent( "playerJoin",     this.OnPlayerJoin );
+		this.WrapEvent( "playerQuit",     this.OnPlayerQuit );
+		this.WrapEvent( "playerDeath",    this.OnPlayerDeath );
+		this.WrapEvent( "playerSpawn",    this.OnPlayerSpawn ); 
+		this.WrapEvent( "playerChat",     this.OnPlayerChat );
 	}
 
 	public Init() : Promise< any >
@@ -53,7 +53,7 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 
 	private OnPlayerQuit( player : Entity.Player, reason : string, kickReason : string ) : Promise< any >
 	{
-		mp.events.call( "playerCharacterLogout", player.GetEntity() );
+		Event.Call( "playerCharacterLogout", player, player.GetCharacter() );
 
 		this.RemoveFromList( player );
 

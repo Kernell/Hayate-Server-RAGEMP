@@ -30,7 +30,7 @@ export class Character extends ConsoleCommand
 			throw new Error( "Syntax: /char login [id]" );
 		}
 
-		mp.events.call( "playerCharacterSelect", player.GetEntity(), id );
+		Event.Call( "playerCharacterSelect", player, id );
 	}
 
 	private Option_create( player : PlayerInterface, option : string, args : any[] ) : void
@@ -42,7 +42,7 @@ export class Character extends ConsoleCommand
 
 		let name = args.shift();
 
-		mp.events.call( "playerCharacterCreate", player.GetEntity(), name );
+		Event.Call( "playerCharacterCreate", player, name );
 	}
 
 	private Option_undefined( player : PlayerInterface, option : string, args : any[] )

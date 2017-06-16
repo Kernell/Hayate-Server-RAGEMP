@@ -19,9 +19,9 @@ import { UsernamePasswordToken } from "../Token/UsernamePasswordToken";
 export class AuthenticationProvider implements AuthenticationProviderInterface
 {
 	protected encoder      : UserPasswordEncoder;
-	protected userProvider : UserProviderInterface;
+	protected userProvider : UserManagerInterface;
 
-	public constructor( userProvider : UserProviderInterface )
+	public constructor( userProvider : UserManagerInterface )
 	{
 		this.userProvider = userProvider;
 		this.encoder      = new UserPasswordEncoder();
@@ -40,7 +40,7 @@ export class AuthenticationProvider implements AuthenticationProviderInterface
 
 		if( this.CheckAuthentication( user, token ) )
 		{
-			let authenticatedToken = new UsernamePasswordToken( user, token.GetCredentials() );
+			let authenticatedToken = new UsernamePasswordToken( user, token.GetCredentials(), ( token as UsernamePasswordToken ).GetIP(), ( token as UsernamePasswordToken ).GetDeviceID() );
 
 			authenticatedToken.SetAuthenticated( true );
 
@@ -56,12 +56,12 @@ export class AuthenticationProvider implements AuthenticationProviderInterface
 
 		if( typeof user != "object" )
 		{
-			user = await this.userProvider.LoadUserByUsername( username );
+			user = await this.userProvider.LoadByUsername( username );
 		}
 
 		if( typeof user != "object" )
 		{
-			user = await this.userProvider.LoadUserByLogin( username );
+			user = await this.userProvider.LoadByLogin( username );
 		}
 
 		return user;

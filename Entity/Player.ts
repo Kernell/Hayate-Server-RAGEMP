@@ -10,7 +10,9 @@
 *
 *********************************************************/
 
-import { Entity }     from "./Entity";
+import { Entity }                from "./Entity";
+import { User }                  from "./User";
+import { UsernamePasswordToken } from "../Security/Token/UsernamePasswordToken";
 
 export class Player extends Entity implements PlayerInterface
 {
@@ -85,8 +87,12 @@ export class Player extends Entity implements PlayerInterface
 		this.entity.ban( reason );
 	}
 
-	public Login( user : UserInterface ) : void
+	public Login( token : UsernamePasswordToken ) : void
 	{
+		let user = token.GetUser() as User;
+		
+		user.Login( token );
+
 		this.user = user;
 
 		mp.events.call( "playerLogin", this.entity, user.GetID() );

@@ -14,50 +14,25 @@ import * as Entity                       from "../Entity";
 import Server                            from "../Server";
 import ManagerBase                       from "./ManagerBase";
 import DatabaseManager                   from "./DatabaseManager";
-import { UserProvider }                  from "../Security/User/UserProvider";
-import { AuthenticationProviderManager } from "../Security/Authentication/AuthenticationProviderManager";
-import { AuthenticationProvider }        from "../Security/Authentication/AuthenticationProvider";
-import { UsernamePasswordToken }         from "../Security/Token/UsernamePasswordToken";
-import { UserEmailValidator }            from "../Security/Validator/UserEmailValidator";
-import { UserNameValidator }             from "../Security/Validator/UserNameValidator";
-import { UserPasswordValidator }         from "../Security/Validator/UserPasswordValidator";
 
 export default class PlayerManager extends ManagerBase< Entity.Player >
 {
-	private authenticationManager : AuthenticationProviderManager;
-
 	constructor( server : Server )
 	{
 		super( server );
 
-		this.Dependency = server.DatabaseManager;
-		this.authenticationManager = null;
+		this.Dependency = server.UserManager;
 
-		// Native events
 		this.RegisterEvent( "playerJoin",     this.OnPlayerJoin );
 		this.RegisterEvent( "playerQuit",     this.OnPlayerQuit );
 		this.RegisterEvent( "playerDeath",    this.OnPlayerDeath );
 		this.RegisterEvent( "playerSpawn",    this.OnPlayerDeath ); 
 		this.RegisterEvent( "playerChat",     this.OnPlayerChat );
-				
-		// Gamemode events
-		this.RegisterEvent( "playerTryLogin", this.OnPlayerTryLogin );
-		this.RegisterEvent( "playerLogin",    this.OnPlayerLogin );
-		this.RegisterEvent( "playerLogout",   this.OnPlayerLogout );
-		this.RegisterEvent( "playerRegister", this.OnPlayerRegister );
 	}
 
 	public Init() : Promise< any >
 	{
 		return super.Init().then(
-			() =>
-			{
-				let repository   = this.Server.DatabaseManager.GetRepository( Entity.User );
-				let userProvider = new UserProvider( repository );
-
-				this.authenticationManager = new AuthenticationProviderManager( [ new AuthenticationProvider( userProvider ) ], true );
-			}
-		).then(
 			() =>
 			{
 				for( let player of mp.players.toArray() )
@@ -121,127 +96,5 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		}
 
 		return null;
-	}
-
-	private OnPlayerTryLogin( player : Entity.Player, login : string, password : string ) : Promise< any >
-	{
-		if( player.GetUser() )
-		{
-			throw new Error( "Вы уже авторизованы" );
-		}
-
-		let token = new UsernamePasswordToken( login, password );
-
-		return this.authenticationManager.Authenticate( token ).then(
-			( token : TokenInterface ) =>
-			{
-				player.Login( token.GetUser() );
-			}
-		);
-	}
-
-	private OnPlayerLogin( player : Entity.Player, userId : number ) : Promise< any >
-	{
-		for( let p of this.List.values() )
-		{
-			if( p != player && p.GetUser().GetID() == userId )
-			{
-				p.Logout();
-
-				break;
-			}
-		}
-
-		let userAuth = new Entity.UserAuth();
-
-		userAuth.SetUserID( userId );
-		userAuth.SetIP( player.GetIP() );
-		userAuth.SetDeviceID( "null" );
-		userAuth.SetToken( new GUID().toString() );
-
-		this.Server.DatabaseManager.GetRepository( Entity.UserAuth ).persist( userAuth );
-
-		let repository = this.Server.DatabaseManager.GetRepository( Entity.Character );
-
-		return repository.find( { user_id: userId } ).then(
-			( characters : Entity.Character[] ) =>
-			{
-				player.OutputChatBox( "Используйте /char create [name] для создания персонажа" );
-
-				if( characters.length != 0 )
-				{
-					player.OutputChatBox( "Используйте /char login [id] для выбора персонажа" );
-
-					for( let char of characters )
-					{
-						player.OutputChatBox( `ID: ${char.GetID()}, Name: ${char.GetName()}` );
-					}
-				}
-			}
-		);
-	}
-
-	private OnPlayerLogout( player : Entity.Player, userId : number ) : Promise< void >
-	{
-		return null;
-	}
-
-	private async OnPlayerRegister( player : Entity.Player, name : string, email : string, password : string ) : Promise< void >
-	{
-		if( player.GetUser() )
-		{
-			return player.OutputChatBox( "Вы уже авторизованы" );
-		}
-
-		let validatorEmail = new UserEmailValidator();
-		let validatorName  = new UserNameValidator();
-		let validatorPassw = new UserPasswordValidator();
-
-		try
-		{
-			validatorName.Validate( name );
-			validatorEmail.Validate( email );
-			validatorPassw.Validate( password );
-		}
-		catch( e )
-		{
-			return player.OutputChatBox( e );
-		}
-
-		let repository = this.Server.DatabaseManager.GetRepository( Entity.User );
-
-		let countEmail = await repository.count( { email: email } );
-
-		if( countEmail != 0 )
-		{
-			return player.OutputChatBox( "Пользователь с этим email уже существует" );
-		}
-						
-		let countName  = await repository.count( { name: name } );
-
-		if( countName != 0 )
-		{
-			return player.OutputChatBox( "Этот имя пользователя уже занято, попробуйте другое" );
-		}
-
-		let user = new Entity.User();
-
-		user.SetName( name );
-		user.SetEmail( email );
-		user.SetPassword( password );
-
-		return repository.persist( user ).then(
-			( user ) =>
-			{
-				player.Login( user );
-			}
-		).catch(
-			( error : Error ) =>
-			{
-				console.log( error.stack );
-
-				player.OutputChatBox( "Произошла ошибка базы данных" );
-			}
-		);
 	}
 }

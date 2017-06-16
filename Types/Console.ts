@@ -158,9 +158,9 @@ class Console extends IdentifiedPool implements PlayerInterface
 		console.log( text );
 	}
 
-	public Login( user : UserInterface ) : void
+	public Login( token : TokenInterface ) : void
 	{
-		this.user = user;
+		this.user = token.GetUser();
 	}
 
 	public Logout() : void

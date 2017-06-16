@@ -84,6 +84,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Command\Register.ts" />
+    <TypeScriptCompile Include="Security\User\UserManager.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Entity\EntityInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -91,6 +94,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Entity\UserAuth.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Entity\UserRole.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Game\Character\CharacterInterface.ts">
@@ -129,10 +135,10 @@
     <TypeScriptCompile Include="Security\User\UserInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Security\User\UserProvider.ts">
+    <TypeScriptCompile Include="Security\User\UserManagerInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Security\User\UserProviderInterface.ts">
+    <TypeScriptCompile Include="Security\User\UserRoleInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Security\Validator\CharacterNameValidator.ts">
@@ -223,6 +229,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Types\Ped.ts" />
+    <TypeScriptCompile Include="Types\Permission.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Types\Vector3.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

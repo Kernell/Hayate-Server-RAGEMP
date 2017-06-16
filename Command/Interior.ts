@@ -26,7 +26,8 @@ export class Interior extends ConsoleCommand
 
 		this.interiors = require( '../../Config/interiors.json' );
 
-		this.Name = "interior";
+		this.Name       = "interior";
+		this.Restricted = true;
 	}
 
 	private Option_show( player : PlayerInterface, option : string, args : any[] ) : void

@@ -29,19 +29,32 @@ export class ConsoleCommand
 
 	public Execute( player : PlayerInterface, args : string[] ) : Boolean
 	{
+		if( player.GetUser() == null )
+		{
+			return false;
+		}
+
+		if( this.Restricted && !player.GetUser().IsGranted( 'command.' + this.Name ) )
+		{
+			throw new Error( `Access denied to command '${this.Name}'` );
+		}
+
 		let option = args.shift();
 		let method = "Option_" + option;
 
 		if( this[ method ] )
 		{
+			if( this.Restricted && method != null && !player.GetUser().IsGranted( 'command.' + this.Name + '.' + option ) )
+			{
+				throw new Error( `Access denied to command '${this.Name} ${option}'` );
+			}
+
 			this[ method ]( player, option, args );
 
 			return true;
 		}
 
-		player.OutputChatBox( `Invalid option '${option}'` );
-
-		return true;
+		throw new Error( `Invalid option '${option}'` );
 	}
 
 	public GetName() : String

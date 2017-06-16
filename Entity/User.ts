@@ -11,6 +11,9 @@
 *********************************************************/
 
 import * as ORM          from "typeorm";
+import * as Entity       from "../Entity";
+
+import { UsernamePasswordToken } from "../Security/Token/UsernamePasswordToken";
 
 @ORM.Entity( "users" )
 export class User implements UserInterface
@@ -29,12 +32,26 @@ export class User implements UserInterface
 
 	@ORM.Column()
 	protected salt : string;
+
+	@ORM.OneToMany( type => Entity.UserAuth, token => token[ "user" ] )
+	protected tokens : Entity.UserAuth[];
+
+	@ORM.Column( { name: "roles", type: "simple_array", default: null, nullable: true } )
+	protected _roles : number[];
 	
 	@ORM.CreateDateColumn( { name: "created_at" } )
 	protected createdAt : Date;
 
 	@ORM.Column( { type: "datetime", name: "deleted_at", nullable: true, default: null } )
 	protected deletedAt : Date;
+
+	protected roles : Map< number, UserRoleInterface >;
+
+	public constructor()
+	{
+		this.tokens = [];
+		this.roles = new Map< number, UserRoleInterface >();
+	}
 
 	public GetID() : number
 	{
@@ -84,5 +101,57 @@ export class User implements UserInterface
 	public GetCreatedDate() : Date
 	{
 		return this.createdAt
+	}
+
+	public GetRoles() : Map< number, UserRoleInterface >
+	{
+		return this.roles;
+	}
+
+	public AddRole( role : UserRoleInterface ) : void
+	{
+		if( this._roles.indexOf( role.GetID() ) == -1 )
+		{
+			this._roles.push( role.GetID() );
+		}
+
+		this.roles.set( role.GetID(), role );
+	}
+
+	public RemoveRole( role : UserRoleInterface ) : void
+	{
+		this._roles.slice( this._roles.indexOf( role.GetID() ), 1 );
+
+		this.roles.delete( role.GetID() );
+	}
+
+	public IsGranted( permission : Permission|string ) : boolean
+	{
+		if( this.id == 0 )
+		{
+			return true;
+		}
+
+		for( let role of this.roles.values() )
+		{
+			if( role.IsGranted( permission ) )
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public Login( token : UsernamePasswordToken ) : void
+	{
+		let auth = new Entity.UserAuth();
+
+		auth.SetUser( this );
+		auth.SetDeviceID( token.GetDeviceID() );
+		auth.SetIP( token.GetIP() );
+		auth.SetToken( token.GetGUID().toString() );
+
+		this.tokens.push( auth );
 	}
 }

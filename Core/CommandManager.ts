@@ -65,7 +65,7 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 							throw new Error( "root user is undefined" );
 						}
 
-						this.console.Login( user );
+						this.console[ 'user' ] = user;
 					}
 				);
 			}

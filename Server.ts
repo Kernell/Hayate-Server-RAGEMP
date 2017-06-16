@@ -18,6 +18,7 @@ import ManagerBase      from "./Core/ManagerBase";
 import CommandManager   from "./Core/CommandManager";
 import DatabaseManager  from "./Core/DatabaseManager";
 import PlayerManager    from "./Core/PlayerManager";
+import UserManager      from "./Security/User/UserManager";
 import VehicleManager   from "./Core/VehicleManager";
 
 import { CharacterManager } from "./Game/Character/CharacterManager";
@@ -38,6 +39,7 @@ export default class Server
 	public DatabaseManager  : DatabaseManager;
 	public CommandManager   : CommandManager;
 	public PlayerManager    : PlayerManager;
+	public UserManager      : UserManager;
 	public VehicleManager   : VehicleManager;
 
 	constructor()
@@ -58,6 +60,7 @@ export default class Server
 		this.DatabaseManager = new DatabaseManager( this );
 		this.CommandManager  = new CommandManager( this );
 		this.PlayerManager   = new PlayerManager( this );
+		this.UserManager     = new UserManager( this );
 		this.VehicleManager  = new VehicleManager( this );
 
 		new CharacterManager( this );

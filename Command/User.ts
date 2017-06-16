@@ -19,7 +19,8 @@ export class User extends ConsoleCommand
 	{
 		super( server );
 
-		this.Name = "user";
+		this.Name       = "user";
+		this.Restricted = true;
 	}
 
 	public Execute( player : PlayerInterface, args : any[] ) : Boolean

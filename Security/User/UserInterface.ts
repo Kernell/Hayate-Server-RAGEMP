@@ -18,4 +18,9 @@ interface UserInterface
 	GetPassword        () : string;
 	GetSalt            () : string;
 	GetCreatedDate     () : Date;
+	GetRoles           () : Map< number, UserRoleInterface >;
+	AddRole            ( role : UserRoleInterface ) : void;
+	RemoveRole         ( role : UserRoleInterface ) : void;
+	IsGranted          ( permission : Permission ) : boolean;
+	IsGranted          ( permission : string )     : boolean;
 }

@@ -24,6 +24,6 @@ interface PlayerInterface extends EntityInterface
 	GetRotation() : Vector3;
 	GetDimension() : number;
 	OutputChatBox( text : string ) : void;
-	Login( user : UserInterface ) : void;
+	Login( token : TokenInterface ) : void;
 	Logout() : void;
 }

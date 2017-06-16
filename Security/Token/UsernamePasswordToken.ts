@@ -14,12 +14,31 @@ export class UsernamePasswordToken implements TokenInterface
 {
 	protected user          : UserInterface|string;
 	protected credentials   : string;
+	protected guid          : GUID;
+	protected ip            : string;
+	protected deviceId      : string;
     protected authenticated : boolean = false;
 
-	public constructor( user : UserInterface|string, credentials : string )
+	public constructor( token : UsernamePasswordToken );
+	public constructor( user : UserInterface|string, credentials : string, ip : string, deviceId : string );
+
+	public constructor( user : UsernamePasswordToken|UserInterface|string, credentials ?: string, ip ?: string, deviceId ?: string )
 	{
+		if( user instanceof UsernamePasswordToken )
+		{
+			let token = user;
+
+			user        = token.user;
+			ip          = token.ip;
+			deviceId    = token.deviceId;
+			credentials = token.credentials;
+		}
+
 		this.SetUser( user );
 
+		this.guid        = new GUID();
+		this.ip          = ip;
+		this.deviceId    = deviceId;
 		this.credentials = credentials;
 	}
 
@@ -62,4 +81,19 @@ export class UsernamePasswordToken implements TokenInterface
     {
         this.credentials = null;
     }
+
+	public GetGUID() : GUID
+	{
+		return this.guid;
+	}
+
+	public GetIP() : string
+	{
+		return this.ip;
+	}
+
+	public GetDeviceID() : string
+	{
+		return this.deviceId;
+	}
 }

@@ -10,8 +10,8 @@
 *
 *********************************************************/
 
-interface UserProviderInterface
+interface UserManagerInterface
 {
-	LoadUserByUsername( name  : string ) : Promise< UserInterface >;
-	LoadUserByLogin   ( login : string ) : Promise< UserInterface >;
+	LoadByUsername( name  : string ) : Promise< UserInterface >;
+	LoadByLogin   ( login : string ) : Promise< UserInterface >;
 }

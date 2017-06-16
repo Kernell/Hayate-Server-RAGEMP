@@ -22,7 +22,8 @@ export class Vehicle extends ConsoleCommand
 	{
 		super( server );
 
-		this.Name = "vehicle";
+		this.Name       = "vehicle";
+		this.Restricted = true;
 	}
 
 	private Option_spawn( player : PlayerInterface, option : string, args : any[] ) : void

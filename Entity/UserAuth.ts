@@ -18,9 +18,10 @@ export class UserAuth
 {
 	@ORM.PrimaryGeneratedColumn()
 	protected id : number;
-	
-	@ORM.Column( { name: "user_id" } )
-	protected userId : number
+
+	@ORM.ManyToOne( type => Entity.User, user => user[ "tokens" ] )
+	@ORM.JoinColumn( { name: "user_id" } )
+	protected user : Entity.User;
 	
 	@ORM.Column( { name: "device_id" } )
 	protected deviceId : string;
@@ -39,9 +40,9 @@ export class UserAuth
 		return this.id;
 	}
 
-	public GetUserID() : number
+	public GetUser() : Entity.User
 	{
-		return this.userId;
+		return this.user;
 	}
 
 	public GetDeviceID() : string
@@ -64,9 +65,9 @@ export class UserAuth
 		return this.date;
 	}
 
-	public SetUserID( userId : number ) : void
+	public SetUser( user : Entity.User ) : void
 	{
-		this.userId = userId;
+		this.user = user;
 	}
 
 	public SetDeviceID( deviceId : string ) : void

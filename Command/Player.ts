@@ -22,7 +22,8 @@ export class Player extends ConsoleCommand
 	{
 		super( server );
 
-		this.Name = "player";
+		this.Name       = "player";
+		this.Restricted = true;
 	}
 
 	private Option_model( player : PlayerInterface, option : string, args : any[] ) : void

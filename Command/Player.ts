@@ -12,13 +12,12 @@
 
 import * as printf        from "printf";
 import * as Config        from "nconf";
-import { ConsoleCommand } from "./ConsoleCommand";
 import * as Entity        from "../Entity";
-import Server             from "../Server";
+import { ConsoleCommand } from "./ConsoleCommand";
 
 export class Player extends ConsoleCommand
 {
-	constructor( server : Server )
+	constructor( server : ServerInterface )
 	{
 		super( server );
 

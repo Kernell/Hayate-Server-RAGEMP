@@ -12,18 +12,17 @@
 
 import "reflect-metadata";
 import "./SharedUtils";
-import * as Config      from "nconf";
+import * as Config          from "nconf";
 
-import ManagerBase      from "./Core/ManagerBase";
-import CommandManager   from "./Core/CommandManager";
-import DatabaseManager  from "./Core/DatabaseManager";
-import PlayerManager    from "./Core/PlayerManager";
-import UserManager      from "./Security/User/UserManager";
-import VehicleManager   from "./Core/VehicleManager";
-
+import ManagerBase          from "./Core/ManagerBase";
+import CommandManager       from "./Core/CommandManager";
+import DatabaseManager      from "./Core/DatabaseManager";
+import PlayerManager        from "./Core/PlayerManager";
+import UserManager          from "./Security/User/UserManager";
+import VehicleManager       from "./Game/Vehicle/VehicleManager";
 import { CharacterManager } from "./Game/Character/CharacterManager";
 
-export default class Server
+export default class Server implements ServerInterface
 {
 	public static COUNTDOWN_NONE     = 0;
 	public static COUNTDOWN_SHUTDOWN = 1;
@@ -42,7 +41,7 @@ export default class Server
 	public UserManager      : UserManager;
 	public VehicleManager   : VehicleManager;
 
-	constructor()
+	public constructor()
 	{
 		Config.argv().env().defaults(
 			{
@@ -54,8 +53,8 @@ export default class Server
 		
 		Config.file( { file: `${path}/Config/${Config.get( 'NODE_ENV' )}.json` } );
 
-		this.Managers   = new Array< any >();
-		this.DebugTicks = {};
+		this.Managers        = new Array< ManagerInterface >();
+		this.DebugTicks      = {};
 
 		this.DatabaseManager = new DatabaseManager( this );
 		this.CommandManager  = new CommandManager( this );
@@ -141,11 +140,11 @@ export default class Server
 				{
 					if( Server.CountDownType == Server.COUNTDOWN_RESTART )
 					{
-						Server.Restart();
+						this.Restart();
 					}
 					else if( Server.CountDownType == Server.COUNTDOWN_SHUTDOWN )
 					{
-						Server.Shutdown();
+						this.Shutdown();
 					}
 				}
 			}
@@ -154,11 +153,11 @@ export default class Server
 		this.DebugTicks[ "DoPulse" ] = ( ( new Date().getTime() - tick ) / 1000 );
 	}
 
-	public static Restart() : void
+	public Restart() : void
 	{
 	}
 
-	public static Shutdown() : void
+	public Shutdown() : void
 	{
 	}
 }

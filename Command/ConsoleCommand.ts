@@ -10,16 +10,14 @@
 *
 *********************************************************/
 
-import Server     from "../Server";
-
 export class ConsoleCommand
 {
-	protected Server          : Server;
+	protected Server          : ServerInterface;
 	protected Name            : String;
 	protected Restricted      : Boolean;
 	protected CaseSensitive   : Boolean;
 
-	constructor( server : Server )
+	constructor( server : ServerInterface )
 	{
 		this.Server        = server;
 		this.Name          = "";

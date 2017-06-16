@@ -11,16 +11,15 @@
 *********************************************************/
 
 import * as ORM         from "typeorm";
-import { Vehicle }      from "../Entity/Vehicle";
-import Server           from "../Server";
-import ManagerBase      from "./ManagerBase";
-import DatabaseManager  from "./DatabaseManager";
+import { Vehicle }      from "../../Entity/Vehicle";
+import ManagerBase      from "../../Core/ManagerBase";
+import DatabaseManager  from "../../Core/DatabaseManager";
 
 export default class VehicleManager extends ManagerBase< Vehicle >
 {
 	private Repository : ORM.Repository< Vehicle > = null;
 
-	constructor( server : Server )
+	constructor( server : ServerInterface )
 	{
 		super( server );
 

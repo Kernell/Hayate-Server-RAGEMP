@@ -10,7 +10,6 @@
 *
 *********************************************************/
 
-import Server from "../Server";
 import { Entity } from "../Entity/Entity";
 
 type EventCallback = ( ...params : any[] ) => Promise< any >;
@@ -20,12 +19,12 @@ type EventsArray   = [ EventType ];
 export default class ManagerBase< TEntity extends Entity > implements ManagerInterface
 {
 	private events       : EventsArray;
-	protected Server     : Server;
+	protected Server     : ServerInterface;
 	protected Dependency : ManagerInterface;
 	protected List       : Map< number, TEntity >;
 	public    State      : ManagerState;
 
-	constructor( server : Server )
+	constructor( server : ServerInterface )
 	{
 		server.RegisterManager( this );
 		

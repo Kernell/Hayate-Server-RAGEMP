@@ -11,13 +11,12 @@
 *********************************************************/
 
 import * as Entity                       from "../Entity";
-import Server                            from "../Server";
 import ManagerBase                       from "./ManagerBase";
 import DatabaseManager                   from "./DatabaseManager";
 
 export default class PlayerManager extends ManagerBase< Entity.Player >
 {
-	constructor( server : Server )
+	constructor( server : ServerInterface )
 	{
 		super( server );
 

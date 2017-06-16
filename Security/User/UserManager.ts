@@ -12,7 +12,6 @@
 
 import * as ORM         from "typeorm";
 import * as Entity      from "../../Entity";
-import Server           from "../../Server";
 import ManagerBase      from "../../Core/ManagerBase";
 import DatabaseManager  from "../../Core/DatabaseManager";
 
@@ -32,13 +31,13 @@ export default class UserManager extends ManagerBase< any > implements UserManag
 	private repositoryRole        : ORM.Repository< Entity.UserRole > = null;
 	private authenticationManager : AuthenticationProviderManager     = null;
 
-	public constructor( server : Server )
+	public constructor( server : ServerInterface )
 	{
 		super( server );
 
 		this.roles      = [];
 
-		this.database   = server.DatabaseManager;
+		this.database   = server.DatabaseManager as DatabaseManager;
 		this.Dependency = server.DatabaseManager;
 
 		this.RegisterEvent( "playerTryLogin", this.OnPlayerTryLogin );
@@ -149,7 +148,7 @@ export default class UserManager extends ManagerBase< any > implements UserManag
 		validatorEmail.Validate( email );
 		validatorPassw.Validate( password );
 
-		let repository = this.Server.DatabaseManager.GetRepository( Entity.User );
+		let repository = this.database.GetRepository( Entity.User );
 
 		let countEmail = await repository.count( { email: email } );
 

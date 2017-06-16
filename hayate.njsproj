@@ -153,6 +153,10 @@
     <TypeScriptCompile Include="Security\Validator\UserPasswordValidator.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="ServerInterface.ts">
+      <SubType>Code</SubType>
+      <TestFramework>ExportRunner</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="SharedUtils\Date.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -174,7 +178,7 @@
     <TypeScriptCompile Include="Core\PlayerManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Core\VehicleManager.ts">
+    <TypeScriptCompile Include="Game\Vehicle\VehicleManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Entity\Character.ts">

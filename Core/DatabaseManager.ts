@@ -13,14 +13,13 @@
 import * as Config    from "nconf";
 import * as ORM       from "typeorm";
 import * as Entity    from "../Entity";
-import Server         from "../Server";
 import ManagerBase    from "./ManagerBase";
 
 export default class DatabaseManager extends ManagerBase< any >
 {
 	private Connection : ORM.Connection;
 
-	constructor( server : Server )
+	constructor( server : ServerInterface )
 	{
 		super( server );
 

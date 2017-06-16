@@ -13,7 +13,6 @@
 import * as Command    from "../Command";
 import * as Entity     from "../Entity";
 import ManagerBase     from "./ManagerBase";
-import Server          from "../Server";
 import DatabaseManager from "./DatabaseManager";
 
 export default class CommandManager extends ManagerBase< Entity.Entity >
@@ -21,7 +20,7 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 	private console  : Console;
 	private Commands : Array< Command.ConsoleCommand >;
 
-	constructor( server : Server )
+	constructor( server : ServerInterface )
 	{
 		super( server );
 

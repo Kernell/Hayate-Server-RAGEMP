@@ -14,13 +14,12 @@ import * as printf        from "printf";
 import * as Config        from "nconf";
 import { ConsoleCommand } from "./ConsoleCommand";
 import * as Entity        from "../Entity";
-import Server             from "../Server";
 
 export class Interior extends ConsoleCommand
 {
 	private interiors : [ { name : string, position : number[] } ];
 
-	constructor( server : Server )
+	constructor( server : ServerInterface )
 	{
 		super( server );
 

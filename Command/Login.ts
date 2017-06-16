@@ -11,11 +11,10 @@
 *********************************************************/
 
 import { ConsoleCommand } from "./ConsoleCommand";
-import Server             from "../Server";
 
 export class Login extends ConsoleCommand
 {
-	constructor( server : Server )
+	constructor( server : ServerInterface )
 	{
 		super( server );
 

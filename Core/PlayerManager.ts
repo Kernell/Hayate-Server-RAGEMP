@@ -42,7 +42,22 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		);
 	}
 
-	private OnPlayerJoin( player : Entity.Player ) : Promise< any >
+	public Stop() : Promise< any >
+	{
+		return new Promise(
+			( resolve, reject ) =>
+			{
+				for( let player of this.GetAll() )
+				{
+					this.OnPlayerQuit( player, "server stopped", "" );
+				}
+
+				resolve();
+			}
+		);
+	}
+
+	private async OnPlayerJoin( player : Entity.Player ) : Promise< any >
 	{
 		this.AddToList( player );
 
@@ -51,9 +66,12 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		return null;
 	}
 
-	private OnPlayerQuit( player : Entity.Player, reason : string, kickReason : string ) : Promise< any >
+	private async OnPlayerQuit( player : Entity.Player, reason : string, kickReason : string ) : Promise< any >
 	{
-		Event.Call( "playerCharacterLogout", player, player.GetCharacter() );
+		if( player.GetCharacter() != null )
+		{
+			Event.Call( "playerCharacterLogout", player, player.GetCharacter() );
+		}
 
 		this.RemoveFromList( player );
 
@@ -62,7 +80,7 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		return null;
 	}
 
-	private OnPlayerDeath( player : Entity.Player, reason : string, killer : Entity.Player ) : Promise< any >
+	private async OnPlayerDeath( player : Entity.Player, reason : string, killer : Entity.Player ) : Promise< any >
 	{
 		const char = player.GetCharacter();
 
@@ -74,12 +92,12 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		return null;
 	}
 
-	private OnPlayerSpawn( player : Entity.Player ) : Promise< any >
+	private async OnPlayerSpawn( player : Entity.Player ) : Promise< any >
 	{
 		return null;
 	}
 
-	private OnPlayerChat( player : Entity.Player, text : string ) : Promise< any >
+	private async OnPlayerChat( player : Entity.Player, text : string ) : Promise< any >
 	{
 		text = text
 			.replace( /&/g, "&amp;" )

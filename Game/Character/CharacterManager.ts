@@ -110,11 +110,11 @@ export class CharacterManager extends ManagerBase< Entity.Entity >
 
 	public async OnLogout( player : PlayerInterface, character : CharacterInterface ) : Promise< any >
 	{
-		character.SetPosition( player.GetPosition() );
-		character.SetRotation( player.GetRotation() );
-		character.SetDimension( player.GetDimension() );
+		character.SetPosition( character.GetPosition() );
+		character.SetRotation( character.GetRotation() );
+		character.SetDimension( character.GetDimension() );
 
-		this.repository.persist( character );
+		await this.repository.persist( character );
 
 		player.SetCharacter( null );
 

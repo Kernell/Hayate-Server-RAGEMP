@@ -158,7 +158,9 @@ export class Character implements CharacterInterface
 
 	public GetPosition() : Vector3
 	{
-		return new Vector3( this.entity.position.x, this.entity.position.y, this.entity.position.z );
+		let position = this.entity.position;
+
+		return new Vector3( position.x, position.y, position.z );
 	}
 
 	public SetPosition( position : Vector3 ) : void

@@ -75,10 +75,10 @@ export class Vehicle extends Entity implements VehicleInterface
 	protected defaultDimension : number;
 
 	@ORM.CreateDateColumn( { name: "created_at" } )
-	protected createdAt : string;
+	protected createdAt : Date;
 
 	@ORM.Column( { type: "datetime", name: "deleted_at", nullable: true, default: null } )
-	protected deletedAt : string;
+	protected deletedAt : Date;
 
 	protected entity : mp.Vehicle;
 
@@ -119,6 +119,11 @@ export class Vehicle extends Entity implements VehicleInterface
 
 	public Create() : void
 	{
+		if( this.IsDeleted() )
+		{
+			return;
+		}
+
 		this.entity = mp.vehicles.new( this.model, this.position, null, this.dimension );
 
 		this.entity.rotation    = this.rotation;
@@ -137,6 +142,16 @@ export class Vehicle extends Entity implements VehicleInterface
 
 	public Persist( repository : ORM.Repository< Vehicle > ) : Promise< Vehicle >
 	{
+		if( this.IsDeleted() )
+		{
+			return null;
+		}
+
+		if( this.GetID() < 0 )
+		{
+			return null;
+		}
+
 		this.model              = this.GetModel();
 		this.position           = this.GetPosition();
 		this.rotation           = this.GetRotation();
@@ -153,6 +168,46 @@ export class Vehicle extends Entity implements VehicleInterface
 		this.neonColor          = this.GetNeonColor();
 
 		return repository.persist( this );
+	}
+
+	public Respawn() : void
+	{
+		this.Fix();
+
+		this.SetDimension       ( this.defaultDimension );
+		this.SetPosition        ( this.defaultPosition );
+		this.SetRotation        ( this.defaultRotation );
+
+		this.SetModel           ( this.model );
+		this.SetColor           ( this.color );
+		this.SetPlate           ( this.plate );
+		this.SetSirensState     ( this.siren );
+		this.SetEngineState     ( this.engine );
+		this.SetLightsState     ( this.lights );
+		this.SetEngineHealth    ( this.engineHealth );
+		this.SetBodyHealth      ( this.bodyHealth );
+		this.SetLocked          ( this.locked );
+		this.SetNeonColor       ( this.neonColor );
+		this.SetNeonEnabled     ( this.neonEnabled );
+	}
+
+	public Delete() : void
+	{
+		this.deletedAt = new Date();
+
+		this.Destroy();
+	}
+
+	public IsDeleted() : boolean
+	{
+		return this.deletedAt != null;
+	}
+
+	public Restore() : void
+	{
+		this.deletedAt = null;
+
+		this.Create();
 	}
 
 	public GetID() : number

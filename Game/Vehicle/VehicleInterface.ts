@@ -12,6 +12,9 @@
 
 interface VehicleInterface extends EntityInterface
 {
+	Delete           () : void;
+	IsDeleted        () : boolean;
+	Restore          () : void;
 	GetID            () : number;
 	GetName          () : string;
 	GetPlate         () : string;

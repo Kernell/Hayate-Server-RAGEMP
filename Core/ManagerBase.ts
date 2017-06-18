@@ -10,15 +10,14 @@
 *
 *********************************************************/
 
-import { Entity }       from "../Entity/Entity";
+import * as Entity      from "../Entity";
 
 type EventCallback = ( ...params : any[] ) => Promise< any >;
 type EventType     = { name: string, callback: Function };
 type EventsArray   = [ EventType ];
 
-export default class ManagerBase< TEntity extends Entity > implements ManagerInterface
+export default class ManagerBase< TEntity extends Entity.Entity > implements ManagerInterface
 {
-	private events       : EventsArray;
 	protected Server     : ServerInterface;
 	protected Dependency : ManagerInterface;
 	protected List       : Map< number, TEntity >;
@@ -32,8 +31,6 @@ export default class ManagerBase< TEntity extends Entity > implements ManagerInt
 		this.Dependency  = null;
 		this.List        = new Map< number, TEntity >();
 		this.State       = ManagerState.None;
-
-		this.events      = [] as EventsArray;
 	}
 
 	protected RegisterEvent( event : string, handler: EventCallback )
@@ -43,31 +40,21 @@ export default class ManagerBase< TEntity extends Entity > implements ManagerInt
 			this.EventHandler( event, handler, player, ...params );
 		};
 
-		let e =
-		{
-			name: event,
-			callback: callback,
-		};
-
-		this.events.push( e );
+		Event.AddListener( event, callback );
 	}
 
 	protected WrapEvent( event : string, handler: EventCallback )
 	{
 		let callback = ( player : mp.Entity, ...params : any[] ) =>
 		{
-			let type = player.type == "console" ? Console : Entity[ player.type ];
+			let typeName = player.type[ 0 ].toUpperCase() + player.type.substring( 1 );
+
+			let type = typeName == "Console" ? Console : Entity[ typeName ];
 
 			this.EventHandler( event, handler, type.FindOrCreate( player ), ...params );
 		};
 
-		let e =
-		{
-			name: event,
-			callback: callback,
-		};
-
-		this.events.push( e );
+		mp.events.add( event, callback );
 	}
 
 	protected EventHandler( event : string, handler: EventCallback, source : PlayerInterface, ...params : any[] )
@@ -162,14 +149,6 @@ export default class ManagerBase< TEntity extends Entity > implements ManagerInt
 				}
 
 				return resolve();
-			}
-		).then(
-			() =>
-			{
-				for( let event of this.events )
-				{
-					Event.AddListener( event.name, event.callback );
-				}
 			}
 		);
 	}

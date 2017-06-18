@@ -69,6 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="index.js" />
+    <Compile Include="Typings\Globals.d.ts">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Command\Character.ts">
@@ -225,6 +228,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Globals\IdentifiedPool.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="SharedUtils\Math.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SharedUtils\String.ts">

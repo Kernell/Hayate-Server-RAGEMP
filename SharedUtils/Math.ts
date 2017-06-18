@@ -10,6 +10,12 @@
 *
 *********************************************************/
 
-import "./SharedUtils/Date";
-import "./SharedUtils/String";
-import "./SharedUtils/Math";
+interface Math
+{
+	Random( min ?: number, max ?: number ) : number
+}
+
+Math.Random = function( min : number = 0, max : number = 0xFFFFFFFF ) : number
+{
+	return Math.floor( Math.random() * ( max - min ) + min );
+}

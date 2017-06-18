@@ -76,6 +76,11 @@ export class Entity extends IdentifiedPool implements EntityInterface
 		return new Vector3( rotation.x, rotation.y, rotation.z );
 	}
 
+	public SetRotation( rotation : Vector3 ) : void
+	{
+		this.entity.rotation = rotation;
+	}
+
 	public GetDimension() : number
 	{
 		return this.entity.dimension;

@@ -24,6 +24,7 @@ interface EntityInterface
 	GetPosition  () : Vector3;
 	SetPosition  ( position : Vector3 ) : void;
 	GetRotation  () : Vector3;
+	SetRotation  ( rotation : Vector3 ) : void;
 	GetDimension () : number;
 	SetDimension ( dimension : number ) : void;
 }

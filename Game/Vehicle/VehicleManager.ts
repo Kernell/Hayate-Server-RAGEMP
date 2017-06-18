@@ -24,6 +24,8 @@ export default class VehicleManager extends ManagerBase< Vehicle >
 		super( server );
 
 		this.Dependency = server.DatabaseManager;
+
+		this.WrapEvent( "playerExitVehicle", this.OnPlayerExitVehicle );
 	}
 
 	public Init() : Promise< any >
@@ -48,5 +50,38 @@ export default class VehicleManager extends ManagerBase< Vehicle >
 				}
 			}
 		);
+	}
+
+	public Stop() : Promise< any >
+	{
+		return new Promise(
+			( resolve, reject ) =>
+			{
+				for( let vehicle of this.GetAll() )
+				{
+					vehicle.Persist( this.Repository );
+				}
+
+				resolve();
+			}
+		);
+	}
+
+	private async OnPlayerExitVehicle( player : PlayerInterface ) : Promise< void >
+	{
+		let char = player.GetCharacter();
+
+		if( char != null )
+		{
+			let vehicle = char.GetVehicle() as Vehicle;
+			let seat    = char.GetVehicleSeat();
+
+			if( seat == 0 && vehicle != null )
+			{
+				vehicle.Persist( this.Repository );
+			}
+		}
+
+		return null;
 	}
 }

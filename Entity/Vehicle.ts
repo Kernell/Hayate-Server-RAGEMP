@@ -56,20 +56,14 @@ export class Vehicle extends Entity implements VehicleInterface
 	@ORM.Column()
 	protected locked : boolean;
 
-	@ORM.Column()
+	@ORM.Column( { name: "neon_enabled" } )
 	protected neonEnabled : boolean;
 
-	@ORM.Column( "json" )
+	@ORM.Column( { name: "neon_color", type: "json" } )
 	protected neonColor : Color;
 
-	@ORM.Column( { name: "mod_type" } )
-	protected modType  : number;
-
-	@ORM.Column( { name: "mod_index" } )
-	protected modIndex : number;
-
-	@ORM.Column( { name: "mod_tires" } )
-	protected modTires : number;
+	@ORM.Column( { name: "mods", type: "json", nullable: true, default: null } )
+	protected mods : Object;
 
 	@ORM.Column( { name: "default_position", type: "json" } )
 	protected defaultPosition : Vector3;
@@ -98,10 +92,14 @@ export class Vehicle extends Entity implements VehicleInterface
 		{
 			super( modelOrEntity );
 
+			this.mods = {};
+
 			return;
 		}
 
 		super( mp.vehicles.new( modelOrEntity, position, null, dimension ) );
+
+		this.mods = {};
 
 		this.model            = modelOrEntity;
 		this.position         = position;
@@ -125,8 +123,36 @@ export class Vehicle extends Entity implements VehicleInterface
 
 		this.entity.rotation    = this.rotation;
 
-		this.SetPlate( this.plate );
-		this.SetColor( this.color );
+		this.SetColor           ( this.color );
+		this.SetPlate           ( this.plate );
+		this.SetSirensState     ( this.siren );
+		this.SetEngineState     ( this.engine );
+		this.SetLightsState     ( this.lights );
+		this.SetEngineHealth    ( this.engineHealth );
+		this.SetBodyHealth      ( this.bodyHealth );
+		this.SetLocked          ( this.locked );
+		this.SetNeonColor       ( this.neonColor );
+		this.SetNeonEnabled     ( this.neonEnabled );
+	}
+
+	public Persist( repository : ORM.Repository< Vehicle > ) : Promise< Vehicle >
+	{
+		this.model              = this.GetModel();
+		this.position           = this.GetPosition();
+		this.rotation           = this.GetRotation();
+		this.dimension          = this.GetDimension();
+		this.color              = this.GetColor();
+		this.plate              = this.GetPlate();
+		this.siren	            = this.GetSirensState();
+		this.engine             = this.GetEngineState();
+		this.lights             = this.GetLightsState();
+		this.engineHealth       = this.GetEngineHealth();
+		this.bodyHealth         = this.GetBodyHealth();
+		this.locked             = this.IsLocked();
+		this.neonEnabled        = this.IsNeonEnabled();
+		this.neonColor          = this.GetNeonColor();
+
+		return repository.persist( this );
 	}
 
 	public GetID() : number
@@ -183,7 +209,8 @@ export class Vehicle extends Entity implements VehicleInterface
 
 	public SetSirensState( siren : boolean ) : void
 	{
-		this.entity.siren = this.siren = siren;
+		// TODO: Readonly
+		//this.entity.siren = this.siren = siren;
 	}
 
 	public GetHornState() : boolean
@@ -203,7 +230,8 @@ export class Vehicle extends Entity implements VehicleInterface
 
 	public SetEngineState( engine : boolean ) : void
 	{
-		this.entity.engine = this.engine = engine;
+		// TODO: Readonly
+		//this.entity.engine = this.engine = engine;
 	}
 
 	public GetLightsState() : number
@@ -219,7 +247,8 @@ export class Vehicle extends Entity implements VehicleInterface
 
 	public SetLightsState( lights : number ) : void
 	{
-		this.entity.highbeams = lights == 2;
+		// TODO: Readonly
+		//this.entity.highbeams = lights == 2;
 		//this.entity.lights = lights == 1;
 
 		this.lights = lights;
@@ -234,7 +263,8 @@ export class Vehicle extends Entity implements VehicleInterface
 
 	public SetEngineHealth( engineHealth : number ) : void
 	{
-		this.entity.engineHealth = this.engineHealth = engineHealth;
+		// TODO: Readonly
+		//this.entity.engineHealth = this.engineHealth = engineHealth;
 	}
 
 	public GetBodyHealth() : number
@@ -244,7 +274,8 @@ export class Vehicle extends Entity implements VehicleInterface
 
 	public SetBodyHealth( bodyHealth : number ) : void
 	{
-		this.entity.bodyHealth = this.bodyHealth = bodyHealth;
+		// TODO: Readonly
+		//this.entity.bodyHealth = this.bodyHealth = bodyHealth;
 	}
 
 	public GetSteerAngle() : number
@@ -313,9 +344,11 @@ export class Vehicle extends Entity implements VehicleInterface
 
 	public SetMod( type : mp.VehicleModTypes, index : any, customTires : any ) : void
 	{
-		this.modType  = type;
-		this.modIndex = index;
-		this.modTires = customTires;
+		this.mods[ type ] =
+		{
+			Index : index,
+			Tires : customTires,
+		};
 
 		return this.entity.setMod( type, index, customTires );
 	}

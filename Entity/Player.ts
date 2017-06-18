@@ -95,12 +95,12 @@ export class Player extends Entity implements PlayerInterface
 
 		this.user = user;
 
-		mp.events.call( "playerLogin", this.entity, user.GetID() );
+		Event.Call( "playerLogin", this, user );
 	}
 
 	public Logout() : void
 	{
-		mp.events.call( "playerLogout", this.entity, this.user.GetID() );
+		Event.Call( "playerLogout", this, this.user );
 
 		this.user = null;
 	}

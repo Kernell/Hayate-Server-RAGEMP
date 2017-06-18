@@ -96,8 +96,10 @@ export default class UserManager extends ManagerBase< any > implements UserManag
 		);
 	}
 
-	private async OnPlayerLogin( player : PlayerInterface, userId : number ) : Promise< any >
+	private async OnPlayerLogin( player : PlayerInterface, user : UserInterface ) : Promise< any >
 	{
+		let userId = user.GetID();
+
 		for( let p of this.List.values() )
 		{
 			if( p != player && p.GetUser().GetID() == userId )
@@ -128,7 +130,7 @@ export default class UserManager extends ManagerBase< any > implements UserManag
 		);
 	}
 
-	private async OnPlayerLogout( player : PlayerInterface, userId : number ) : Promise< any >
+	private async OnPlayerLogout( player : PlayerInterface, user : UserInterface ) : Promise< any >
 	{
 		return null;
 	}

@@ -98,7 +98,7 @@ export class CharacterManager extends ManagerBase< Entity.Entity >
 
 		character.Spawn();
 
-		Event.Call( "playerCharacterLogin", player.GetEntity(), character.GetID() );
+		Event.Call( "playerCharacterLogin", player, character );
 
 		return null;
 	}

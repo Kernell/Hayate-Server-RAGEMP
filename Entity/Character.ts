@@ -121,9 +121,11 @@ export class Character implements CharacterInterface
 
 	public Spawn( position ?: Vector3, rotation ?: Vector3, dimension ?: number ) : void
 	{
+		let _rotation = rotation || this.rotation;
+
 		this.entity.spawn( this.position = position || this.position );
 
-		this.entity.heading   = ( rotation || this.rotation ).Z;
+		this.entity.heading   = _rotation.z;
 		this.entity.dimension = dimension || this.dimension;
 
 		this.entity.name                = this.name;

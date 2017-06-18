@@ -30,14 +30,6 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 		this.console  = new Console();
 		this.Commands = new Array< Command.ConsoleCommand >();
 
-		this.Add( new Command.Interior ( server ) );
-		this.Add( new Command.Character( server ) );
-		this.Add( new Command.Player   ( server ) );
-		this.Add( new Command.User     ( server ) );
-		this.Add( new Command.Vehicle  ( server ) );
-		this.Add( new Command.Login    ( server ) );
-		this.Add( new Command.Register ( server ) );
-
 		process.stdin.on( "data",     input          => this.OnLine( input.toString().trim() ) );
 		process.stdin.on( "keypress", ( chunk, key ) => this.OnKey ( chunk, key ) );
 
@@ -68,6 +60,17 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 						this.console[ 'user' ] = user;
 					}
 				);
+			}
+		).then(
+			() =>
+			{
+				this.Add( new Command.Interior ( this.Server ) );
+				this.Add( new Command.Character( this.Server ) );
+				this.Add( new Command.Player   ( this.Server ) );
+				this.Add( new Command.User     ( this.Server ) );
+				this.Add( new Command.Vehicle  ( this.Server ) );
+				this.Add( new Command.Login    ( this.Server ) );
+				this.Add( new Command.Register ( this.Server ) );
 			}
 		);
 	}

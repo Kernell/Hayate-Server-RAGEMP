@@ -133,7 +133,7 @@ export class Character implements CharacterInterface
 		this.entity.health              = this.health;
 		this.entity.armour              = this.armor;
 		this.entity.eyeColour           = this.eyeColor;
-		this.entity.hairHighlightColour = this.hairHighlightColor;
+	//	this.entity.hairHighlightColour = this.hairHighlightColor;
 	}
 
 	public GetModel() : Ped

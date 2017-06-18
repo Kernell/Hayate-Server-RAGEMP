@@ -90,12 +90,23 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 
 		if( command != null )
 		{
+			if( command.IsRestricted() )
+			{
+				if( player.GetUser() == null )
+				{
+					return true;
+				}
+
+				if( !player.GetUser().IsGranted( 'command.' + command.GetName() ) )
+				{
+					player.OutputChatBox( `Access denied to command '${command.GetName()}'` );
+				}
+			}
+
 			new Promise(
 				( resolve, reject ) =>
                 {
-					command.Execute( player, argv );
-
-					resolve();
+					resolve( command.Execute( player, argv ) );
                 }
 			).catch(
 				( error ) =>

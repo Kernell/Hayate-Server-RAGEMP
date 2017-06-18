@@ -21,7 +21,7 @@ export class Register extends ConsoleCommand
 		this.Name = "register";
 	}
 
-	public Execute( player : PlayerInterface, args : any[] ) : Boolean
+	public Execute( player : PlayerInterface, args : any[] ) : Promise< any >
 	{
 		if( args.length < 3 )
 		{
@@ -34,6 +34,6 @@ export class Register extends ConsoleCommand
 
 		Event.Call( "playerRegister", player, name, email, password );
 
-		return true;
+		return null;
 	}
 }

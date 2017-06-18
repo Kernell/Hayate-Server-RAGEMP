@@ -21,7 +21,7 @@ export class Login extends ConsoleCommand
 		this.Name = "login";
 	}
 
-	public Execute( player : PlayerInterface, args : any[] ) : Boolean
+	public Execute( player : PlayerInterface, args : any[] ) : Promise< any >
 	{
 		if( args.length < 2 )
 		{
@@ -33,6 +33,6 @@ export class Login extends ConsoleCommand
 
 		Event.Call( "playerTryLogin", player, login, pass );
 
-		return true;
+		return null;
 	}
 }

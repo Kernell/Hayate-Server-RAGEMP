@@ -22,10 +22,10 @@ export class User extends ConsoleCommand
 		this.Restricted = true;
 	}
 
-	public Execute( player : PlayerInterface, args : any[] ) : Boolean
+	public Execute( player : PlayerInterface, args : any[] ) : Promise< any >
 	{
 		Console.WriteLine( Console.FgMagenta + "[%s] entered command /%s with args: %s" + Console.Reset, player.GetName(), this.GetName(), args.join( ', ' ) );
 
-		return true;
+		return null;
 	}
 }

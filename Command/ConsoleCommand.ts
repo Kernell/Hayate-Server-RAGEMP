@@ -25,18 +25,8 @@ export class ConsoleCommand
 		this.CaseSensitive = true;
 	}
 
-	public Execute( player : PlayerInterface, args : string[] ) : Boolean
+	public Execute( player : PlayerInterface, args : string[] ) : Promise< any >
 	{
-		if( player.GetUser() == null )
-		{
-			return false;
-		}
-
-		if( this.Restricted && !player.GetUser().IsGranted( 'command.' + this.Name ) )
-		{
-			throw new Error( `Access denied to command '${this.Name}'` );
-		}
-
 		let option = args.shift();
 		let method = "Option_" + option;
 
@@ -47,9 +37,7 @@ export class ConsoleCommand
 				throw new Error( `Access denied to command '${this.Name} ${option}'` );
 			}
 
-			this[ method ]( player, option, args );
-
-			return true;
+			return this[ method ]( player, option, args );
 		}
 
 		throw new Error( `Invalid option '${option}'` );

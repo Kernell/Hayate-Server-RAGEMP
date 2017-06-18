@@ -15,7 +15,9 @@ if( process.env.NODE_ENV == 'development' )
 	process._debugProcess( process.pid );
 }
 
-const fs = require( 'fs' );
+global.printf = require( "printf" );
+
+const fs     = require( 'fs' );
 
 let include = ( fileName ) =>
 {

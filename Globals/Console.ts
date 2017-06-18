@@ -10,8 +10,6 @@
 *
 *********************************************************/
 
-const printf = require( "printf" );
-
 class Console extends IdentifiedPool implements PlayerInterface
 {
 	public static Reset      = "\x1b[0m";

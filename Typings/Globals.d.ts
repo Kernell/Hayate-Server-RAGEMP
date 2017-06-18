@@ -10,4 +10,4 @@
 *
 *********************************************************/
 
-declare function printf( ...params : string[] ) : string;
+declare function printf( ...params : any[] ) : string;

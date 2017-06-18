@@ -14,15 +14,325 @@ import * as printf        from "printf";
 import * as Config        from "nconf";
 import { ConsoleCommand } from "./ConsoleCommand";
 import * as Entity        from "../Entity";
+import VehicleManager     from "../Game/Vehicle/VehicleManager";
 
 export class Vehicle extends ConsoleCommand
 {
+	private manager : VehicleManager;
+
 	constructor( server : ServerInterface )
 	{
 		super( server );
 
 		this.Name       = "vehicle";
 		this.Restricted = true;
+
+		this.manager = server.VehicleManager as VehicleManager;
+	}
+
+	private Option_create( player : PlayerInterface, option : string, args : any[] ) : Promise< any >
+	{
+		if( args.length < 1 )
+		{
+			throw new Error( `Syntax: /${this.Name} ${option} [model hash or name]` );
+		}
+
+		let name = args.shift();
+		let model : number = mp.joaat( name );
+
+		if( VehicleModel[ model ] == null )
+		{
+			throw new Error( "Модель с именем '" + name + "' не найдена" );
+		}
+
+		let rotation  = player.GetRotation();
+		let position  = player.GetPosition().Offset( 2.5, rotation.Z );
+		let dimension = player.GetDimension();
+
+		rotation.Z += 90.0;
+
+		return this.manager.Create( model, position, rotation, dimension ).then(
+			( vehicle ) =>
+			{
+				if( !vehicle.IsValid() )
+				{
+					throw new Error( "Internal server error" );
+				}
+
+				player.OutputChatBox( vehicle.GetName() + " создан, ID: " + vehicle.GetID() );
+			}
+		);
+	}
+
+	private Option_delete( player : PlayerInterface, option : string, args : any[] ) : Promise< any >
+	{
+		let character = player.GetCharacter();
+
+		if( character == null )
+		{
+			return;
+		}
+
+		let vehicle = args[ 0 ] ? this.manager.Get( Number( args[ 0 ] ) ) : ( character.GetVehicle() as Entity.Vehicle );
+
+		if( vehicle == null )
+		{
+			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+		}
+
+		vehicle.Delete();
+
+		if( vehicle.GetID() < 0 )
+		{
+			this.manager.RemoveFromList( vehicle );
+		}
+
+		player.OutputChatBox( "Vehicle " + vehicle.GetName() + " deleted" );
+
+		return vehicle.Persist( this.manager.GetRepository() );
+	}
+
+	private Option_restore( player : PlayerInterface, option : string, args : any[] ) : void
+	{
+		if( args.length < 1 )
+		{
+			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+		}
+
+		let vehicle = this.manager.Get( Number( args[ 0 ] ) );
+
+		if( vehicle == null )
+		{
+			throw new Error( "Vehicle with id '" + args[ 0 ] + "' not found" );
+		}
+
+		vehicle.Restore();
+
+		player.OutputChatBox( "Vehicle " + vehicle.GetName() + " restored" );
+	}
+
+	private Option_warp( player : PlayerInterface, option : string, args : any[] ) : void
+	{
+		if( args.length < 1 )
+		{
+			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+		}
+
+		let vehicle = this.manager.Get( Number( args[ 0 ] ) );
+
+		if( vehicle == null )
+		{
+			throw new Error( "Vehicle with id '" + args[ 0 ] + "' not found" );
+		}
+
+		let rotation  = player.GetRotation();
+		let position  = player.GetPosition().Offset( 2.5, rotation.Z );
+		let dimension = player.GetDimension();
+
+		rotation.Z += 90.0;
+
+		vehicle.SetRotation( rotation );
+		vehicle.SetPosition( position );
+		vehicle.SetDimension( dimension );
+	}
+
+	private Option_warpto( player : PlayerInterface, option : string, args : any[] ) : void
+	{
+		if( args.length < 1 )
+		{
+			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+		}
+
+		let vehicle = this.manager.Get( Number( args[ 0 ] ) );
+
+		if( vehicle == null )
+		{
+			throw new Error( "Vehicle with id '" + args[ 0 ] + "' not found" );
+		}
+
+		let rotation  = vehicle.GetRotation();
+		let position  = vehicle.GetPosition().Offset( 2.5, rotation.Z );
+		let dimension = vehicle.GetDimension();
+
+		rotation.Z += 90.0;
+
+		let character = player.GetCharacter();
+
+		character.SetRotation( rotation );
+		character.SetPosition( position );
+		character.SetDimension( dimension );
+	}
+
+	private Option_respawn( player : PlayerInterface, option : string, args : any[] ) : void
+	{
+		if( args.length < 1 )
+		{
+			throw new Error( `Syntax: /${this.Name} ${option} [id] [all = false]` );
+		}
+
+		let vehicle = this.manager.Get( Number( args[ 0 ] ) );
+
+		if( vehicle == null )
+		{
+			throw new Error( "Vehicle with id '" + args[ 0 ] + "' not found" );
+		}
+
+		if( args.length == 2 )
+		{
+			for( let vehicle of this.manager.GetAll() )
+			{
+				vehicle.Respawn();
+			}
+
+			player.OutputChatBox( `All vehicles respawned` );
+
+			return;
+		}
+
+		vehicle.Respawn();
+
+		player.OutputChatBox( `Vehicle ${vehicle.GetID()} respawned` );
+	}
+
+	private Option_fix( player : PlayerInterface, option : string, args : any[] ) : void
+	{
+		let character = player.GetCharacter();
+
+		if( character == null )
+		{
+			return;
+		}
+
+		let vehicle = args[ 0 ] ? this.manager.Get( Number( args[ 0 ] ) ) : ( character.GetVehicle() as Entity.Vehicle );
+
+		if( vehicle == null )
+		{
+			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+		}
+
+		vehicle.Fix();
+
+		player.OutputChatBox( `Vehicle ${vehicle.GetName()} [${vehicle.GetID()}] fixed` );
+	}
+
+	private Option_flip( player : PlayerInterface, option : string, args : any[] ) : void
+	{
+		let character = player.GetCharacter();
+
+		if( character == null )
+		{
+			return;
+		}
+
+		let vehicle = args[ 0 ] ? this.manager.Get( Number( args[ 0 ] ) ) : ( character.GetVehicle() as Entity.Vehicle );
+
+		if( vehicle == null )
+		{
+			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+		}
+
+		vehicle.SetRotation( new Vector3( 0.0, 0.0, vehicle.GetRotation().z - 180.0 ) );
+	}
+
+	private Option_setcolor( player : PlayerInterface, option : string, args : any[] ) : void
+	{
+		if( args.length < 2 )
+        {
+			throw new Error( `Syntax: /${this.Name} ${option} [id|@my] [color1:hex] [color2:hex = color1]` );
+        }
+
+		let character = player.GetCharacter();
+
+		if( character == null )
+		{
+			return;
+		}
+
+		let vehicle = args[ 0 ] == "@my" ? character.GetVehicle() as Entity.Vehicle : this.manager.Get( Number( args[ 0 ] ) );
+
+		if( vehicle == null )
+		{
+			throw new Error( "Vehicle with id '" + args[ 0 ] + "' not found" );
+		}
+
+		let c1 = parseInt( args[ 1 ], 16 );
+		let c2 = parseInt( args[ 2 ], 16 ) || c1;
+
+		if( isNaN( c1 ) || isNaN( c2 ) )
+        {
+			throw new Error( "Invalid colors" );
+        }
+
+		let color1 = new Color( c1 >> 16 & 255, c1 >> 8 & 255, c1 & 255 );
+		let color2 = new Color( c2 >> 16 & 255, c2 >> 8 & 255, c2 & 255 );
+
+		vehicle.SetColor( new VehicleColor( color1, color2 ) );
+		vehicle.Persist( this.manager.GetRepository() );
+
+		player.OutputChatBox( `Vehicle ${vehicle.GetName()} (ID ${vehicle.GetID()}) color changed to (${vehicle.GetColor().toString()})` );
+	}
+
+	private Option_setmodel( player : PlayerInterface, option : string, args : any[] ) : void
+	{
+		if( args.length < 2 )
+        {
+			throw new Error( `Syntax: /${this.Name} ${option} [id|@my] [model hash|name]` );
+        }
+
+		let character = player.GetCharacter();
+
+		if( character == null )
+		{
+			return;
+		}
+
+		let vehicle = args[ 0 ] == "@my" ? character.GetVehicle() as Entity.Vehicle : this.manager.Get( Number( args[ 0 ] ) );
+
+		if( vehicle == null )
+		{
+			throw new Error( "Vehicle with id '" + args[ 0 ] + "' not found" );
+		}
+
+		let model = Number( args[ 1 ] ) || mp.joaat( args[ 1 ] );
+
+		if( VehicleModel[ model ] == null )
+        {
+			throw new Error( "Invalid vehicle model name\\hash " + args[ 1 ] );
+        }
+
+		player.OutputChatBox( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) model changed to ` + VehicleModel[ model ] );
+	
+		vehicle.SetModel( model );
+		vehicle.Persist( this.manager.GetRepository() );
+	}
+
+	private Option_setspawn( player : PlayerInterface, option : string, args : any[] ) : void
+	{
+		let character = player.GetCharacter();
+
+		if( character == null )
+		{
+			return;
+		}
+
+		let vehicle = args[ 0 ] ? this.manager.Get( Number( args[ 0 ] ) ) : ( character.GetVehicle() as Entity.Vehicle );
+
+		if( vehicle == null )
+		{
+			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+		}
+
+		let position  = character.GetPosition();
+		let rotation  = character.GetRotation();
+		let dimension = character.GetDimension();
+
+		vehicle[ "defaultPosition" ]  = position;
+		vehicle[ "defaultRotation" ]  = rotation;
+		vehicle[ "defaultDimension" ] = dimension;
+
+		vehicle.Persist( this.manager.GetRepository() );
+
+		player.OutputChatBox( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) default spawn changed` );
 	}
 
 	private Option_spawn( player : PlayerInterface, option : string, args : any[] ) : void
@@ -71,9 +381,39 @@ export class Vehicle extends ConsoleCommand
 
 		vehicle[ "id" ] = id;
 
-		this.Server.VehicleManager.AddToList( vehicle );
+		this.manager.AddToList( vehicle );
 
-		player.OutputChatBox( vehicle.GetName() + " создан, ID: " + vehicle.GetID() );
+		player.OutputChatBox( "Временный '" + vehicle.GetName() + "' создан, ID: " + vehicle.GetID() );
+	}
+
+	private Option_setplate( player : PlayerInterface, option : string, args : any[] ) : void
+	{
+		if( args.length < 2 )
+        {
+			throw new Error( `Syntax: /${this.Name} ${option} [id|@my] [plate]` );
+        }
+
+		let character = player.GetCharacter();
+
+		if( character == null )
+		{
+			return;
+		}
+
+		let vehIdName = args.shift();
+		let vehicle = vehIdName == "@my" ? character.GetVehicle() as Entity.Vehicle : this.manager.Get( Number( vehIdName ) );
+
+		if( vehicle == null )
+		{
+			throw new Error( "Vehicle with id '" + vehIdName + "' not found" );
+		}
+
+		let plateText = args.join( ' ' );
+
+		vehicle.SetPlate( plateText );
+		vehicle.Persist( this.manager.GetRepository() );
+
+		player.OutputChatBox( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) plate text changed to ${plateText}` );
 	}
 
 	private Option_undefined( player : PlayerInterface, option : string, args : any[] )

@@ -87,6 +87,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Command\Register.ts" />
+    <TypeScriptCompile Include="Globals\Exception.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Globals\Event.ts">
       <SubType>Code</SubType>
       <TestFramework>ExportRunner</TestFramework>

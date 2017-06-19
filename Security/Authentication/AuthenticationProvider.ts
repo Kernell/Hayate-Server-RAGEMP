@@ -35,7 +35,7 @@ export class AuthenticationProvider implements AuthenticationProviderInterface
 
 		if( user == null )
 		{
-			throw new Error( "User not found" );
+			throw new Exception( "User not found" );
 		}
 
 		if( this.CheckAuthentication( user, token ) )
@@ -47,7 +47,7 @@ export class AuthenticationProvider implements AuthenticationProviderInterface
 			return authenticatedToken;
 		}
 
-		throw new Error( "Invalid login or password" );
+		throw new Exception( "Invalid login or password" );
 	}
 
 	public async RetrieveUser( username : string, token : TokenInterface ) : Promise< UserInterface >
@@ -74,7 +74,7 @@ export class AuthenticationProvider implements AuthenticationProviderInterface
 
 		if( password == '' )
 		{
-            throw new Error( 'The presented password must not be empty' );
+            throw new Exception( 'The presented password must not be empty' );
         }
 
 		return this.encoder.IsPasswordValid( user.GetPassword(), password, user.GetSalt() );

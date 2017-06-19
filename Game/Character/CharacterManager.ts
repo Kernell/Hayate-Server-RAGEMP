@@ -66,7 +66,7 @@ export class CharacterManager extends ManagerBase< Entity.Entity >
 
 			if( chars > Config.get( "characters:max_per_user" ) )
 			{
-				throw new Error( "Вы не можете создавать больше персонажей" );
+				throw new Exception( "Вы не можете создавать больше персонажей" );
 			}
 		}
 
@@ -74,7 +74,7 @@ export class CharacterManager extends ManagerBase< Entity.Entity >
 
 		if( chars > 0 )
 		{
-			throw new Error( "Персонаж с таким именем уже существует" );
+			throw new Exception( "Персонаж с таким именем уже существует" );
 		}
 
 		let char = new Entity.Character( player );

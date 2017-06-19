@@ -80,9 +80,18 @@ export default class ManagerBase< TEntity extends Entity.Entity > implements Man
 		if( promise != null )
 		{
 			promise.catch(
-				( e : Error ) =>
+				( error : Error ) =>
 				{
-					source.OutputChatBox( e.message );
+					if( error instanceof Exception )
+					{
+						source.OutputChatBox( `<span style='color: #FF8800;'>${error.message}</span>` );
+					}
+					else
+					{
+						source.OutputChatBox( "<span style='color: #FF8800;'>Что-то пошло не так. Мы работаем над тем, чтобы исправить это как можно скорее. Вы сможете попробовать снова спустя какое-то время</span>" );
+
+						Console.WriteLine( Console.FgRed + '%s' + Console.Reset, error.stack );
+					}
 				}
 			);
 		}

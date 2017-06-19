@@ -25,7 +25,7 @@ export class Login extends ConsoleCommand
 	{
 		if( args.length < 2 )
 		{
-			throw new Error( "Syntax: /login [email] [password]" );
+			throw new Exception( "Syntax: /login [email] [password]" );
 		}
 
 		let login = args.shift();

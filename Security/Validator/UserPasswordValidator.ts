@@ -20,7 +20,7 @@ export class UserPasswordValidator
 	{
 		if( value.length < 6 || value.length > 64 )
 		{
-			throw new Error( "Используйте пароль длинной от 6 до 32 символов" );
+			throw new Exception( "Используйте пароль длинной от 6 до 32 символов" );
 		}
 
 		return true;

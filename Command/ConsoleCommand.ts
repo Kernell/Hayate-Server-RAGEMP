@@ -34,13 +34,13 @@ export class ConsoleCommand
 		{
 			if( this.Restricted && method != null && !player.GetUser().IsGranted( 'command.' + this.Name + '.' + option ) )
 			{
-				throw new Error( `Access denied to command '${this.Name} ${option}'` );
+				throw new Exception( `Access denied to command '${this.Name} ${option}'` );
 			}
 
 			return this[ method ]( player, option, args );
 		}
 
-		throw new Error( `Invalid option '${option}'` );
+		throw new Exception( `Invalid option '${option}'` );
 	}
 
 	public GetName() : String

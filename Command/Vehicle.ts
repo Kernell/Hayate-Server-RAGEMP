@@ -34,7 +34,7 @@ export class Vehicle extends ConsoleCommand
 	{
 		if( args.length < 1 )
 		{
-			throw new Error( `Syntax: /${this.Name} ${option} [model hash or name]` );
+			throw new Exception( `Syntax: /${this.Name} ${option} [model hash or name]` );
 		}
 
 		let name = args.shift();
@@ -42,7 +42,7 @@ export class Vehicle extends ConsoleCommand
 
 		if( VehicleModel[ model ] == null )
 		{
-			throw new Error( "Модель с именем '" + name + "' не найдена" );
+			throw new Exception( "Модель с именем '" + name + "' не найдена" );
 		}
 
 		let rotation  = player.GetRotation();
@@ -56,7 +56,7 @@ export class Vehicle extends ConsoleCommand
 			{
 				if( !vehicle.IsValid() )
 				{
-					throw new Error( "Internal server error" );
+					throw new Exception( "Internal server error" );
 				}
 
 				player.OutputChatBox( vehicle.GetName() + " создан, ID: " + vehicle.GetID() );
@@ -77,7 +77,7 @@ export class Vehicle extends ConsoleCommand
 
 		if( vehicle == null )
 		{
-			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+			throw new Exception( `Syntax: /${this.Name} ${option} [id]` );
 		}
 
 		vehicle.Delete();
@@ -96,14 +96,14 @@ export class Vehicle extends ConsoleCommand
 	{
 		if( args.length < 1 )
 		{
-			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+			throw new Exception( `Syntax: /${this.Name} ${option} [id]` );
 		}
 
 		let vehicle = this.manager.Get( Number( args[ 0 ] ) );
 
 		if( vehicle == null )
 		{
-			throw new Error( "Vehicle with id '" + args[ 0 ] + "' not found" );
+			throw new Exception( "Vehicle with id '" + args[ 0 ] + "' not found" );
 		}
 
 		vehicle.Restore();
@@ -115,14 +115,14 @@ export class Vehicle extends ConsoleCommand
 	{
 		if( args.length < 1 )
 		{
-			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+			throw new Exception( `Syntax: /${this.Name} ${option} [id]` );
 		}
 
 		let vehicle = this.manager.Get( Number( args[ 0 ] ) );
 
 		if( vehicle == null )
 		{
-			throw new Error( "Vehicle with id '" + args[ 0 ] + "' not found" );
+			throw new Exception( "Vehicle with id '" + args[ 0 ] + "' not found" );
 		}
 
 		let rotation  = player.GetRotation();
@@ -140,14 +140,14 @@ export class Vehicle extends ConsoleCommand
 	{
 		if( args.length < 1 )
 		{
-			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+			throw new Exception( `Syntax: /${this.Name} ${option} [id]` );
 		}
 
 		let vehicle = this.manager.Get( Number( args[ 0 ] ) );
 
 		if( vehicle == null )
 		{
-			throw new Error( "Vehicle with id '" + args[ 0 ] + "' not found" );
+			throw new Exception( "Vehicle with id '" + args[ 0 ] + "' not found" );
 		}
 
 		let rotation  = vehicle.GetRotation();
@@ -167,14 +167,14 @@ export class Vehicle extends ConsoleCommand
 	{
 		if( args.length < 1 )
 		{
-			throw new Error( `Syntax: /${this.Name} ${option} [id] [all = false]` );
+			throw new Exception( `Syntax: /${this.Name} ${option} [id] [all = false]` );
 		}
 
 		let vehicle = this.manager.Get( Number( args[ 0 ] ) );
 
 		if( vehicle == null )
 		{
-			throw new Error( "Vehicle with id '" + args[ 0 ] + "' not found" );
+			throw new Exception( "Vehicle with id '" + args[ 0 ] + "' not found" );
 		}
 
 		if( args.length == 2 )
@@ -207,7 +207,7 @@ export class Vehicle extends ConsoleCommand
 
 		if( vehicle == null )
 		{
-			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+			throw new Exception( `Syntax: /${this.Name} ${option} [id]` );
 		}
 
 		vehicle.Fix();
@@ -228,7 +228,7 @@ export class Vehicle extends ConsoleCommand
 
 		if( vehicle == null )
 		{
-			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+			throw new Exception( `Syntax: /${this.Name} ${option} [id]` );
 		}
 
 		vehicle.SetRotation( new Vector3( 0.0, 0.0, vehicle.GetRotation().z - 180.0 ) );
@@ -238,7 +238,7 @@ export class Vehicle extends ConsoleCommand
 	{
 		if( args.length < 2 )
         {
-			throw new Error( `Syntax: /${this.Name} ${option} [id|@my] [color1:hex] [color2:hex = color1]` );
+			throw new Exception( `Syntax: /${this.Name} ${option} [id|@my] [color1:hex] [color2:hex = color1]` );
         }
 
 		let character = player.GetCharacter();
@@ -252,7 +252,7 @@ export class Vehicle extends ConsoleCommand
 
 		if( vehicle == null )
 		{
-			throw new Error( "Vehicle with id '" + args[ 0 ] + "' not found" );
+			throw new Exception( "Vehicle with id '" + args[ 0 ] + "' not found" );
 		}
 
 		let c1 = parseInt( args[ 1 ], 16 );
@@ -260,7 +260,7 @@ export class Vehicle extends ConsoleCommand
 
 		if( isNaN( c1 ) || isNaN( c2 ) )
         {
-			throw new Error( "Invalid colors" );
+			throw new Exception( "Invalid colors" );
         }
 
 		let color1 = new Color( c1 >> 16 & 255, c1 >> 8 & 255, c1 & 255 );
@@ -276,7 +276,7 @@ export class Vehicle extends ConsoleCommand
 	{
 		if( args.length < 2 )
         {
-			throw new Error( `Syntax: /${this.Name} ${option} [id|@my] [model hash|name]` );
+			throw new Exception( `Syntax: /${this.Name} ${option} [id|@my] [model hash|name]` );
         }
 
 		let character = player.GetCharacter();
@@ -290,14 +290,14 @@ export class Vehicle extends ConsoleCommand
 
 		if( vehicle == null )
 		{
-			throw new Error( "Vehicle with id '" + args[ 0 ] + "' not found" );
+			throw new Exception( "Vehicle with id '" + args[ 0 ] + "' not found" );
 		}
 
 		let model = Number( args[ 1 ] ) || mp.joaat( args[ 1 ] );
 
 		if( VehicleModel[ model ] == null )
         {
-			throw new Error( "Invalid vehicle model name\\hash " + args[ 1 ] );
+			throw new Exception( "Invalid vehicle model name\\hash " + args[ 1 ] );
         }
 
 		player.OutputChatBox( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) model changed to ` + VehicleModel[ model ] );
@@ -319,7 +319,7 @@ export class Vehicle extends ConsoleCommand
 
 		if( vehicle == null )
 		{
-			throw new Error( `Syntax: /${this.Name} ${option} [id]` );
+			throw new Exception( `Syntax: /${this.Name} ${option} [id]` );
 		}
 
 		let position  = character.GetPosition();
@@ -346,7 +346,7 @@ export class Vehicle extends ConsoleCommand
 
 		if( VehicleModel[ model ] == null )
 		{
-			throw new Error( "Модель с именем '" + name + "' не найдена" );
+			throw new Exception( "Модель с именем '" + name + "' не найдена" );
 		}
 
 		for( let i = -1; i > -temp_max; --i )
@@ -361,7 +361,7 @@ export class Vehicle extends ConsoleCommand
 
 		if( id == null )
 		{
-			throw new Error( "Недостаточно памяти для создания автомобиля" );
+			throw new Exception( "Недостаточно памяти для создания автомобиля" );
 		}
 
 		let rotation  = player.GetRotation();
@@ -376,7 +376,7 @@ export class Vehicle extends ConsoleCommand
 
 		if( !vehicle.IsValid() )
 		{
-			throw new Error( "Internal server error" );
+			throw new Exception( "Internal server error" );
 		}
 
 		vehicle[ "id" ] = id;
@@ -390,7 +390,7 @@ export class Vehicle extends ConsoleCommand
 	{
 		if( args.length < 2 )
         {
-			throw new Error( `Syntax: /${this.Name} ${option} [id|@my] [plate]` );
+			throw new Exception( `Syntax: /${this.Name} ${option} [id|@my] [plate]` );
         }
 
 		let character = player.GetCharacter();
@@ -405,7 +405,7 @@ export class Vehicle extends ConsoleCommand
 
 		if( vehicle == null )
 		{
-			throw new Error( "Vehicle with id '" + vehIdName + "' not found" );
+			throw new Exception( "Vehicle with id '" + vehIdName + "' not found" );
 		}
 
 		let plateText = args.join( ' ' );

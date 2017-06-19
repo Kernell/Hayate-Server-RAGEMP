@@ -25,7 +25,7 @@ export class Register extends ConsoleCommand
 	{
 		if( args.length < 3 )
 		{
-			throw new Error( "Syntax: /register [name] [email] [password]" );
+			throw new Exception( "Syntax: /register [name] [email] [password]" );
 		}
 
 		let name     = args.shift();

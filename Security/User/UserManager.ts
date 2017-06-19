@@ -75,7 +75,7 @@ export default class UserManager extends ManagerBase< any > implements UserManag
 	{
 		if( player.GetUser() )
 		{
-			throw new Error( "Вы уже авторизованы" );
+			throw new Exception( "Вы уже авторизованы" );
 		}
 
 		let token = new UsernamePasswordToken( login, password, player.GetIP(), "N/A" );
@@ -139,7 +139,7 @@ export default class UserManager extends ManagerBase< any > implements UserManag
 	{
 		if( player.GetUser() )
 		{
-			throw new Error( "Вы уже авторизованы" );
+			throw new Exception( "Вы уже авторизованы" );
 		}
 
 		let validatorEmail = new UserEmailValidator();
@@ -156,14 +156,14 @@ export default class UserManager extends ManagerBase< any > implements UserManag
 
 		if( countEmail != 0 )
 		{
-			throw new Error( "Пользователь с этим email уже существует" );
+			throw new Exception( "Пользователь с этим email уже существует" );
 		}
 						
 		let countName  = await repository.count( { name: name } );
 
 		if( countName != 0 )
 		{
-			throw new Error( "Этот имя пользователя уже занято, попробуйте другое" );
+			throw new Exception( "Этот имя пользователя уже занято, попробуйте другое" );
 		}
 
 		let user = new Entity.User();
@@ -176,13 +176,6 @@ export default class UserManager extends ManagerBase< any > implements UserManag
 			( user : UserInterface ) =>
 			{
 				return this.OnPlayerTryLogin( player, email, password );
-			}
-		).catch(
-			( error : Error ) =>
-			{
-				console.log( error.stack );
-
-				player.OutputChatBox( "Произошла ошибка базы данных" );
 			}
 		);
 	}

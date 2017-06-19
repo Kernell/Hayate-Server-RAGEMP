@@ -112,9 +112,18 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 					resolve( command.Execute( player, argv ) );
                 }
 			).catch(
-				( error ) =>
+				( error : Error ) =>
                 {
-					player.OutputChatBox( `<span style='color: #FF8800;'>${error}</span>` );
+					if( error instanceof Exception )
+					{
+						player.OutputChatBox( `<span style='color: #FF8800;'>${error.message}</span>` );
+					}
+					else
+					{
+						player.OutputChatBox( "<span style='color: #FF8800;'>Что-то пошло не так. Мы работаем над тем, чтобы исправить это как можно скорее. Вы сможете попробовать снова спустя какое-то время</span>" );
+
+						Console.WriteLine( Console.FgRed + '%s' + Console.Reset, error.stack );
+					}
                 }
 			);
 

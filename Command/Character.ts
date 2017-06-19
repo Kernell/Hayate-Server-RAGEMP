@@ -27,7 +27,7 @@ export class Character extends ConsoleCommand
 
 		if( id == null )
 		{
-			throw new Error( "Syntax: /char login [id]" );
+			throw new Exception( "Syntax: /char login [id]" );
 		}
 
 		Event.Call( "playerCharacterSelect", player, id );
@@ -37,7 +37,7 @@ export class Character extends ConsoleCommand
 	{
 		if( args.length < 1 )
 		{
-			throw new Error( "Syntax: /char create [name]" );
+			throw new Exception( "Syntax: /char create [name]" );
 		}
 
 		let name = args.shift();

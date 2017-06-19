@@ -16,24 +16,24 @@ export class CharacterNameValidator
 	{
 		if( name.length < 3 || name.length > 16 )
 		{
-			throw new Error( "Имя персонажа может быть от 3 до 16 символов" );
+			throw new Exception( "Имя персонажа может быть от 3 до 16 символов" );
 		}
 
 		name = name.toUpperCase();
 
 		if( /[^A-ZА-Я0-9]/.test( name ) )
 		{
-			throw new Error( "Имя персонажа содержит некорректные символы" );
+			throw new Exception( "Имя персонажа содержит некорректные символы" );
 		}
 
 		if( !/[^0-9]/.test( name ) )
 		{
-			throw new Error( "Имя персонажа не может состоять только из чисел" );
+			throw new Exception( "Имя персонажа не может состоять только из чисел" );
 		}
 
 		if( !/[^A-Z0-9]/.test( name ) == !/[^А-Я0-9]/.test( name ) )
 		{
-			throw new Error( "Имя персонажа может быть только на одном языке" );
+			throw new Exception( "Имя персонажа может быть только на одном языке" );
 		}
 
 		return true;

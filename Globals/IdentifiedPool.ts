@@ -25,7 +25,7 @@ class IdentifiedPool
 
 	protected Dispose() : void
 	{
-		IdentifiedPool.Instances.slice( IdentifiedPool.Instances.indexOf( this ), 1 );
+		IdentifiedPool.Instances.splice( IdentifiedPool.Instances.indexOf( this ), 1 );
 
 		this.entity = null;
 	}

@@ -120,7 +120,7 @@ export class User implements UserInterface
 
 	public RemoveRole( role : UserRoleInterface ) : void
 	{
-		this._roles.slice( this._roles.indexOf( role.GetID() ), 1 );
+		this._roles.splice( this._roles.indexOf( role.GetID() ), 1 );
 
 		this.roles.delete( role.GetID() );
 	}

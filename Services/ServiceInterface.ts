@@ -10,11 +10,12 @@
 *
 *********************************************************/
 
-enum ManagerState
+interface ServiceInterface
 {
-	None,
-	OK,
-	Error,
-}
+	State         : ServiceState;
 
-module.exports = ManagerState;
+	GetState      ()                           : ServiceState;
+	Start         ()                           : Promise< any >;
+	Stop          ()                           : Promise< any >;
+	DoPulse       ( date : Date )              : void;
+}

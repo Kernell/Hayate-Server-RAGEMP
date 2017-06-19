@@ -11,16 +11,18 @@
 *********************************************************/
 
 import * as Entity                       from "../Entity";
-import ManagerBase                       from "./ManagerBase";
-import DatabaseManager                   from "./DatabaseManager";
+import { ServiceBase }                   from "./ServiceBase";
+import { DatabaseService }               from "./DatabaseService";
 
-export default class PlayerManager extends ManagerBase< Entity.Player >
+export class PlayerService extends ServiceBase
 {
+	public static PlayersOnline = new Array< Entity.Player >();
+
 	constructor( server : ServerInterface )
 	{
 		super( server );
 
-		this.Dependency = server.UserManager;
+		this.Dependency = server.AccountService;
 
 		this.WrapEvent( "playerJoin",     this.OnPlayerJoin );
 		this.WrapEvent( "playerQuit",     this.OnPlayerQuit );
@@ -29,9 +31,9 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		this.WrapEvent( "playerChat",     this.OnPlayerChat );
 	}
 
-	public Init() : Promise< any >
+	public Start() : Promise< any >
 	{
-		return super.Init().then(
+		return super.Start().then(
 			() =>
 			{
 				for( let player of mp.players.toArray() )
@@ -47,10 +49,7 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 		return new Promise(
 			( resolve, reject ) =>
 			{
-				for( let player of this.GetAll() )
-				{
-					this.OnPlayerQuit( player, "server stopped", "" );
-				}
+				PlayerService.PlayersOnline.map( player => this.OnPlayerQuit( player, "server stopped", "" ) );
 
 				resolve();
 			}
@@ -59,7 +58,7 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 
 	private async OnPlayerJoin( player : Entity.Player ) : Promise< any >
 	{
-		this.AddToList( player );
+		PlayerService.PlayersOnline.push( player );
 
 		player.OutputChatBox( "<span style='color: #FF8000;'>Use /login for sign in or /register to sign up</span>" );
 
@@ -73,7 +72,7 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 			Event.Call( "playerCharacterLogout", player, player.GetCharacter() );
 		}
 
-		this.RemoveFromList( player );
+		PlayerService.PlayersOnline.remove( player );
 
 		player.Destroy();
 	
@@ -108,10 +107,7 @@ export default class PlayerManager extends ManagerBase< Entity.Player >
 
 		const line = `<span style='color: #E4C1C0;'>[Мир] ${player.GetName()}: ${text}</span>`;
 
-		for( let player of this.GetAll() )
-		{
-			player.OutputChatBox( line );
-		}
+		PlayerService.PlayersOnline.map( player => player.OutputChatBox( line ) );
 
 		return null;
 	}

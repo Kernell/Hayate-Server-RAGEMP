@@ -16,21 +16,19 @@ type EventCallback = ( ...params : any[] ) => Promise< any >;
 type EventType     = { name: string, callback: Function };
 type EventsArray   = [ EventType ];
 
-export default class ManagerBase< TEntity extends Entity.Entity > implements ManagerInterface
+export class ServiceBase implements ServiceInterface
 {
 	protected Server     : ServerInterface;
-	protected Dependency : ManagerInterface;
-	protected List       : Map< number, TEntity >;
-	public    State      : ManagerState;
+	protected Dependency : ServiceInterface;
+	public    State      : ServiceState;
 
 	constructor( server : ServerInterface )
 	{
-		server.RegisterManager( this );
+		server.RegisterService( this );
 		
 		this.Server      = server;
 		this.Dependency  = null;
-		this.List        = new Map< number, TEntity >();
-		this.State       = ManagerState.None;
+		this.State       = ServiceState.None;
 	}
 
 	protected RegisterEvent( event : string, handler: EventCallback )
@@ -97,42 +95,12 @@ export default class ManagerBase< TEntity extends Entity.Entity > implements Man
 		}
 	}
 	
-	public DestroyAll() : void
-	{
-		for( let iter of this.List.values() )
-		{
-			iter.Destroy();
-		}
-
-		this.List.clear();
-	}
-	
-	public AddToList( object : TEntity ) : void
-	{
-		this.List.set( object.GetID(), object );
-	}
-	
-	public RemoveFromList( object : TEntity ) : void
-	{
-		this.List.delete( object.GetID() );
-	}
-
-	public Get( id : number ) : TEntity
-	{
-		return this.List.get( id );
-	}
-
-	public GetState() : ManagerState
+	public GetState() : ServiceState
 	{
 		return this.State;
 	}
 	
-	public GetAll() : IterableIterator< TEntity >
-	{
-		return this.List.values();
-	}
-
-	public Init() : Promise< any >
+	public Start() : Promise< any >
 	{
 		return new Promise(
 			( resolve, reject ) =>
@@ -141,12 +109,12 @@ export default class ManagerBase< TEntity extends Entity.Entity > implements Man
 				{
 					let timeout = () =>
 					{
-						if( this.Dependency.GetState() == ManagerState.OK )
+						if( this.Dependency.GetState() == ServiceState.OK )
 						{
 							return resolve();
 						}
 
-						if( this.Dependency.GetState() == ManagerState.Error )
+						if( this.Dependency.GetState() == ServiceState.Error )
 						{
 							return reject();
 						}

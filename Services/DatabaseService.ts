@@ -10,25 +10,25 @@
 *
 *********************************************************/
 
-import * as Config    from "nconf";
-import * as ORM       from "typeorm";
-import * as Entity    from "../Entity";
-import ManagerBase    from "./ManagerBase";
+import * as Config     from "nconf";
+import * as ORM        from "typeorm";
+import * as Entity     from "../Entity";
+import { ServiceBase } from "./ServiceBase";
 
-export default class DatabaseManager extends ManagerBase< any >
+export class DatabaseService extends ServiceBase
 {
-	private Connection : ORM.Connection;
+	private connection : ORM.Connection;
 
 	constructor( server : ServerInterface )
 	{
 		super( server );
 
-		this.Connection = null;
+		this.connection = null;
 	}
 
-	public Init() : Promise< any >
+	public Start() : Promise< any >
 	{
-		if( this.Connection == null )
+		if( this.connection == null )
 		{
 			return ORM.createConnection(
 				{
@@ -54,16 +54,16 @@ export default class DatabaseManager extends ManagerBase< any >
 			).then(
 				( connection ) =>
 				{
-					this.Connection = connection;
+					this.connection = connection;
 				}
 			);
 		}
 
-		return super.Init();
+		return super.Start();
 	}
 
 	public GetRepository< Entity >( entityClassOrName : ORM.ObjectType< Entity > | string ) : ORM.Repository< Entity >
 	{
-		return this.Connection.getRepository( entityClassOrName );
+		return this.connection.getRepository( entityClassOrName );
 	}
 }

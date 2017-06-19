@@ -14,13 +14,13 @@ import "reflect-metadata";
 import "./SharedUtils";
 import * as Config          from "nconf";
 
-import ManagerBase          from "./Core/ManagerBase";
-import CommandManager       from "./Core/CommandManager";
-import DatabaseManager      from "./Core/DatabaseManager";
-import PlayerManager        from "./Core/PlayerManager";
-import UserManager          from "./Security/User/UserManager";
-import VehicleManager       from "./Game/Vehicle/VehicleManager";
-import { CharacterManager } from "./Game/Character/CharacterManager";
+import { ServiceBase }      from "./Services/ServiceBase";
+import { AccountService }   from "./Services/AccountService";
+import { CommandService }   from "./Services/CommandService";
+import { DatabaseService }  from "./Services/DatabaseService";
+import { PlayerService }    from "./Services/PlayerService";
+import { VehicleService }   from "./Services/VehicleService";
+import { CharacterService } from "./Services/CharacterService";
 
 export default class Server implements ServerInterface
 {
@@ -33,13 +33,13 @@ export default class Server implements ServerInterface
 
 	private DoPulseTimer             : NodeJS.Timer;
 	private DebugTicks               : any;
-	private Managers                 : Array< ManagerInterface >;
+	private services                 : Array< ServiceInterface >;
 
-	public DatabaseManager  : DatabaseManager;
-	public CommandManager   : CommandManager;
-	public PlayerManager    : PlayerManager;
-	public UserManager      : UserManager;
-	public VehicleManager   : VehicleManager;
+	public DatabaseService  : DatabaseService;
+	public CommandService   : CommandService;
+	public PlayerService    : PlayerService;
+	public AccountService   : AccountService;
+	public VehicleService   : VehicleService;
 
 	public constructor()
 	{
@@ -53,16 +53,16 @@ export default class Server implements ServerInterface
 		
 		Config.file( { file: `${path}/Config/${Config.get( 'NODE_ENV' )}.json` } );
 
-		this.Managers        = new Array< ManagerInterface >();
+		this.services        = new Array< ServiceInterface >();
 		this.DebugTicks      = {};
 
-		this.DatabaseManager = new DatabaseManager( this );
-		this.CommandManager  = new CommandManager( this );
-		this.PlayerManager   = new PlayerManager( this );
-		this.UserManager     = new UserManager( this );
-		this.VehicleManager  = new VehicleManager( this );
+		this.DatabaseService = new DatabaseService( this );
+		this.CommandService  = new CommandService( this );
+		this.PlayerService   = new PlayerService( this );
+		this.AccountService  = new AccountService( this );
+		this.VehicleService  = new VehicleService( this );
 
-		new CharacterManager( this );
+		new CharacterService( this );
 
 		this.StartAll();
 	
@@ -71,18 +71,18 @@ export default class Server implements ServerInterface
 
 	private StartAll() : void
 	{
-		for( let manager of this.Managers )
+		for( let manager of this.services )
 		{
 			let tick = new Date().getTime();
 
 			let name = manager.constructor.name + ":";
 
-			manager.State = ManagerState.None;
+			manager.State = ServiceState.None;
 
-			manager.Init().then(
+			manager.Start().then(
 				( info ) =>
 				{
-					manager.State = ManagerState.OK;
+					manager.State = ServiceState.OK;
 
 					let tick_count = ( new Date().getTime() - tick ) / 1000;
 
@@ -91,7 +91,7 @@ export default class Server implements ServerInterface
 			).catch(
 				( error : Error ) =>
 				{
-					manager.State = ManagerState.Error;
+					manager.State = ServiceState.Error;
 
 					Console.WriteLine( `Starting %-70s [${Console.FgRed}FAILED${Console.Reset}]`, name );
 
@@ -108,12 +108,12 @@ export default class Server implements ServerInterface
 	{
 		let promises = [];
 
-		for( let manager of this.Managers )
+		for( let manager of this.services )
 		{
 			let promise = new Promise(
 				( resolve, reject ) =>
 				{
-					if( manager.State != ManagerState.OK )
+					if( manager.State != ServiceState.OK )
 					{
 						resolve();
 
@@ -127,7 +127,7 @@ export default class Server implements ServerInterface
 					manager.Stop().then(
 						( info ) =>
 						{
-							manager.State = ManagerState.None;
+							manager.State = ServiceState.None;
 
 							let tick_count = ( new Date().getTime() - tick ) / 1000;
 
@@ -162,9 +162,9 @@ export default class Server implements ServerInterface
 		let date = new Date();
 		let tick = date.getTime();
 
-		for( let manager of this.Managers )
+		for( let manager of this.services )
 		{
-			if( manager.GetState() != ManagerState.OK )
+			if( manager.GetState() != ServiceState.OK )
 			{
 				continue;
 			}
@@ -206,9 +206,9 @@ export default class Server implements ServerInterface
 		this.DebugTicks[ "DoPulse" ] = ( ( new Date().getTime() - tick ) / 1000 );
 	}
 	
-	public RegisterManager( manager : ManagerInterface )
+	public RegisterService( service : ServiceInterface ) : void
 	{
-		this.Managers.push( manager );
+		this.services.push( service );
 	}
 
 	public Restart() : void

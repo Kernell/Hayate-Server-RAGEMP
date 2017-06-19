@@ -12,13 +12,14 @@
 
 interface ServerInterface
 {
-	DatabaseManager  : ManagerInterface;
-	CommandManager   : ManagerInterface;
-	PlayerManager    : ManagerInterface;
-	UserManager      : ManagerInterface;
-	VehicleManager   : ManagerInterface;
+	AccountService   : ServiceInterface;
+	DatabaseService  : ServiceInterface;
+	CommandService   : ServiceInterface;
+	PlayerService    : ServiceInterface;
+	VehicleService   : ServiceInterface;
 
-	RegisterManager  ( manager : ManagerInterface ) : void;
+	RegisterService  ( service : ServiceInterface ) : void;
+
 	Restart          () : void;
 	Shutdown         () : void;
 }

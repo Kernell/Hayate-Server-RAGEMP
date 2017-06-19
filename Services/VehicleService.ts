@@ -10,45 +10,67 @@
 *
 *********************************************************/
 
-import * as ORM         from "typeorm";
-import { Vehicle }      from "../../Entity/Vehicle";
-import ManagerBase      from "../../Core/ManagerBase";
-import DatabaseManager  from "../../Core/DatabaseManager";
+import * as ORM            from "typeorm";
+import { Vehicle }         from "../Entity/Vehicle";
+import { ServiceBase }     from "./ServiceBase";
+import { DatabaseService } from "./DatabaseService";
 
-export default class VehicleManager extends ManagerBase< Vehicle >
+export class VehicleService extends ServiceBase
 {
-	private Repository : ORM.Repository< Vehicle > = null;
+	private list       : Array< Vehicle >;
+	private repository : ORM.Repository< Vehicle > = null;
 
 	constructor( server : ServerInterface )
 	{
 		super( server );
 
-		this.Dependency = server.DatabaseManager;
+		this.list       = new Array< Vehicle >();
+		this.Dependency = server.DatabaseService;
 
 		this.WrapEvent( "playerExitVehicle", this.OnPlayerExitVehicle );
 	}
 
-	public GetRepository() : ORM.Repository< Vehicle >
+	public Add( vehicle : Vehicle ) : void
 	{
-		return this.Repository;
+		this.list.push( vehicle );
 	}
 
-	public Init() : Promise< any >
+	public Get( id : number ) : Vehicle
 	{
-		return super.Init().then(
+		return this.list.find( ( vehicle, index ) => vehicle.GetID() == id );
+	}
+
+	public GetAll() : Array< Vehicle >
+	{
+		return this.list;
+	}
+
+	public Remove( vehicle : Vehicle ) : void
+	{
+		this.list.remove( vehicle );
+	}
+
+	public GetRepository() : ORM.Repository< Vehicle >
+	{
+		return this.repository;
+	}
+
+	public Start() : Promise< any >
+	{
+		return super.Start().then(
 			async () =>
 			{
-				this.Repository = ( this.Dependency as DatabaseManager ).GetRepository( Vehicle );
+				this.repository = ( this.Dependency as DatabaseService ).GetRepository( Vehicle );
 
 				try
 				{
-					let vehicles = await this.Repository.find();
+					let vehicles = await this.repository.find();
 
 					for( let vehicle of vehicles )
 					{
 						vehicle.Create();
 
-						this.AddToList( vehicle );
+						this.list.push( vehicle );
 					}
 				}
 				catch( e )
@@ -64,11 +86,11 @@ export default class VehicleManager extends ManagerBase< Vehicle >
 		return new Promise(
 			( resolve, reject ) =>
 			{
-				for( let vehicle of this.GetAll() )
+				for( let vehicle of this.list )
 				{
-					vehicle.Persist( this.Repository );
+					vehicle.Persist( this.repository );
 
-					this.RemoveFromList( vehicle );
+					this.list.remove( vehicle );
 				}
 
 				resolve();
@@ -79,13 +101,13 @@ export default class VehicleManager extends ManagerBase< Vehicle >
 	public async Create( model : VehicleModel, position : Vector3, rotation : Vector3, dimension : number ) : Promise< Vehicle >
 	{
 		let color = new VehicleColor();
-		let plate = VehicleManager.GetRandomNumberPlate();
+		let plate = VehicleService.GetRandomNumberPlate();
 
 		let vehicle = new Vehicle( model, position, rotation, dimension, color, plate );
 
-		this.AddToList( vehicle );
+		this.list.push( vehicle );
 
-		return vehicle.Persist( this.Repository );
+		return vehicle.Persist( this.repository );
 	}
 
 	private async OnPlayerExitVehicle( player : PlayerInterface ) : Promise< void >
@@ -99,7 +121,7 @@ export default class VehicleManager extends ManagerBase< Vehicle >
 
 			if( seat == 0 && vehicle != null )
 			{
-				vehicle.Persist( this.Repository );
+				vehicle.Persist( this.repository );
 			}
 		}
 

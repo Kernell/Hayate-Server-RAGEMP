@@ -10,12 +10,12 @@
 *
 *********************************************************/
 
-import * as Command    from "../Command";
-import * as Entity     from "../Entity";
-import ManagerBase     from "./ManagerBase";
-import DatabaseManager from "./DatabaseManager";
+import * as Command        from "../Command";
+import * as Entity         from "../Entity";
+import { ServiceBase }     from "./ServiceBase";
+import { DatabaseService } from "./DatabaseService";
 
-export default class CommandManager extends ManagerBase< Entity.Entity >
+export class CommandService extends ServiceBase
 {
 	private shudownTick : number = 0;
 	private console     : Console;
@@ -25,7 +25,7 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 	{
 		super( server );
 
-		this.Dependency = server.DatabaseManager;
+		this.Dependency = server.DatabaseService;
 
 		this.console  = new Console();
 		this.Commands = new Array< Command.ConsoleCommand >();
@@ -42,12 +42,12 @@ export default class CommandManager extends ManagerBase< Entity.Entity >
 		);
 	}
 
-	public Init() : Promise< any >
+	public Start() : Promise< any >
 	{
-		return super.Init().then(
+		return super.Start().then(
 			() =>
 			{
-				let repository = ( this.Dependency as DatabaseManager ).GetRepository( Entity.User );
+				let repository = ( this.Dependency as DatabaseService ).GetRepository( Entity.User );
 
 				return repository.findOneById( 0 ).then(
 					( user : Entity.User ) =>

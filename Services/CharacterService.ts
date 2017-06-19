@@ -10,18 +10,16 @@
 *
 *********************************************************/
 
-import * as ORM         from "typeorm";
-import * as Config      from "nconf";
-import Server           from "../../Server";
-import ManagerBase      from "../../Core/ManagerBase";
-import DatabaseManager  from "../../Core/DatabaseManager";
-import * as Entity      from "../../Entity";
+import * as ORM                   from "typeorm";
+import * as Config                from "nconf";
+import * as Entity                from "../Entity";
+import { ServiceBase }            from "./ServiceBase";
+import { DatabaseService }        from "./DatabaseService";
+import { CharacterNameValidator } from "../Security/Validator/CharacterNameValidator";
 
-import { CharacterNameValidator } from "../../Security/Validator/CharacterNameValidator";
-
-export class CharacterManager extends ManagerBase< Entity.Entity >
+export class CharacterService extends ServiceBase
 {
-	private database        : DatabaseManager                      = null;
+	private database        : DatabaseService                      = null;
 	private nameValidator   : CharacterNameValidator               = null;
 	private repository      : ORM.Repository< CharacterInterface > = null;
 
@@ -29,8 +27,8 @@ export class CharacterManager extends ManagerBase< Entity.Entity >
 	{
 		super( server );
 
-		this.database      = server.DatabaseManager as DatabaseManager;
-		this.Dependency    = server.DatabaseManager;
+		this.database      = server.DatabaseService as DatabaseService;
+		this.Dependency    = server.DatabaseService;
 		this.nameValidator = new CharacterNameValidator();
 
 		this.RegisterEvent( "playerCharacterCreate", this.OnCreate );
@@ -39,9 +37,9 @@ export class CharacterManager extends ManagerBase< Entity.Entity >
 		this.RegisterEvent( "playerCharacterLogout", this.OnLogout );
 	}
 
-	public Init() : Promise< any >
+	public Start() : Promise< any >
 	{
-		return super.Init().then(
+		return super.Start().then(
 			() =>
 			{
 				this.repository = this.database.GetRepository( Entity.Character );

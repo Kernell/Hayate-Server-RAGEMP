@@ -94,7 +94,7 @@
       <SubType>Code</SubType>
       <TestFramework>ExportRunner</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Security\User\UserManager.ts">
+    <TypeScriptCompile Include="Services\AccountService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Entity\EntityInterface.ts">
@@ -112,7 +112,7 @@
     <TypeScriptCompile Include="Game\Character\CharacterInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Game\Character\CharacterManager.ts">
+    <TypeScriptCompile Include="Services\CharacterService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Game\Vehicle\VehicleInterface.ts">
@@ -167,6 +167,9 @@
       <SubType>Code</SubType>
       <TestFramework>ExportRunner</TestFramework>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="SharedUtils\Array.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="SharedUtils\Date.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -176,19 +179,19 @@
     <TypeScriptCompile Include="Command\Vehicle.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Core\DatabaseManager.ts">
+    <TypeScriptCompile Include="Services\DatabaseService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Core\ManagerInterface.ts">
+    <TypeScriptCompile Include="Services\ServiceInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Core\ManagerBase.ts">
+    <TypeScriptCompile Include="Services\ServiceBase.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Core\PlayerManager.ts">
+    <TypeScriptCompile Include="Services\PlayerService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Game\Vehicle\VehicleManager.ts">
+    <TypeScriptCompile Include="Services\VehicleService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Entity\Character.ts">
@@ -221,7 +224,7 @@
     <TypeScriptCompile Include="Command\User.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Core\CommandManager.ts">
+    <TypeScriptCompile Include="Services\CommandService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Globals\Console.ts">
@@ -242,7 +245,7 @@
     <TypeScriptCompile Include="Globals\GUID.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Globals\ManagerState.ts">
+    <TypeScriptCompile Include="Globals\ServiceState.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Globals\Ped.ts" />
@@ -272,13 +275,13 @@
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\" />
     <Folder Include="Command\" />
     <Folder Include="Entity\" />
     <Folder Include="Config\" />
     <Folder Include="Game\" />
     <Folder Include="Game\Character\" />
     <Folder Include="Game\Vehicle\" />
+    <Folder Include="Services\" />
     <Folder Include="Security\" />
     <Folder Include="Security\Encoders\" />
     <Folder Include="Security\Authentication\" />

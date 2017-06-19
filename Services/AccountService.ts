@@ -10,23 +10,24 @@
 *
 *********************************************************/
 
-import * as ORM         from "typeorm";
-import * as Entity      from "../../Entity";
-import ManagerBase      from "../../Core/ManagerBase";
-import DatabaseManager  from "../../Core/DatabaseManager";
+import * as ORM            from "typeorm";
+import * as Entity         from "../Entity";
+import { PlayerService }   from "./PlayerService";
+import { ServiceBase }     from "./ServiceBase";
+import { DatabaseService } from "./DatabaseService";
 
-import { AuthenticationProviderManager } from "../Authentication/AuthenticationProviderManager";
-import { AuthenticationProvider }        from "../Authentication/AuthenticationProvider";
-import { UsernamePasswordToken }         from "../Token/UsernamePasswordToken";
-import { UserEmailValidator }            from "../Validator/UserEmailValidator";
-import { UserNameValidator }             from "../Validator/UserNameValidator";
-import { UserPasswordValidator }         from "../Validator/UserPasswordValidator";
+import { AuthenticationProviderManager } from "../Security/Authentication/AuthenticationProviderManager";
+import { AuthenticationProvider }        from "../Security/Authentication/AuthenticationProvider";
+import { UsernamePasswordToken }         from "../Security/Token/UsernamePasswordToken";
+import { UserEmailValidator }            from "../Security/Validator/UserEmailValidator";
+import { UserNameValidator }             from "../Security/Validator/UserNameValidator";
+import { UserPasswordValidator }         from "../Security/Validator/UserPasswordValidator";
 
-export default class UserManager extends ManagerBase< any > implements UserManagerInterface
+export class AccountService extends ServiceBase implements UserManagerInterface
 {
 	private roles                 : Entity.UserRole[];
 
-	private database              : DatabaseManager                   = null;
+	private database              : DatabaseService                   = null;
 	private repository            : ORM.Repository< UserInterface >   = null;
 	private repositoryRole        : ORM.Repository< Entity.UserRole > = null;
 	private authenticationManager : AuthenticationProviderManager     = null;
@@ -37,8 +38,8 @@ export default class UserManager extends ManagerBase< any > implements UserManag
 
 		this.roles      = [];
 
-		this.database   = server.DatabaseManager as DatabaseManager;
-		this.Dependency = server.DatabaseManager;
+		this.database   = server.DatabaseService as DatabaseService;
+		this.Dependency = server.DatabaseService;
 
 		this.RegisterEvent( "playerTryLogin", this.OnPlayerTryLogin );
 		this.RegisterEvent( "playerLogin",    this.OnPlayerLogin );
@@ -46,9 +47,9 @@ export default class UserManager extends ManagerBase< any > implements UserManag
 		this.RegisterEvent( "playerRegister", this.OnPlayerRegister );
 	}
 
-	public Init() : Promise< any >
+	public Start() : Promise< any >
 	{
-		return super.Init().then(
+		return super.Start().then(
 			() =>
 			{
 				this.repository     = this.database.GetRepository( Entity.User );
@@ -100,7 +101,7 @@ export default class UserManager extends ManagerBase< any > implements UserManag
 	{
 		let userId = user.GetID();
 
-		for( let p of this.List.values() )
+		for( let p of PlayerService.PlayersOnline )
 		{
 			if( p != player && p.GetUser().GetID() == userId )
 			{

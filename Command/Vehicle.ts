@@ -14,11 +14,11 @@ import * as printf        from "printf";
 import * as Config        from "nconf";
 import { ConsoleCommand } from "./ConsoleCommand";
 import * as Entity        from "../Entity";
-import VehicleManager     from "../Game/Vehicle/VehicleManager";
+import { VehicleService } from "../Services/VehicleService";
 
 export class Vehicle extends ConsoleCommand
 {
-	private manager : VehicleManager;
+	private service : VehicleService;
 
 	constructor( server : ServerInterface )
 	{
@@ -27,7 +27,7 @@ export class Vehicle extends ConsoleCommand
 		this.Name       = "vehicle";
 		this.Restricted = true;
 
-		this.manager = server.VehicleManager as VehicleManager;
+		this.service = server.VehicleService as VehicleService;
 	}
 
 	private Option_create( player : PlayerInterface, option : string, args : any[] ) : Promise< any >
@@ -51,7 +51,7 @@ export class Vehicle extends ConsoleCommand
 
 		rotation.Z += 90.0;
 
-		return this.manager.Create( model, position, rotation, dimension ).then(
+		return this.service.Create( model, position, rotation, dimension ).then(
 			( vehicle ) =>
 			{
 				if( !vehicle.IsValid() )
@@ -73,7 +73,7 @@ export class Vehicle extends ConsoleCommand
 			return;
 		}
 
-		let vehicle = args[ 0 ] ? this.manager.Get( Number( args[ 0 ] ) ) : ( character.GetVehicle() as Entity.Vehicle );
+		let vehicle = args[ 0 ] ? this.service.Get( Number( args[ 0 ] ) ) : ( character.GetVehicle() as Entity.Vehicle );
 
 		if( vehicle == null )
 		{
@@ -84,12 +84,12 @@ export class Vehicle extends ConsoleCommand
 
 		if( vehicle.GetID() < 0 )
 		{
-			this.manager.RemoveFromList( vehicle );
+			this.service.Remove( vehicle );
 		}
 
 		player.OutputChatBox( "Vehicle " + vehicle.GetName() + " deleted" );
 
-		return vehicle.Persist( this.manager.GetRepository() );
+		return vehicle.Persist( this.service.GetRepository() );
 	}
 
 	private Option_restore( player : PlayerInterface, option : string, args : any[] ) : void
@@ -99,7 +99,7 @@ export class Vehicle extends ConsoleCommand
 			throw new Exception( `Syntax: /${this.Name} ${option} [id]` );
 		}
 
-		let vehicle = this.manager.Get( Number( args[ 0 ] ) );
+		let vehicle = this.service.Get( Number( args[ 0 ] ) );
 
 		if( vehicle == null )
 		{
@@ -118,7 +118,7 @@ export class Vehicle extends ConsoleCommand
 			throw new Exception( `Syntax: /${this.Name} ${option} [id]` );
 		}
 
-		let vehicle = this.manager.Get( Number( args[ 0 ] ) );
+		let vehicle = this.service.Get( Number( args[ 0 ] ) );
 
 		if( vehicle == null )
 		{
@@ -143,7 +143,7 @@ export class Vehicle extends ConsoleCommand
 			throw new Exception( `Syntax: /${this.Name} ${option} [id]` );
 		}
 
-		let vehicle = this.manager.Get( Number( args[ 0 ] ) );
+		let vehicle = this.service.Get( Number( args[ 0 ] ) );
 
 		if( vehicle == null )
 		{
@@ -170,7 +170,7 @@ export class Vehicle extends ConsoleCommand
 			throw new Exception( `Syntax: /${this.Name} ${option} [id] [all = false]` );
 		}
 
-		let vehicle = this.manager.Get( Number( args[ 0 ] ) );
+		let vehicle = this.service.Get( Number( args[ 0 ] ) );
 
 		if( vehicle == null )
 		{
@@ -179,10 +179,7 @@ export class Vehicle extends ConsoleCommand
 
 		if( args.length == 2 )
 		{
-			for( let vehicle of this.manager.GetAll() )
-			{
-				vehicle.Respawn();
-			}
+			this.service.GetAll().map( vehicle => vehicle.Respawn() );
 
 			player.OutputChatBox( `All vehicles respawned` );
 
@@ -203,7 +200,7 @@ export class Vehicle extends ConsoleCommand
 			return;
 		}
 
-		let vehicle = args[ 0 ] ? this.manager.Get( Number( args[ 0 ] ) ) : ( character.GetVehicle() as Entity.Vehicle );
+		let vehicle = args[ 0 ] ? this.service.Get( Number( args[ 0 ] ) ) : ( character.GetVehicle() as Entity.Vehicle );
 
 		if( vehicle == null )
 		{
@@ -224,7 +221,7 @@ export class Vehicle extends ConsoleCommand
 			return;
 		}
 
-		let vehicle = args[ 0 ] ? this.manager.Get( Number( args[ 0 ] ) ) : ( character.GetVehicle() as Entity.Vehicle );
+		let vehicle = args[ 0 ] ? this.service.Get( Number( args[ 0 ] ) ) : ( character.GetVehicle() as Entity.Vehicle );
 
 		if( vehicle == null )
 		{
@@ -248,7 +245,7 @@ export class Vehicle extends ConsoleCommand
 			return;
 		}
 
-		let vehicle = args[ 0 ] == "@my" ? character.GetVehicle() as Entity.Vehicle : this.manager.Get( Number( args[ 0 ] ) );
+		let vehicle = args[ 0 ] == "@my" ? character.GetVehicle() as Entity.Vehicle : this.service.Get( Number( args[ 0 ] ) );
 
 		if( vehicle == null )
 		{
@@ -267,7 +264,7 @@ export class Vehicle extends ConsoleCommand
 		let color2 = new Color( c2 >> 16 & 255, c2 >> 8 & 255, c2 & 255 );
 
 		vehicle.SetColor( new VehicleColor( color1, color2 ) );
-		vehicle.Persist( this.manager.GetRepository() );
+		vehicle.Persist( this.service.GetRepository() );
 
 		player.OutputChatBox( `Vehicle ${vehicle.GetName()} (ID ${vehicle.GetID()}) color changed to (${vehicle.GetColor().toString()})` );
 	}
@@ -286,7 +283,7 @@ export class Vehicle extends ConsoleCommand
 			return;
 		}
 
-		let vehicle = args[ 0 ] == "@my" ? character.GetVehicle() as Entity.Vehicle : this.manager.Get( Number( args[ 0 ] ) );
+		let vehicle = args[ 0 ] == "@my" ? character.GetVehicle() as Entity.Vehicle : this.service.Get( Number( args[ 0 ] ) );
 
 		if( vehicle == null )
 		{
@@ -303,7 +300,7 @@ export class Vehicle extends ConsoleCommand
 		player.OutputChatBox( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) model changed to ` + VehicleModel[ model ] );
 	
 		vehicle.SetModel( model );
-		vehicle.Persist( this.manager.GetRepository() );
+		vehicle.Persist( this.service.GetRepository() );
 	}
 
 	private Option_setspawn( player : PlayerInterface, option : string, args : any[] ) : void
@@ -315,7 +312,7 @@ export class Vehicle extends ConsoleCommand
 			return;
 		}
 
-		let vehicle = args[ 0 ] ? this.manager.Get( Number( args[ 0 ] ) ) : ( character.GetVehicle() as Entity.Vehicle );
+		let vehicle = args[ 0 ] ? this.service.Get( Number( args[ 0 ] ) ) : ( character.GetVehicle() as Entity.Vehicle );
 
 		if( vehicle == null )
 		{
@@ -330,7 +327,7 @@ export class Vehicle extends ConsoleCommand
 		vehicle[ "defaultRotation" ]  = rotation;
 		vehicle[ "defaultDimension" ] = dimension;
 
-		vehicle.Persist( this.manager.GetRepository() );
+		vehicle.Persist( this.service.GetRepository() );
 
 		player.OutputChatBox( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) default spawn changed` );
 	}
@@ -351,7 +348,7 @@ export class Vehicle extends ConsoleCommand
 
 		for( let i = -1; i > -temp_max; --i )
 		{
-			if( this.Server.VehicleManager.Get( i ) == null )
+			if( this.service.Get( i ) == null )
 			{
 				id = i;
 
@@ -381,7 +378,7 @@ export class Vehicle extends ConsoleCommand
 
 		vehicle[ "id" ] = id;
 
-		this.manager.AddToList( vehicle );
+		this.service.Add( vehicle );
 
 		player.OutputChatBox( "Временный '" + vehicle.GetName() + "' создан, ID: " + vehicle.GetID() );
 	}
@@ -401,7 +398,7 @@ export class Vehicle extends ConsoleCommand
 		}
 
 		let vehIdName = args.shift();
-		let vehicle = vehIdName == "@my" ? character.GetVehicle() as Entity.Vehicle : this.manager.Get( Number( vehIdName ) );
+		let vehicle = vehIdName == "@my" ? character.GetVehicle() as Entity.Vehicle : this.service.Get( Number( vehIdName ) );
 
 		if( vehicle == null )
 		{
@@ -411,7 +408,7 @@ export class Vehicle extends ConsoleCommand
 		let plateText = args.join( ' ' );
 
 		vehicle.SetPlate( plateText );
-		vehicle.Persist( this.manager.GetRepository() );
+		vehicle.Persist( this.service.GetRepository() );
 
 		player.OutputChatBox( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) plate text changed to ${plateText}` );
 	}

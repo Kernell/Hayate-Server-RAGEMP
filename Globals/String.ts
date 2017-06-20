@@ -31,3 +31,5 @@ String.prototype.pad = function( num : number, char : string = ' ', left : boole
 
 	return this + spaces;
 }
+
+module.exports = String;

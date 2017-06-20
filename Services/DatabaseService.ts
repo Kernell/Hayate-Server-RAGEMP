@@ -19,14 +19,14 @@ export class DatabaseService extends ServiceBase
 {
 	private connection : ORM.Connection;
 
-	constructor( server : ServerInterface )
+	constructor()
 	{
-		super( server );
+		super();
 
 		this.connection = null;
 	}
 
-	public Start() : Promise< any >
+	public async Start() : Promise< any >
 	{
 		if( this.connection == null )
 		{
@@ -43,9 +43,9 @@ export class DatabaseService extends ServiceBase
 					},
 					entities :
 					[
-						Entity.User,
-						Entity.UserRole,
-						Entity.UserAuth,
+						Entity.Account,
+						Entity.AccountRole,
+						Entity.AccountAuth,
 						Entity.Character,
 						Entity.Vehicle,
 					],
@@ -59,7 +59,7 @@ export class DatabaseService extends ServiceBase
 			);
 		}
 
-		return super.Start();
+		return null;
 	}
 
 	public GetRepository< Entity >( entityClassOrName : ORM.ObjectType< Entity > | string ) : ORM.Repository< Entity >

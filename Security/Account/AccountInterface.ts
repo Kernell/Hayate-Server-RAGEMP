@@ -10,7 +10,7 @@
 *
 *********************************************************/
 
-interface UserInterface
+interface AccountInterface
 {
 	GetID              () : number;
 	GetName            () : string;
@@ -18,9 +18,9 @@ interface UserInterface
 	GetPassword        () : string;
 	GetSalt            () : string;
 	GetCreatedDate     () : Date;
-	GetRoles           () : Map< number, UserRoleInterface >;
-	AddRole            ( role : UserRoleInterface ) : void;
-	RemoveRole         ( role : UserRoleInterface ) : void;
+	GetRoles           () : Map< number, AccountRoleInterface >;
+	AddRole            ( role : AccountRoleInterface ) : void;
+	RemoveRole         ( role : AccountRoleInterface ) : void;
 	IsGranted          ( permission : Permission ) : boolean;
 	IsGranted          ( permission : string )     : boolean;
 }

@@ -17,7 +17,7 @@ interface PlayerInterface extends EntityInterface
 
 	GetID() : number;
 	GetName() : string;
-	GetUser() : UserInterface;
+	GetAccount() : AccountInterface;
 	GetPing() : number;
 	GetIP() : string;
 	GetPosition() : Vector3;
@@ -26,4 +26,6 @@ interface PlayerInterface extends EntityInterface
 	OutputChatBox( text : string ) : void;
 	Login( token : TokenInterface ) : void;
 	Logout() : void;
+	Kick( reason ?: string ) : void;
+	Ban( reason ?: string ) : void;
 }

@@ -15,8 +15,8 @@ import * as Entity       from "../Entity";
 
 import { UsernamePasswordToken } from "../Security/Token/UsernamePasswordToken";
 
-@ORM.Entity( "users" )
-export class User implements UserInterface
+@ORM.Entity( "accounts" )
+export class Account implements AccountInterface
 {
 	@ORM.PrimaryGeneratedColumn()
 	protected id  : number;
@@ -33,8 +33,8 @@ export class User implements UserInterface
 	@ORM.Column()
 	protected salt : string;
 
-	@ORM.OneToMany( type => Entity.UserAuth, token => token[ "user" ] )
-	protected tokens : Entity.UserAuth[];
+	@ORM.OneToMany( type => Entity.AccountAuth, token => token[ "account" ] )
+	protected tokens : Entity.AccountAuth[];
 
 	@ORM.Column( { name: "roles", type: "simple_array", default: null, nullable: true } )
 	protected _roles : number[];
@@ -45,12 +45,12 @@ export class User implements UserInterface
 	@ORM.Column( { type: "datetime", name: "deleted_at", nullable: true, default: null } )
 	protected deletedAt : Date;
 
-	protected roles : Map< number, UserRoleInterface >;
+	protected roles : Map< number, AccountRoleInterface >;
 
 	public constructor()
 	{
 		this.tokens = [];
-		this.roles = new Map< number, UserRoleInterface >();
+		this.roles = new Map< number, AccountRoleInterface >();
 	}
 
 	public GetID() : number
@@ -103,12 +103,12 @@ export class User implements UserInterface
 		return this.createdAt
 	}
 
-	public GetRoles() : Map< number, UserRoleInterface >
+	public GetRoles() : Map< number, AccountRoleInterface >
 	{
 		return this.roles;
 	}
 
-	public AddRole( role : UserRoleInterface ) : void
+	public AddRole( role : AccountRoleInterface ) : void
 	{
 		if( this._roles.indexOf( role.GetID() ) == -1 )
 		{
@@ -118,7 +118,7 @@ export class User implements UserInterface
 		this.roles.set( role.GetID(), role );
 	}
 
-	public RemoveRole( role : UserRoleInterface ) : void
+	public RemoveRole( role : AccountRoleInterface ) : void
 	{
 		this._roles.splice( this._roles.indexOf( role.GetID() ), 1 );
 
@@ -145,9 +145,9 @@ export class User implements UserInterface
 
 	public Login( token : UsernamePasswordToken ) : void
 	{
-		let auth = new Entity.UserAuth();
+		let auth = new Entity.AccountAuth();
 
-		auth.SetUser( this );
+		auth.SetAccount( this );
 		auth.SetDeviceID( token.GetDeviceID() );
 		auth.SetIP( token.GetIP() );
 		auth.SetToken( token.GetGUID().toString() );

@@ -10,7 +10,7 @@
 *
 *********************************************************/
 
-interface UserRoleInterface
+interface AccountRoleInterface
 {
 	GetID            () : number;
 	GetName          () : string;

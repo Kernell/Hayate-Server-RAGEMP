@@ -12,14 +12,12 @@
 
 export class ConsoleCommand
 {
-	protected Server          : ServerInterface;
 	protected Name            : String;
 	protected Restricted      : Boolean;
 	protected CaseSensitive   : Boolean;
 
-	constructor( server : ServerInterface )
+	constructor()
 	{
-		this.Server        = server;
 		this.Name          = "";
 		this.Restricted    = false;
 		this.CaseSensitive = true;
@@ -32,7 +30,7 @@ export class ConsoleCommand
 
 		if( this[ method ] )
 		{
-			if( this.Restricted && method != null && !player.GetUser().IsGranted( 'command.' + this.Name + '.' + option ) )
+			if( this.Restricted && method != null && !player.GetAccount().IsGranted( 'command.' + this.Name + '.' + option ) )
 			{
 				throw new Exception( `Access denied to command '${this.Name} ${option}'` );
 			}

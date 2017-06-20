@@ -18,11 +18,9 @@ export class PlayerService extends ServiceBase
 {
 	public static PlayersOnline = new Array< Entity.Player >();
 
-	constructor( server : ServerInterface )
+	constructor()
 	{
-		super( server );
-
-		this.Dependency = server.AccountService;
+		super();
 
 		this.WrapEvent( "playerJoin",     this.OnPlayerJoin );
 		this.WrapEvent( "playerQuit",     this.OnPlayerQuit );
@@ -31,29 +29,21 @@ export class PlayerService extends ServiceBase
 		this.WrapEvent( "playerChat",     this.OnPlayerChat );
 	}
 
-	public Start() : Promise< any >
+	public async Start() : Promise< any >
 	{
-		return super.Start().then(
-			() =>
-			{
-				for( let player of mp.players.toArray() )
-				{
-					this.OnPlayerJoin( Entity.Player.FindOrCreate< Entity.Player >( player ) );
-				}
-			}
-		);
+		for( let player of mp.players.toArray() )
+		{
+			this.OnPlayerJoin( Entity.Player.FindOrCreate< Entity.Player >( player ) );
+		}
+
+		return null;
 	}
 
-	public Stop() : Promise< any >
+	public async Stop() : Promise< any >
 	{
-		return new Promise(
-			( resolve, reject ) =>
-			{
-				PlayerService.PlayersOnline.map( player => this.OnPlayerQuit( player, "server stopped", "" ) );
+		PlayerService.PlayersOnline.map( player => this.OnPlayerQuit( player, "server stopped", "" ) );
 
-				resolve();
-			}
-		);
+		return null;
 	}
 
 	private async OnPlayerJoin( player : Entity.Player ) : Promise< any >

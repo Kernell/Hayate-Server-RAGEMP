@@ -19,9 +19,9 @@ import { UsernamePasswordToken } from "../Token/UsernamePasswordToken";
 export class AuthenticationProvider implements AuthenticationProviderInterface
 {
 	protected encoder      : UserPasswordEncoder;
-	protected userProvider : UserManagerInterface;
+	protected userProvider : AccountManagerInterface;
 
-	public constructor( userProvider : UserManagerInterface )
+	public constructor( userProvider : AccountManagerInterface )
 	{
 		this.userProvider = userProvider;
 		this.encoder      = new UserPasswordEncoder();
@@ -50,24 +50,24 @@ export class AuthenticationProvider implements AuthenticationProviderInterface
 		throw new Exception( "Invalid login or password" );
 	}
 
-	public async RetrieveUser( username : string, token : TokenInterface ) : Promise< UserInterface >
+	public async RetrieveUser( username : string, token : TokenInterface ) : Promise< AccountInterface >
 	{
-		let user = token.GetUser();
+		let account = token.GetAccount();
 
-		if( typeof user != "object" )
+		if( typeof account != "object" )
 		{
-			user = await this.userProvider.LoadByUsername( username );
+			account = await this.userProvider.LoadByUsername( username );
 		}
 
-		if( typeof user != "object" )
+		if( typeof account != "object" )
 		{
-			user = await this.userProvider.LoadByLogin( username );
+			account = await this.userProvider.LoadByLogin( username );
 		}
 
-		return user;
+		return account;
 	}
 
-	protected CheckAuthentication( user : UserInterface, token : TokenInterface ) : boolean
+	protected CheckAuthentication( user : AccountInterface, token : TokenInterface ) : boolean
 	{
 		let username = token.GetUsername();
 		let password = token.GetCredentials();

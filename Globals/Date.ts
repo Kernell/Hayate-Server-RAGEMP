@@ -32,3 +32,5 @@ Date.prototype.toISOString = function()
 
 	return `${y}-${m}-${d} ${h}:${i}:${s}`;
 }
+
+module.exports = Date;

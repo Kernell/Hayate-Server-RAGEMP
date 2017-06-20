@@ -12,8 +12,8 @@
 
 interface TokenInterface
 {
-	GetUser           () : UserInterface;
-	SetUser           ( user : UserInterface|string ) : void;
+	GetAccount        () : AccountInterface;
+	SetAccount        ( account : AccountInterface|string ) : void;
 	GetUsername       () : string;
 	IsAuthenticated   () : boolean;
 	SetAuthenticated  ( authenticated : boolean ) : void;

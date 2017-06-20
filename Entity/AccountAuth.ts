@@ -13,15 +13,15 @@
 import * as ORM    from "typeorm";
 import * as Entity from "../Entity";
 
-@ORM.Entity( "user_auth" )
-export class UserAuth
+@ORM.Entity( "account_auth" )
+export class AccountAuth
 {
 	@ORM.PrimaryGeneratedColumn()
 	protected id : number;
 
-	@ORM.ManyToOne( type => Entity.User, user => user[ "tokens" ] )
-	@ORM.JoinColumn( { name: "user_id" } )
-	protected user : Entity.User;
+	@ORM.ManyToOne( type => Entity.Account, account => account[ "tokens" ] )
+	@ORM.JoinColumn( { name: "account_id" } )
+	protected account : Entity.Account;
 	
 	@ORM.Column( { name: "device_id" } )
 	protected deviceId : string;
@@ -40,9 +40,9 @@ export class UserAuth
 		return this.id;
 	}
 
-	public GetUser() : Entity.User
+	public GetAccount() : Entity.Account
 	{
-		return this.user;
+		return this.account;
 	}
 
 	public GetDeviceID() : string
@@ -65,9 +65,9 @@ export class UserAuth
 		return this.date;
 	}
 
-	public SetUser( user : Entity.User ) : void
+	public SetAccount( account : Entity.Account ) : void
 	{
-		this.user = user;
+		this.account = account;
 	}
 
 	public SetDeviceID( deviceId : string ) : void

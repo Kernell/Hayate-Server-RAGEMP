@@ -12,7 +12,7 @@
 
 export class UsernamePasswordToken implements TokenInterface
 {
-	protected user          : UserInterface|string;
+	protected account       : AccountInterface|string;
 	protected credentials   : string;
 	protected guid          : GUID;
 	protected ip            : string;
@@ -20,21 +20,21 @@ export class UsernamePasswordToken implements TokenInterface
     protected authenticated : boolean = false;
 
 	public constructor( token : UsernamePasswordToken );
-	public constructor( user : UserInterface|string, credentials : string, ip : string, deviceId : string );
+	public constructor( account : AccountInterface|string, credentials : string, ip : string, deviceId : string );
 
-	public constructor( user : UsernamePasswordToken|UserInterface|string, credentials ?: string, ip ?: string, deviceId ?: string )
+	public constructor( account : UsernamePasswordToken|AccountInterface|string, credentials ?: string, ip ?: string, deviceId ?: string )
 	{
-		if( user instanceof UsernamePasswordToken )
+		if( account instanceof UsernamePasswordToken )
 		{
-			let token = user;
+			let token = account;
 
-			user        = token.user;
+			account     = token.account;
 			ip          = token.ip;
 			deviceId    = token.deviceId;
 			credentials = token.credentials;
 		}
 
-		this.SetUser( user );
+		this.SetAccount( account );
 
 		this.guid        = new GUID();
 		this.ip          = ip;
@@ -42,24 +42,24 @@ export class UsernamePasswordToken implements TokenInterface
 		this.credentials = credentials;
 	}
 
-	public GetUser() : UserInterface
+	public GetAccount() : AccountInterface
 	{
-		return this.user as UserInterface;
+		return this.account as AccountInterface;
 	}
 
-	public SetUser( user : UserInterface|string ) : void
+	public SetAccount( account : AccountInterface|string ) : void
 	{
-		this.user = user;
+		this.account = account;
 	}
 
 	public GetUsername() : string
 	{
-		if( typeof this.user == "string" )
+		if( typeof this.account == "string" )
 		{
-			return this.user;
+			return this.account;
 		}
 
-		return this.user.GetName();
+		return this.account.GetName();
 	}
 
 	public IsAuthenticated() : boolean

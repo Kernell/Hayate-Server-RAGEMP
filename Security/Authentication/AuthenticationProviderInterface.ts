@@ -14,7 +14,7 @@ interface AuthenticationProviderInterface
 {
 	Authenticate( token : TokenInterface ) : Promise< TokenInterface >;
 
-	RetrieveUser( username : string, token : TokenInterface ) : Promise< UserInterface >;
+	RetrieveUser( username : string, token : TokenInterface ) : Promise< AccountInterface >;
 
 	Supports( token : TokenInterface ) : boolean;
 }

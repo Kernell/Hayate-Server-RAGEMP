@@ -39,7 +39,7 @@ class Console extends IdentifiedPool implements PlayerInterface
 	public static BgCyan     = "\x1b[46m";
 	public static BgWhite    = "\x1b[47m";
 
-	private user : UserInterface;
+	private account : AccountInterface;
 
 	constructor()
 	{
@@ -109,9 +109,9 @@ class Console extends IdentifiedPool implements PlayerInterface
 		return "Console";
 	}
 	
-	public GetUser() : UserInterface
+	public GetAccount() : AccountInterface
 	{
-		return this.user;
+		return this.account;
 	}
 
 	public GetPing() : number
@@ -158,12 +158,20 @@ class Console extends IdentifiedPool implements PlayerInterface
 
 	public Login( token : TokenInterface ) : void
 	{
-		this.user = token.GetUser();
+		this.account = token.GetAccount();
 	}
 
 	public Logout() : void
 	{
-		this.user = null;
+		this.account = null;
+	}
+
+	public Kick( reason : string ) : void
+	{
+	}
+
+	public Ban( reason : string ) : void
+	{
 	}
 
 	public static Write( buffer : string, ...params : any[] ) : void

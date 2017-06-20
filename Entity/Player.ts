@@ -11,14 +11,14 @@
 *********************************************************/
 
 import { Entity }                from "./Entity";
-import { User }                  from "./User";
+import { Account }               from "./Account";
 import { UsernamePasswordToken } from "../Security/Token/UsernamePasswordToken";
 
 export class Player extends Entity implements PlayerInterface
 {
-	protected user   : UserInterface;
-	protected char   : CharacterInterface;
-	protected entity : mp.Player;
+	protected account : AccountInterface;
+	protected char    : CharacterInterface;
+	protected entity  : mp.Player;
 
 	public constructor( entity : mp.Entity )
 	{
@@ -27,9 +27,9 @@ export class Player extends Entity implements PlayerInterface
 		this.char = null;
 	}
 
-	public GetUser() : UserInterface
+	public GetAccount() : AccountInterface
 	{
-		return this.user;
+		return this.account;
 	}
 
 	public GetCharacter() : CharacterInterface
@@ -77,31 +77,31 @@ export class Player extends Entity implements PlayerInterface
 		this.entity.notify( message );
 	}
 
-	public Kick( reason : string ) : void
+	public Kick( reason : string  = "" ) : void
 	{
 		this.entity.kick( reason );
 	}
 
-	public Ban( reason : string ) : void
+	public Ban( reason : string = "" ) : void
 	{
 		this.entity.ban( reason );
 	}
 
 	public Login( token : UsernamePasswordToken ) : void
 	{
-		let user = token.GetUser() as User;
+		let account = token.GetAccount() as Account;
 		
-		user.Login( token );
+		account.Login( token );
 
-		this.user = user;
+		this.account = account;
 
-		Event.Call( "playerLogin", this, user );
+		Event.Call( "playerLogin", this, account );
 	}
 
 	public Logout() : void
 	{
-		Event.Call( "playerLogout", this, this.user );
+		Event.Call( "playerLogout", this, this.account );
 
-		this.user = null;
+		this.account = null;
 	}
 }

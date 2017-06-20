@@ -10,19 +10,8 @@
 *
 *********************************************************/
 
-interface Array< T >
+interface AccountManagerInterface
 {
-	remove( value : T ) : Array< T >;
-}
-
-Array.prototype.remove = function( value )
-{
-    let idx = this.indexOf( value );
-    
-	if( idx != -1 )
-	{
-        return this.splice( idx, 1 );
-    }
-
-    return null;
+	LoadByUsername( name  : string ) : Promise< AccountInterface >;
+	LoadByLogin   ( login : string ) : Promise< AccountInterface >;
 }

@@ -12,8 +12,8 @@
 
 import * as ORM from "typeorm";
 
-@ORM.Entity( "user_roles" )
-export class UserRole implements UserRoleInterface
+@ORM.Entity( "account_roles" )
+export class AccountRole implements AccountRoleInterface
 {
 	@ORM.PrimaryGeneratedColumn()
 	protected id : number;

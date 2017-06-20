@@ -14,7 +14,7 @@ import * as ORM from "typeorm";
 
 import { Entity } from "./Entity";
 import { Vehicle } from "./Vehicle";
-import { User } from "./User";
+import { Account } from "./Account";
 
 @ORM.Entity( "characters" )
 export class Character implements CharacterInterface
@@ -24,9 +24,9 @@ export class Character implements CharacterInterface
 	@ORM.PrimaryGeneratedColumn()
 	protected id  : number;
 	
-	@ORM.ManyToOne( type => User )
-	@ORM.JoinColumn( { name: "user_id" } )
-	protected user : User;
+	@ORM.ManyToOne( type => Account )
+	@ORM.JoinColumn( { name: "account_id" } )
+	protected account : Account;
 
 	@ORM.Column( "int" )
 	protected level : number = 1;
@@ -94,14 +94,14 @@ export class Character implements CharacterInterface
 		return this.name;
 	}
 
-	public GetUser() : UserInterface
+	public GetAccount() : AccountInterface
 	{
-		return this.user;
+		return this.account;
 	}
 
-	public SetUser( user : UserInterface ) : void
+	public SetAccount( account : AccountInterface ) : void
 	{
-		this.user = user as User;
+		this.account = account as Account;
 	}
 	
 	public SetName( name : string ) : void

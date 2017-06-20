@@ -12,6 +12,7 @@
 
 import * as Command        from "../Command";
 import * as Entity         from "../Entity";
+import { Server }          from "../Server";
 import { ServiceBase }     from "./ServiceBase";
 import { DatabaseService } from "./DatabaseService";
 
@@ -21,11 +22,9 @@ export class CommandService extends ServiceBase
 	private console     : Console;
 	private Commands    : Array< Command.ConsoleCommand >;
 
-	constructor( server : ServerInterface )
+	constructor()
 	{
-		super( server );
-
-		this.Dependency = server.DatabaseService;
+		super();
 
 		this.console  = new Console();
 		this.Commands = new Array< Command.ConsoleCommand >();
@@ -42,37 +41,27 @@ export class CommandService extends ServiceBase
 		);
 	}
 
-	public Start() : Promise< any >
+	public async Start() : Promise< any >
 	{
-		return super.Start().then(
-			() =>
-			{
-				let repository = ( this.Dependency as DatabaseService ).GetRepository( Entity.User );
+		let repository = Server.DatabaseService.GetRepository( Entity.Account );
 
-				return repository.findOneById( 0 ).then(
-					( user : Entity.User ) =>
-					{
-						if( user == null )
-						{
-							throw new Error( "root user is undefined" );
-						}
+		let account = await repository.findOneById( 0 );
 
-						this.console[ 'user' ] = user;
-					}
-				);
-			}
-		).then(
-			() =>
-			{
-				this.Add( new Command.Interior ( this.Server ) );
-				this.Add( new Command.Character( this.Server ) );
-				this.Add( new Command.Player   ( this.Server ) );
-				this.Add( new Command.User     ( this.Server ) );
-				this.Add( new Command.Vehicle  ( this.Server ) );
-				this.Add( new Command.Login    ( this.Server ) );
-				this.Add( new Command.Register ( this.Server ) );
-			}
-		);
+		if( account == null )
+		{
+			throw new Error( "root account is undefined" );
+		}
+
+		this.console[ 'account' ] = account;
+
+		this.Add( new Command.Interior () );
+		this.Add( new Command.Character() );
+		this.Add( new Command.Player   () );
+		this.Add( new Command.Vehicle  () );
+		this.Add( new Command.Login    () );
+		this.Add( new Command.Register () );
+
+		return null;
 	}
 
 	protected Add( command : Command.ConsoleCommand ) : Boolean
@@ -95,12 +84,12 @@ export class CommandService extends ServiceBase
 		{
 			if( command.IsRestricted() )
 			{
-				if( player.GetUser() == null )
+				if( player.GetAccount() == null )
 				{
 					return true;
 				}
 
-				if( !player.GetUser().IsGranted( 'command.' + command.GetName() ) )
+				if( !player.GetAccount().IsGranted( 'command.' + command.GetName() ) )
 				{
 					player.OutputChatBox( `Access denied to command '${command.GetName()}'` );
 				}
@@ -230,7 +219,7 @@ export class CommandService extends ServiceBase
 		{
 			Console.WriteLine( "\nCtrl-C pressed. Server shutting down!\n" );
 
-			setTimeout( () => this.Server.Shutdown(), 1000 );
+			setTimeout( () => Server.Shutdown(), 1000 );
 		}
 		else
 		{

@@ -11,7 +11,7 @@
 *********************************************************/
 
 import "reflect-metadata";
-import "./SharedUtils";
+
 import * as Config          from "nconf";
 
 import { ServiceBase }      from "./Services/ServiceBase";
@@ -19,11 +19,18 @@ import { AccountService }   from "./Services/AccountService";
 import { CommandService }   from "./Services/CommandService";
 import { DatabaseService }  from "./Services/DatabaseService";
 import { PlayerService }    from "./Services/PlayerService";
-import { VehicleService }   from "./Services/VehicleService";
 import { CharacterService } from "./Services/CharacterService";
+import { VehicleService }   from "./Services/VehicleService";
 
-export default class Server implements ServerInterface
+export class Server
 {
+	public static DatabaseService    : DatabaseService;
+	public static CommandService     : CommandService;
+	public static PlayerService      : PlayerService;
+	public static CharacterService   : CharacterService;
+	public static AccountService     : AccountService;
+	public static VehicleService     : VehicleService;
+
 	public static COUNTDOWN_NONE     = 0;
 	public static COUNTDOWN_SHUTDOWN = 1;
 	public static COUNTDOWN_RESTART  = 2;
@@ -31,17 +38,12 @@ export default class Server implements ServerInterface
 	private static CountDown         = 0;
 	private static CountDownType     = Server.COUNTDOWN_NONE;
 
-	private DoPulseTimer             : NodeJS.Timer;
-	private DebugTicks               : any;
-	private services                 : Array< ServiceInterface >;
+	private static services          : Array< ServiceInterface > = new Array< ServiceInterface >();
 
-	public DatabaseService  : DatabaseService;
-	public CommandService   : CommandService;
-	public PlayerService    : PlayerService;
-	public AccountService   : AccountService;
-	public VehicleService   : VehicleService;
+	private static doPulseTimer      : NodeJS.Timer;
+	private static debugTicks        : { [ name : string ] : number };
 
-	public constructor()
+	public static Main() : void
 	{
 		Config.argv().env().defaults(
 			{
@@ -53,127 +55,113 @@ export default class Server implements ServerInterface
 		
 		Config.file( { file: `${path}/Config/${Config.get( 'NODE_ENV' )}.json` } );
 
-		this.services        = new Array< ServiceInterface >();
-		this.DebugTicks      = {};
+		Server.debugTicks      = {};
 
-		this.DatabaseService = new DatabaseService( this );
-		this.CommandService  = new CommandService( this );
-		this.PlayerService   = new PlayerService( this );
-		this.AccountService  = new AccountService( this );
-		this.VehicleService  = new VehicleService( this );
+		Server.DatabaseService  = new DatabaseService();
+		Server.AccountService   = new AccountService();
+		Server.CommandService   = new CommandService();
+		Server.PlayerService    = new PlayerService();
+		Server.CharacterService = new CharacterService();
+		Server.VehicleService   = new VehicleService();
 
-		new CharacterService( this );
-
-		this.StartAll();
+		Server.StartAll();
 	
-		this.DoPulseTimer = setInterval( () => this.DoPulse(), 1000 );
+		Server.doPulseTimer = setInterval( () => this.DoPulse(), 1000 );
 	}
 
-	private StartAll() : void
+	public static RegisterService( service : ServiceInterface ) : void
 	{
-		for( let manager of this.services )
+		this.services.push( service );
+	}
+
+	private static async StartAll() : Promise< any >
+	{
+		for( let service of Server.services )
 		{
 			let tick = new Date().getTime();
+			let name = service.constructor.name + ":";
 
-			let name = manager.constructor.name + ":";
+			service.State = ServiceState.None;
+			
+			Console.Write( `Starting %-70s`, name );
 
-			manager.State = ServiceState.None;
+			try
+			{
+				await service.Start();
 
-			manager.Start().then(
-				( info ) =>
+				service.State = ServiceState.OK;
+
+				let tick_count = ( new Date().getTime() - tick ) / 1000;
+
+				Console.Write( `[  ${Console.FgGreen}OK${Console.Reset}  ] % 5.3f ms\n`, tick_count );
+			}
+			catch( error )
+			{
+				service.State = ServiceState.Error;
+
+				Console.Write( `[${Console.FgRed}FAILED${Console.Reset}]\n` );
+
+				if( error )
 				{
-					manager.State = ServiceState.OK;
-
-					let tick_count = ( new Date().getTime() - tick ) / 1000;
-
-					Console.WriteLine( `Starting %-70s [  ${Console.FgGreen}OK${Console.Reset}  ] % 5.3f ms`, name, tick_count );
+					Console.WriteLine( '%s', error.stack || error );
 				}
-			).catch(
-				( error : Error ) =>
-				{
-					manager.State = ServiceState.Error;
-
-					Console.WriteLine( `Starting %-70s [${Console.FgRed}FAILED${Console.Reset}]`, name );
-
-					if( error )
-					{
-						Console.WriteLine( '%s', error.stack || error );
-					}
-				}
-			);
+			}
 		}
 	}
 
-	private StopAll() : Promise< any >
+	private static async StopAll() : Promise< any >
 	{
-		let promises = [];
-
-		for( let manager of this.services )
+		for( let service of Server.services )
 		{
-			let promise = new Promise(
-				( resolve, reject ) =>
+			if( service.State != ServiceState.OK )
+			{
+				continue;
+			}
+
+			let tick = new Date().getTime();
+			let name = service.constructor.name + ":";
+
+			Console.Write( `Stopping %-70s`, name );
+
+			try
+			{
+				await service.Stop();
+
+				service.State = ServiceState.None;
+
+				let tick_count = ( new Date().getTime() - tick ) / 1000;
+
+				Console.Write( `[  ${Console.FgGreen}OK${Console.Reset}  ] % 5.3f ms\n`, tick_count );
+			}
+			catch( error )
+			{
+				Console.Write( `[${Console.FgRed}FAILED${Console.Reset}]\n` );
+
+				if( error )
 				{
-					if( manager.State != ServiceState.OK )
-					{
-						resolve();
-
-						return;
-					}
-
-					let tick = new Date().getTime();
-
-					let name = manager.constructor.name + ":";
-
-					manager.Stop().then(
-						( info ) =>
-						{
-							manager.State = ServiceState.None;
-
-							let tick_count = ( new Date().getTime() - tick ) / 1000;
-
-							Console.WriteLine( `Stopping %-70s [  ${Console.FgGreen}OK${Console.Reset}  ] % 5.3f ms`, name, tick_count );
-
-							resolve();
-						}
-					).catch(
-						( error : Error ) =>
-						{
-							Console.WriteLine( `Stopping %-70s [${Console.FgRed}FAILED${Console.Reset}]`, name );
-
-							if( error )
-							{
-								Console.WriteLine( '%s', error.stack || error );
-							}
-
-							resolve();
-						}
-					);
+					Console.WriteLine( '%s', error.stack || error );
 				}
-			);
-
-			promises.push( promise );
+			}
 		}
-
-		return Promise.all( promises );
 	}
 
-	private DoPulse() : void
+	private static DoPulse() : void
 	{
 		let date = new Date();
 		let tick = date.getTime();
 
-		for( let manager of this.services )
+		for( let service of Server.services )
 		{
-			if( manager.GetState() != ServiceState.OK )
+			if( service.GetState() != ServiceState.OK )
 			{
 				continue;
 			}
 
 			let tick2 = new Date().getTime();
 			
-			manager.DoPulse( date );
+			service.DoPulse( date );
 			
-			this.DebugTicks[ manager.constructor.name ] = ( ( new Date().getTime() - tick2 ) / 1000 );
+			this.debugTicks[ service.constructor.name ] = ( ( new Date().getTime() - tick2 ) / 1000 );
 		}
 
 		if( Server.CountDown > 0 )
@@ -203,21 +191,19 @@ export default class Server implements ServerInterface
 			}
 		}
 
-		this.DebugTicks[ "DoPulse" ] = ( ( new Date().getTime() - tick ) / 1000 );
-	}
-	
-	public RegisterService( service : ServiceInterface ) : void
-	{
-		this.services.push( service );
+		this.debugTicks[ "DoPulse" ] = ( ( new Date().getTime() - tick ) / 1000 );
 	}
 
-	public Restart() : void
+	public static Restart() : void
 	{
-		this.StopAll().then( () => this.StartAll() );
+		this.StopAll();
+		this.StartAll();
 	}
 
-	public Shutdown() : void
+	public static Shutdown() : void
 	{
-		this.StopAll().then( () => setTimeout( () => process.exit(), 2000 ) );
+		this.StopAll();
+		
+		setTimeout( () => process.exit(), 2000 );
 	}
 }

@@ -13,6 +13,7 @@
 import * as ORM                   from "typeorm";
 import * as Config                from "nconf";
 import * as Entity                from "../Entity";
+import { Server }                 from "../Server";
 import { ServiceBase }            from "./ServiceBase";
 import { DatabaseService }        from "./DatabaseService";
 import { CharacterNameValidator } from "../Security/Validator/CharacterNameValidator";
@@ -23,12 +24,11 @@ export class CharacterService extends ServiceBase
 	private nameValidator   : CharacterNameValidator               = null;
 	private repository      : ORM.Repository< CharacterInterface > = null;
 
-	public constructor( server : ServerInterface )
+	public constructor()
 	{
-		super( server );
+		super();
 
-		this.database      = server.DatabaseService as DatabaseService;
-		this.Dependency    = server.DatabaseService;
+		this.database      = Server.DatabaseService as DatabaseService;
 		this.nameValidator = new CharacterNameValidator();
 
 		this.RegisterEvent( "playerCharacterCreate", this.OnCreate );
@@ -37,14 +37,9 @@ export class CharacterService extends ServiceBase
 		this.RegisterEvent( "playerCharacterLogout", this.OnLogout );
 	}
 
-	public Start() : Promise< any >
+	public async Start() : Promise< any >
 	{
-		return super.Start().then(
-			() =>
-			{
-				this.repository = this.database.GetRepository( Entity.Character );
-			}
-		);
+		this.repository = this.database.GetRepository( Entity.Character );
 	}
 
 	protected GetRepository() : ORM.Repository< CharacterInterface >
@@ -56,11 +51,11 @@ export class CharacterService extends ServiceBase
 	{
 		this.nameValidator.Validate( name );
 
-		let user = player.GetUser();
+		let user = player.GetAccount();
 
 		if( !user.IsGranted( Permission.UnlimitedCharacters ) )
 		{
-			let chars = await this.repository.count( { user_id: user.GetID() } );
+			let chars = await this.repository.count( { account_id: user.GetID() } );
 
 			if( chars > Config.get( "characters:max_per_user" ) )
 			{
@@ -77,7 +72,7 @@ export class CharacterService extends ServiceBase
 
 		let char = new Entity.Character( player );
 
-		char.SetUser( user );
+		char.SetAccount( user );
 		char.SetName( name );
 
 		return this.repository.persist( char ).then( char => this.OnSelect( player, char ) );

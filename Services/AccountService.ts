@@ -12,6 +12,7 @@
 
 import * as ORM            from "typeorm";
 import * as Entity         from "../Entity";
+import { Server }          from "../Server";
 import { PlayerService }   from "./PlayerService";
 import { ServiceBase }     from "./ServiceBase";
 import { DatabaseService } from "./DatabaseService";
@@ -23,23 +24,22 @@ import { UserEmailValidator }            from "../Security/Validator/UserEmailVa
 import { UserNameValidator }             from "../Security/Validator/UserNameValidator";
 import { UserPasswordValidator }         from "../Security/Validator/UserPasswordValidator";
 
-export class AccountService extends ServiceBase implements UserManagerInterface
+export class AccountService extends ServiceBase implements AccountManagerInterface
 {
-	private roles                 : Entity.UserRole[];
+	private roles                 : Entity.AccountRole[];
 
 	private database              : DatabaseService                   = null;
-	private repository            : ORM.Repository< UserInterface >   = null;
-	private repositoryRole        : ORM.Repository< Entity.UserRole > = null;
+	private repository            : ORM.Repository< AccountInterface >   = null;
+	private repositoryRole        : ORM.Repository< Entity.AccountRole > = null;
 	private authenticationManager : AuthenticationProviderManager     = null;
 
-	public constructor( server : ServerInterface )
+	public constructor()
 	{
-		super( server );
+		super();
 
 		this.roles      = [];
 
-		this.database   = server.DatabaseService as DatabaseService;
-		this.Dependency = server.DatabaseService;
+		this.database   = Server.DatabaseService as DatabaseService;
 
 		this.RegisterEvent( "playerTryLogin", this.OnPlayerTryLogin );
 		this.RegisterEvent( "playerLogin",    this.OnPlayerLogin );
@@ -47,34 +47,29 @@ export class AccountService extends ServiceBase implements UserManagerInterface
 		this.RegisterEvent( "playerRegister", this.OnPlayerRegister );
 	}
 
-	public Start() : Promise< any >
+	public async Start() : Promise< any >
 	{
-		return super.Start().then(
-			() =>
-			{
-				this.repository     = this.database.GetRepository( Entity.User );
-				this.repositoryRole = this.database.GetRepository( Entity.UserRole );
+		this.repository     = this.database.GetRepository( Entity.Account );
+		this.repositoryRole = this.database.GetRepository( Entity.AccountRole );
 
-				this.authenticationManager = new AuthenticationProviderManager( [ new AuthenticationProvider( this ) ], true );
+		this.authenticationManager = new AuthenticationProviderManager( [ new AuthenticationProvider( this ) ], true );
 
-				return this.repositoryRole.find().then( roles => this.roles = roles );
-			}
-		);
+		return this.repositoryRole.find().then( roles => this.roles = roles );
 	}
 
-	public LoadByUsername( name : string ) : Promise< UserInterface >
+	public LoadByUsername( name : string ) : Promise< AccountInterface >
 	{
 		return this.repository.findOne( { name: name } );
 	}
 
-	public LoadByLogin( login : string ) : Promise< UserInterface >
+	public LoadByLogin( login : string ) : Promise< AccountInterface >
 	{
 		return this.repository.findOne( { email: login } );
 	}
 
 	private async OnPlayerTryLogin( player : PlayerInterface, login : string, password : string ) : Promise< any >
 	{
-		if( player.GetUser() )
+		if( player.GetAccount() )
 		{
 			throw new Exception( "Вы уже авторизованы" );
 		}
@@ -86,24 +81,24 @@ export class AccountService extends ServiceBase implements UserManagerInterface
 			{
 				player.Login( token );
 
-				let user = token.GetUser();
+				let user = token.GetAccount();
 
 				user[ '_roles' ].map( roleId => this.roles[ roleId ] && user.AddRole( this.roles[ roleId ] ) );
 
-				let repositoryAuth = this.database.GetRepository( Entity.UserAuth );
+				let repositoryAuth = this.database.GetRepository( Entity.AccountAuth );
 
 				return repositoryAuth.persist( user[ 'tokens' ][ 0 ] );
 			}
 		);
 	}
 
-	private async OnPlayerLogin( player : PlayerInterface, user : UserInterface ) : Promise< any >
+	private async OnPlayerLogin( player : PlayerInterface, user : AccountInterface ) : Promise< any >
 	{
 		let userId = user.GetID();
 
 		for( let p of PlayerService.PlayersOnline )
 		{
-			if( p != player && p.GetUser().GetID() == userId )
+			if( p != player && p.GetAccount().GetID() == userId )
 			{
 				p.Logout();
 
@@ -131,14 +126,14 @@ export class AccountService extends ServiceBase implements UserManagerInterface
 		);
 	}
 
-	private async OnPlayerLogout( player : PlayerInterface, user : UserInterface ) : Promise< any >
+	private async OnPlayerLogout( player : PlayerInterface, user : AccountInterface ) : Promise< any >
 	{
 		return null;
 	}
 
 	private async OnPlayerRegister( player : PlayerInterface, name : string, email : string, password : string ) : Promise< any >
 	{
-		if( player.GetUser() )
+		if( player.GetAccount() )
 		{
 			throw new Exception( "Вы уже авторизованы" );
 		}
@@ -151,7 +146,7 @@ export class AccountService extends ServiceBase implements UserManagerInterface
 		validatorEmail.Validate( email );
 		validatorPassw.Validate( password );
 
-		let repository = this.database.GetRepository( Entity.User );
+		let repository = this.database.GetRepository( Entity.Account );
 
 		let countEmail = await repository.count( { email: email } );
 
@@ -167,14 +162,14 @@ export class AccountService extends ServiceBase implements UserManagerInterface
 			throw new Exception( "Этот имя пользователя уже занято, попробуйте другое" );
 		}
 
-		let user = new Entity.User();
+		let user = new Entity.Account();
 
 		user.SetName( name );
 		user.SetEmail( email );
 		user.SetPassword( password );
 
 		return repository.persist( user ).then(
-			( user : UserInterface ) =>
+			( user : AccountInterface ) =>
 			{
 				return this.OnPlayerTryLogin( player, email, password );
 			}

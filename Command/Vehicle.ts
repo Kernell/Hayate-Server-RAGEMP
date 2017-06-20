@@ -15,19 +15,20 @@ import * as Config        from "nconf";
 import { ConsoleCommand } from "./ConsoleCommand";
 import * as Entity        from "../Entity";
 import { VehicleService } from "../Services/VehicleService";
+import { Server }         from "../Server"
 
 export class Vehicle extends ConsoleCommand
 {
 	private service : VehicleService;
 
-	constructor( server : ServerInterface )
+	constructor()
 	{
-		super( server );
+		super();
 
 		this.Name       = "vehicle";
 		this.Restricted = true;
 
-		this.service = server.VehicleService as VehicleService;
+		this.service = Server.VehicleService;
 	}
 
 	private Option_create( player : PlayerInterface, option : string, args : any[] ) : Promise< any >

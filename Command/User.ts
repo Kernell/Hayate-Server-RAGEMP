@@ -14,9 +14,9 @@ import { ConsoleCommand } from "./ConsoleCommand";
 
 export class User extends ConsoleCommand
 {
-	constructor( server : ServerInterface )
+	constructor()
 	{
-		super( server );
+		super();
 
 		this.Name       = "user";
 		this.Restricted = true;

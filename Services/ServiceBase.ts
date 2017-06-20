@@ -10,6 +10,7 @@
 *
 *********************************************************/
 
+import { Server }       from "../Server";
 import * as Entity      from "../Entity";
 
 type EventCallback = ( ...params : any[] ) => Promise< any >;
@@ -18,17 +19,13 @@ type EventsArray   = [ EventType ];
 
 export class ServiceBase implements ServiceInterface
 {
-	protected Server     : ServerInterface;
-	protected Dependency : ServiceInterface;
-	public    State      : ServiceState;
+	public State : ServiceState;
 
-	constructor( server : ServerInterface )
+	constructor()
 	{
-		server.RegisterService( this );
-		
-		this.Server      = server;
-		this.Dependency  = null;
-		this.State       = ServiceState.None;
+		Server.RegisterService( this );
+
+		this.State = ServiceState.None;
 	}
 
 	protected RegisterEvent( event : string, handler: EventCallback )
@@ -100,39 +97,14 @@ export class ServiceBase implements ServiceInterface
 		return this.State;
 	}
 	
-	public Start() : Promise< any >
+	public async Start() : Promise< any >
 	{
-		return new Promise(
-			( resolve, reject ) =>
-			{
-				if( this.Dependency != null )
-				{
-					let timeout = () =>
-					{
-						if( this.Dependency.GetState() == ServiceState.OK )
-						{
-							return resolve();
-						}
-
-						if( this.Dependency.GetState() == ServiceState.Error )
-						{
-							return reject();
-						}
-				
-						setTimeout( timeout, 100 );
-					};
-
-					return timeout();
-				}
-
-				return resolve();
-			}
-		);
+		return null;
 	}
 
-	public Stop() : Promise< any >
+	public async Stop() : Promise< any >
 	{
-		return new Promise( ( resolve, reject ) => resolve() );
+		return null;
 	}
 
 	public DoPulse( date : Date ) : void

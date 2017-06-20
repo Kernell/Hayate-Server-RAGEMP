@@ -14,9 +14,9 @@ import { ConsoleCommand } from "./ConsoleCommand";
 
 export class Character extends ConsoleCommand
 {
-	constructor( server : ServerInterface )
+	constructor()
 	{
-		super( server );
+		super();
 
 		this.Name = "char";
 	}

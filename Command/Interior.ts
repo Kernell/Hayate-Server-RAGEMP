@@ -19,9 +19,9 @@ export class Interior extends ConsoleCommand
 {
 	private interiors : [ { name : string, position : number[] } ];
 
-	constructor( server : ServerInterface )
+	constructor()
 	{
-		super( server );
+		super();
 
 		this.interiors = require( '../../Config/interiors.json' );
 

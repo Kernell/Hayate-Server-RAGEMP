@@ -11,6 +11,7 @@
 *********************************************************/
 
 import * as ORM            from "typeorm";
+import { Server }          from "../Server";
 import { Vehicle }         from "../Entity/Vehicle";
 import { ServiceBase }     from "./ServiceBase";
 import { DatabaseService } from "./DatabaseService";
@@ -20,12 +21,11 @@ export class VehicleService extends ServiceBase
 	private list       : Array< Vehicle >;
 	private repository : ORM.Repository< Vehicle > = null;
 
-	constructor( server : ServerInterface )
+	constructor()
 	{
-		super( server );
+		super();
 
-		this.list       = new Array< Vehicle >();
-		this.Dependency = server.DatabaseService;
+		this.list = new Array< Vehicle >();
 
 		this.WrapEvent( "playerExitVehicle", this.OnPlayerExitVehicle );
 	}
@@ -55,47 +55,31 @@ export class VehicleService extends ServiceBase
 		return this.repository;
 	}
 
-	public Start() : Promise< any >
+	public async Start() : Promise< any >
 	{
-		return super.Start().then(
-			async () =>
-			{
-				this.repository = ( this.Dependency as DatabaseService ).GetRepository( Vehicle );
+		this.repository = Server.DatabaseService.GetRepository( Vehicle );
 
-				try
+		return this.repository.find().then(
+			( vehicles ) =>
+            {
+				for( let vehicle of vehicles )
 				{
-					let vehicles = await this.repository.find();
+					vehicle.Create();
 
-					for( let vehicle of vehicles )
-					{
-						vehicle.Create();
-
-						this.list.push( vehicle );
-					}
+					this.list.push( vehicle );
 				}
-				catch( e )
-				{
-					console.log( e );
-				}
-			}
+            }
 		);
 	}
 
-	public Stop() : Promise< any >
+	public async Stop() : Promise< any >
 	{
-		return new Promise(
-			( resolve, reject ) =>
-			{
-				for( let vehicle of this.list )
-				{
-					vehicle.Persist( this.repository );
+		for( let vehicle of this.list )
+		{
+			await vehicle.Persist( this.repository );
 
-					this.list.remove( vehicle );
-				}
-
-				resolve();
-			}
-		);
+			this.list.remove( vehicle );
+		}
 	}
 
 	public async Create( model : VehicleModel, position : Vector3, rotation : Vector3, dimension : number ) : Promise< Vehicle >

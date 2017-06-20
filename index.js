@@ -17,7 +17,7 @@ if( process.env.NODE_ENV == 'development' )
 
 global.printf = require( "printf" );
 
-const fs     = require( 'fs' );
+const fs = require( 'fs' );
 
 let include = ( fileName ) =>
 {
@@ -28,7 +28,12 @@ let include = ( fileName ) =>
 
 	let typeName = fileName.replace( /\.js$/i, '' );
 
-	global[ typeName ] = require( './bin/Globals/' + fileName );
+	let _export = require( './bin/Globals/' + fileName );
+
+	if( typeof _export != "undefined" )
+	{
+		global[ typeName ] = _export;
+	}
 }
 
 include( 'IdentifiedPool.js' );
@@ -41,9 +46,9 @@ Vector3 = global[ "Vector3" ];
 setTimeout(
 	() => 
 	{
-		let Server = require( "./bin/Server" ).default;
+		let Server = require( "./bin/Server" ).Server;
 
-		new Server();
+		Server.Main();
 	},
 	100
 );

@@ -196,14 +196,11 @@ export class Server
 
 	public static Restart() : void
 	{
-		this.StopAll();
-		this.StartAll();
+		this.StopAll().then( () => this.StartAll() );
 	}
 
 	public static Shutdown() : void
 	{
-		this.StopAll();
-		
-		setTimeout( () => process.exit(), 2000 );
+		this.StopAll().then( () => setTimeout( () => process.exit(), 1000 ) );
 	}
 }

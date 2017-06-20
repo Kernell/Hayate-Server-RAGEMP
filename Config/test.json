@@ -1,0 +1,19 @@
+﻿{
+    "database":
+    {
+        "driver": "mysql",
+        "host": "91.201.41.35",
+        "port": 3306,
+        "user": "hayate_test",
+        "password": "hnBBAx1sTWyfyzVN",
+        "database": "hayate_test"
+    },
+    "characters":
+    {
+        "max_per_user": 5
+    },
+    "vehicles":
+    {
+        "temp_max": 128
+    }
+}

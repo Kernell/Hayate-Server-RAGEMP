@@ -26,8 +26,6 @@ export class VehicleService extends ServiceBase
 		super();
 
 		this.list = new Array< Vehicle >();
-
-		this.WrapEvent( "playerExitVehicle", this.OnPlayerExitVehicle );
 	}
 
 	public Add( vehicle : Vehicle ) : void
@@ -37,7 +35,7 @@ export class VehicleService extends ServiceBase
 
 	public Get( id : number ) : Vehicle
 	{
-		return this.list.find( ( vehicle, index ) => vehicle.GetID() == id );
+		return this.list.find( vehicle => vehicle.GetID() == id );
 	}
 
 	public GetAll() : Array< Vehicle >
@@ -57,7 +55,7 @@ export class VehicleService extends ServiceBase
 
 	public async Start() : Promise< any >
 	{
-		this.repository = Server.DatabaseService.GetRepository( Vehicle );
+		this.repository = DatabaseService.GetRepository( Vehicle );
 
 		return this.repository.find().then(
 			( vehicles ) =>
@@ -94,14 +92,12 @@ export class VehicleService extends ServiceBase
 		return vehicle.Persist( this.repository );
 	}
 
-	private async OnPlayerExitVehicle( player : PlayerInterface ) : Promise< void >
+	private async PlayerExitVehicle( connection : IConnection ) : Promise< void >
 	{
-		let char = player.GetCharacter();
-
-		if( char != null )
+		if( connection.Player != null )
 		{
-			let vehicle = char.GetVehicle() as Vehicle;
-			let seat    = char.GetVehicleSeat();
+			let vehicle = connection.Player.GetVehicle() as Vehicle;
+			let seat    = connection.Player.GetVehicleSeat();
 
 			if( seat == 0 && vehicle != null )
 			{

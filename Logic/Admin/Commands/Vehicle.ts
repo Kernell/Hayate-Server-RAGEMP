@@ -26,7 +26,6 @@ export class Vehicle extends AdminCommand
 	{
 		super();
 
-		this.name       = "vehicle";
 		this.restricted = true;
 
 		this.service = Server.VehicleService;

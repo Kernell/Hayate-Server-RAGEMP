@@ -32,7 +32,7 @@ export class AdminLogic
 		this.console  = new Console();
 		this.Commands = new Array< AdminCommand >();
 
-		process.stdin.on( "data", input => this.ProcessChatMessage( this.console, input.toString().trim() ) );
+		process.stdin.on( "data", input => this.ProcessChatMessage( this.console, "/" + input.toString().trim() ) );
 
 		process.on( 'SIGINT', () => this.OnSigint() );
 	}
@@ -67,22 +67,35 @@ export class AdminLogic
 		return true;
 	}
 
-	public ProcessChatMessage( connection : IConnection, line : string ) : void
+	public ProcessChatMessage( connection : IConnection, line : string ) : boolean
 	{
-		if( line.length == 0 )
+		if( line.length <= 1 )
 		{
-			return;
+			return false;
 		}
 
+		if( line[ 0 ] != "/" && line[ 0 ] != "!" )
+		{
+			return false;
+		}
+
+		line = line.substring( 1 );
+
 		let commandArgv = line.split( ' ' );
+
+		if( commandArgv.length == 0 )
+		{
+			return false;
+		}
+
 		let commandName = commandArgv.shift();
 
-		let command = this.GetCommand( commandName );
-		
 		if( !this.Execute( connection, commandName, commandArgv ) )
 		{
 			connection.Send( new ServerPacket.ChatMessage( `${commandName}: command not found`, ChatType.Notice ) );
 		}
+
+		return true;
 	}
 
 	protected Execute( connection : IConnection, commandName : string, argv : any[] ) : boolean
@@ -114,11 +127,11 @@ export class AdminLogic
                 {
 					if( error instanceof Exception )
 					{
-						connection.Send( new ServerPacket.ChatMessage( `<span style='color: #FF8800;'>${error.message}</span>`, ChatType.Notice ) );
+						connection.Send( new ServerPacket.ChatMessage( `${error.message}`, ChatType.Notice ) );
 					}
 					else
 					{
-						let msg = "<span style='color: #FF8800;'>Что-то пошло не так. Мы работаем над тем, чтобы исправить это как можно скорее. Вы сможете попробовать снова спустя какое-то время</span>";
+						let msg = "Что-то пошло не так. Мы работаем над тем, чтобы исправить это как можно скорее. Вы сможете попробовать снова спустя какое-то время";
 
 						connection.Send( new ServerPacket.ChatMessage( msg, ChatType.Notice ) );
 

@@ -69,7 +69,14 @@ export class Server
 
 		Server.AdminLogic       = new AdminLogic();
 
-		await Server.StartAll();
+		try
+		{
+			await Server.StartAll();
+		}
+		catch( e )
+		{
+			Console.WriteLine( `${Console.FgRed}%s${Console.Reset}`, e.stack );
+		}
 
 		Server.ScsServer.BeginListening();
 	
@@ -114,6 +121,8 @@ export class Server
 				}
 			}
 		}
+
+		await Server.AdminLogic.Start();
 	}
 
 	private static async StopAll() : Promise< any >

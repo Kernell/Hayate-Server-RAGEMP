@@ -24,7 +24,7 @@ export class Interior extends AdminCommand
 	{
 		super();
 
-		this.interiors = require( '../../Config/interiors.json' );
+		this.interiors = require( '../../../../Config/interiors.json' );
 
 		this.restricted = true;
 	}

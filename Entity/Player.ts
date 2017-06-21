@@ -28,7 +28,6 @@ export class Player implements PlayerInterface
 	@ORM.JoinColumn( { name: "account_id" } )
 	protected account : Account;
 
-	@ORM.Column( "int" )
 	protected level : number = 1;
 
 	@ORM.Column( "bigint" )

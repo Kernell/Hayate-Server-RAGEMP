@@ -12,10 +12,11 @@
 
 import * as printf        from "printf";
 import * as Config        from "nconf";
-import { ConsoleCommand } from "./ConsoleCommand";
-import * as Entity        from "../Entity";
+import * as Entity        from "../../../Entity";
+import * as ServerPacket  from "../../../Network/Packets";
+import { AdminCommand }   from "../AdminCommand";
 
-export class Interior extends ConsoleCommand
+export class Interior extends AdminCommand
 {
 	private interiors : [ { name : string, position : number[] } ];
 
@@ -25,12 +26,16 @@ export class Interior extends ConsoleCommand
 
 		this.interiors = require( '../../Config/interiors.json' );
 
-		this.Name       = "interior";
-		this.Restricted = true;
+		this.restricted = true;
 	}
 
-	private Option_show( player : PlayerInterface, option : string, args : any[] ) : void
+	private Option_show( connection : IConnection, option : string, args : any[] ) : void
 	{
+		if( connection.Player == null )
+		{
+			return;
+		}
+
 		let id = args.shift();
 
 		let interior = this.interiors[ id ];
@@ -39,14 +44,14 @@ export class Interior extends ConsoleCommand
 		{
 			let position = new Vector3( interior.position[ 0 ], interior.position[ 1 ], interior.position[ 2 ] );
 			
-			player.SetPosition( position );
+			connection.Player.SetPosition( position );
 
-			player.OutputChatBox( "Location ID: " + id + ", Name: " + interior.name );
+			connection.Send( new ServerPacket.ChatMessage( "Location ID: " + id + ", Name: " + interior.name, ChatType.Notice ) );
 		}
 	}
 
-	private Option_undefined( player : PlayerInterface, option : string, args : any[] )
+	private Option_undefined( connection : IConnection, option : string, args : any[] )
 	{
-		player.OutputChatBox( "Syntax: /" + this.Name + " <option>" );
+		throw new Exception( "Syntax: /" + this.name + " <option>" );
 	}
 }

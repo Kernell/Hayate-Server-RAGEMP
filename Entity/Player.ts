@@ -10,21 +10,93 @@
 *
 *********************************************************/
 
-import { Entity }                from "./Entity";
-import { Account }               from "./Account";
-import { UsernamePasswordToken } from "../Security/Token/UsernamePasswordToken";
+import * as ORM from "typeorm";
 
-export class Player extends Entity implements PlayerInterface
+import { Entity } from "./Entity";
+import { Vehicle } from "./Vehicle";
+import { Account } from "./Account";
+
+@ORM.Entity( "characters" )
+export class Player implements PlayerInterface
 {
-	protected account : AccountInterface;
-	protected char    : CharacterInterface;
-	protected entity  : mp.Player;
+	public static readonly MONEY_MAX = 0xFFFFFFFF;
 
-	public constructor( entity : mp.Entity )
+	@ORM.PrimaryGeneratedColumn()
+	protected id  : number;
+	
+	@ORM.ManyToOne( type => Account )
+	@ORM.JoinColumn( { name: "account_id" } )
+	protected account : Account;
+
+	@ORM.Column( "int" )
+	protected level : number = 1;
+
+	@ORM.Column( "bigint" )
+	protected experience : number = 0;
+
+	@ORM.Column( "int" )
+	protected model : number = Ped.Player_Zero;
+
+	@ORM.Column( "json" )
+	protected position : Vector3 = new Vector3( -435.517, 1123.620, 325.8544 );
+
+	@ORM.Column( "json" )
+	protected rotation : Vector3 = new Vector3();
+
+	@ORM.Column( "int" )
+	protected dimension : number = 0;
+
+	@ORM.Column()
+	protected name : string;
+	
+	@ORM.Column( "bigint" )
+	protected money : number = 0;
+	
+	@ORM.Column( "float" )
+	protected health : number = 1000;
+
+	@ORM.Column( "float" )
+	protected armor : number = 0;
+
+	@ORM.Column( { name: "eye_color", type: "int" } )
+	protected eyeColor : number = 0;
+
+	@ORM.Column( { name: "hair_highlight_color", type: "int" } )
+	protected hairHighlightColor : number = 0;
+
+	@ORM.CreateDateColumn( { name: "created_at" } )
+	protected createdAt : Date;
+
+	@ORM.Column( { type: "datetime", name: "deleted_at", nullable: true, default: null } )
+	protected deletedAt : Date;
+
+	public Connection : IConnection;
+
+	private entity : mp.Player;
+
+	public GetID() : number
 	{
-		super( entity )
+		return this.id;
+	}
 
-		this.char = null;
+	public GetName() : string
+	{
+		return this.name;
+	}
+
+	public Delete() : void
+	{
+		this.deletedAt = new Date();
+	}
+
+	public IsDeleted() : boolean
+	{
+		return this.deletedAt != null;
+	}
+
+	public Restore() : void
+	{
+		this.deletedAt = null;
 	}
 
 	public GetAccount() : AccountInterface
@@ -32,76 +104,329 @@ export class Player extends Entity implements PlayerInterface
 		return this.account;
 	}
 
-	public GetCharacter() : CharacterInterface
+	public SetAccount( account : AccountInterface ) : void
 	{
-		return this.char;
+		this.account = account as Account;
+	}
+	
+	public SetName( name : string ) : void
+	{
+		this.entity.name = this.name = name;
 	}
 
-	public SetCharacter( char : CharacterInterface )
+	public GetLevel() : number
 	{
-		this.char = char;
+		return this.level;
 	}
 
-	public GetName() : string
+	public SetLevel( level : number ) : void
 	{
-		return this.entity.name;
+		this.level = level;
 	}
 
-	public GetPing() : number
+	public GetExperience() : number
 	{
-		return this.entity.ping;
+		return this.experience;
 	}
 
-	public GetIP() : string
+	public SetExperience( experience : number ) : void
 	{
-		return this.entity.ip;
+		this.experience = experience;
 	}
 
-	public OutputChatBox( text : string ) : void
+	public Spawn( position ?: Vector3, rotation ?: Vector3, dimension ?: number ) : void
 	{
-		this.entity.outputChatBox( text );
+		let _rotation = rotation || this.rotation;
+
+		this.entity.spawn( this.position = position || this.position );
+
+		this.entity.heading   = _rotation.z;
+		this.entity.dimension = dimension || this.dimension;
+
+		this.entity.name                = this.name;
+		this.entity.model               = this.model;
+		this.entity.health              = this.health;
+		this.entity.armour              = this.armor;
+		this.entity.eyeColour           = this.eyeColor;
+	//	this.entity.hairHighlightColour = this.hairHighlightColor;
 	}
 
-	public Invoke( hash : string, ...args : any[] ) : void
+	public GetModel() : Ped
 	{
-		this.entity.invoke( hash, ...args );
+		return this.entity.model;
 	}
 
-	public Call( eventName : string, ...args : any[] ) : void
+	public SetModel( model : Ped ) : void
 	{
-		this.entity.call( eventName, ...args );
+		this.entity.model = this.model = model;
 	}
 
-	public Notify( message : string ) : void
+	public GetAlpha() : number
 	{
-		this.entity.notify( message );
+		return this.entity.alpha;
 	}
 
-	public Kick( reason : string  = "" ) : void
+	public SetAlpha( alpha : number ) : void
 	{
-		this.entity.kick( reason );
+		this.entity.alpha = alpha;
 	}
 
-	public Ban( reason : string = "" ) : void
+	public GetPosition() : Vector3
 	{
-		this.entity.ban( reason );
+		let position = this.entity.position;
+
+		return new Vector3( position.x, position.y, position.z );
 	}
 
-	public Login( token : UsernamePasswordToken ) : void
+	public SetPosition( position : Vector3 ) : void
 	{
-		let account = token.GetAccount() as Account;
-		
-		account.Login( token );
-
-		this.account = account;
-
-		Event.Call( "playerLogin", this, account );
+		this.entity.position = this.position = position;
 	}
 
-	public Logout() : void
+	public GetDimension() : number
 	{
-		Event.Call( "playerLogout", this, this.account );
+		return this.entity.dimension;
+	}
 
-		this.account = null;
+	public SetDimension( dimension : number ) : void
+	{
+		this.entity.dimension = this.dimension = dimension;
+	}
+
+	public GetRotation() : Vector3
+	{
+		return new Vector3( 0, 0, this.entity.heading );
+	}
+
+	public SetRotation( rotation : Vector3 ) : void
+	{
+		this.entity.heading = ( this.rotation = rotation ).Z;
+	}
+
+	public SetMoney( money : number ) : void
+	{
+		this.money = money;
+	}
+
+	public GetMoney() : number
+	{
+		return this.money;
+	}
+
+	public TakeMoney( value : number ) : boolean
+	{
+		if( this.money >= value )
+		{
+			this.money -= value;
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public GiveMoney( value : number ) : boolean
+	{
+		if( this.money + value <= Player.MONEY_MAX )
+		{
+			this.money += value;
+			
+			return true;
+		}
+
+		return false;
+	}
+
+	public GetHealth() : number
+	{
+		return this.entity.health;
+	}
+
+	public SetHealth( health : number ) : void
+	{
+		this.entity.health = this.health = health;
+	}
+
+	public GetArmor() : number
+	{
+		return this.entity.armour;
+	}
+
+	public SetArmor( armor : number ) : void
+	{
+		this.entity.armour = this.armor = armor;
+	}
+
+	public GetEyeColor() : number
+	{
+		return this.entity.eyeColour;
+	}
+
+	public SetEyeColor( eyeColor : number ) : void
+	{
+		this.entity.eyeColour = this.eyeColor = eyeColor;
+	}
+
+	public GetHairColor() : number
+	{
+		return this.entity.hairColour;
+	}
+
+	public SetHairColor( hairColor : number ) : void;
+	public SetHairColor( firstColor : number, secondColor : number ) : void;
+
+	public SetHairColor( firstColor : number, secondColor ?: any ) : void
+	{
+		if( secondColor == null )
+		{
+			this.entity.hairColour = firstColor;
+
+			return;
+		}
+
+		this.entity.setHairColour( firstColor, secondColor );
+	}
+
+	public GetHairHighlightColor() : number
+	{
+		return this.entity.hairHighlightColour;
+	}
+
+	public SetHairHighlightColor( hairHighlightColor : number ) : void
+	{
+		this.entity.hairHighlightColour = this.hairHighlightColor = hairHighlightColor;
+	}
+
+	public GetAction() : string
+	{
+		return this.entity.action;
+	}
+
+	public IsInVehicle() : boolean
+	{
+		return this.entity.vehicle != null;
+	}
+
+	public GetVehicle() : VehicleInterface
+	{
+		return this.entity.vehicle ? Vehicle.FindOrCreate< Vehicle >( this.entity.vehicle ) : null;
+	}
+
+	public GetVehicleSeat() : number
+	{
+		return this.entity.seat;
+	}
+
+	public GetWeapon() : number
+	{
+		return this.entity.weapon;
+	}
+
+	public IsAiming() : boolean
+	{
+		return this.entity.isAiming;
+	}
+
+	public IsJumping() : boolean
+	{
+		return this.entity.isJumping;
+	}
+
+	public IsInCover() : boolean
+	{
+		return this.entity.isInCover;
+	}
+
+	public IsClimbing() : boolean
+	{
+		return this.entity.isClimbing;
+	}
+
+	public IsEnteringVehicle() : boolean
+	{
+		return this.entity.isEnteringVehicle;
+	}
+
+	public IsLeavingVehicle() : boolean
+	{
+		return this.entity.isLeavingVehicle;
+	}
+
+	public GiveWeapon( weapon : Weapon, ammo : number ) : void;
+	public GiveWeapon( weapon : Weapon[], ammo : number ) : void;
+	
+	public GiveWeapon( weapon : any, ammo : number ) : void
+	{
+		this.entity.giveWeapon( weapon, ammo );
+	}
+
+	public GetClothes( component : mp.PlayerClothesComponent ) : mp.PlayerClothes
+	{
+		return this.entity.getClothes( component );
+	}
+
+	public SetClothes( component : mp.PlayerClothesComponent, drawable : number, texture : number, palette : number ) : void
+	{
+		this.entity.setClothes( component, drawable, texture, palette );
+	}
+
+	public GetProp( prop : mp.PlayerPropID ) : mp.PlayerProp
+	{
+		return this.entity.getProp( prop );
+	}
+
+	public SetProp( prop : mp.PlayerPropID, drawable : number, texture : number ) : void
+	{
+		this.entity.setProp( prop, drawable, texture );
+	}
+
+	public PutIntoVehicle( vehicle : VehicleInterface, seat : number ) : void
+	{
+		this.entity.putIntoVehicle( vehicle.GetEntity() as mp.Vehicle, seat );
+	}
+
+	public RemoveFromVehicle() : void
+	{
+		this.entity.removeFromVehicle();
+	}
+
+	public GetHeadBlend() : mp.PlayerBlend
+	{
+		return this.entity.getHeadBlend();
+	}
+
+	public SetHeadBlend( shapeFirstID : number, shapeSecondID : number, shapeThirdID : number, skinFirstID : number, skinSecondID : number, skinThirdID : number, shapeMix : number, skinMix : number, thirdMix : number ) : void
+	{
+		this.entity.setHeadBlend( shapeFirstID, shapeSecondID, shapeThirdID, skinFirstID, skinSecondID, skinThirdID, shapeMix, skinMix, thirdMix );
+	}
+
+	public UpdateHeadBlend( ...args : any[] ) : void
+	{
+		this.entity.updateHeadBlend( ...args );
+	}
+
+	public SetFaceFeature( index : number, scale : number ) : void
+	{
+		this.entity.setFaceFeature( index, scale );
+	}
+
+	public GetFaceFeature() : void
+	{
+		return this.GetFaceFeature();
+	}
+
+	public PlayAnimation( block : string, anim : string ) : void
+	{
+		this.entity.playAnimation( block, anim );
+	}
+
+	public PlayScenario( ...args : any[] ) : void
+	{
+		this.entity.playScenario( ...args );
+	}
+
+	public StopAnimation( ...args : any[] ) : void
+	{
+		this.entity.stopAnimation( ...args );
 	}
 }

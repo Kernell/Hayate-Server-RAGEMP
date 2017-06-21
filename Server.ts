@@ -13,23 +13,23 @@
 import "reflect-metadata";
 
 import * as Config          from "nconf";
-
+import { ScsServer }        from "./ScsServer";
 import { ServiceBase }      from "./Services/ServiceBase";
 import { AccountService }   from "./Services/AccountService";
-import { CommandService }   from "./Services/CommandService";
 import { DatabaseService }  from "./Services/DatabaseService";
 import { PlayerService }    from "./Services/PlayerService";
-import { CharacterService } from "./Services/CharacterService";
 import { VehicleService }   from "./Services/VehicleService";
+import { AdminLogic }       from "./Logic/Admin/AdminLogic";
 
 export class Server
 {
+	public static ScsServer          : ScsServer;
+
 	public static DatabaseService    : DatabaseService;
-	public static CommandService     : CommandService;
 	public static PlayerService      : PlayerService;
-	public static CharacterService   : CharacterService;
 	public static AccountService     : AccountService;
 	public static VehicleService     : VehicleService;
+	public static AdminLogic         : AdminLogic;
 
 	public static COUNTDOWN_NONE     = 0;
 	public static COUNTDOWN_SHUTDOWN = 1;
@@ -43,7 +43,7 @@ export class Server
 	private static doPulseTimer      : NodeJS.Timer;
 	private static debugTicks        : { [ name : string ] : number };
 
-	public static Main() : void
+	public static async Main() : Promise< void >
 	{
 		Config.argv().env().defaults(
 			{
@@ -57,14 +57,18 @@ export class Server
 
 		Server.debugTicks      = {};
 
+		Server.ScsServer        = new ScsServer();
+
 		Server.DatabaseService  = new DatabaseService();
 		Server.AccountService   = new AccountService();
-		Server.CommandService   = new CommandService();
 		Server.PlayerService    = new PlayerService();
-		Server.CharacterService = new CharacterService();
 		Server.VehicleService   = new VehicleService();
 
-		Server.StartAll();
+		Server.AdminLogic       = new AdminLogic();
+
+		await Server.StartAll();
+
+		Server.ScsServer.BeginListening();
 	
 		Server.doPulseTimer = setInterval( () => this.DoPulse(), 1000 );
 	}
@@ -201,6 +205,8 @@ export class Server
 
 	public static Shutdown() : void
 	{
+		Server.ScsServer.ShutdownServer();
+
 		this.StopAll().then( () => setTimeout( () => process.exit(), 1000 ) );
 	}
 }

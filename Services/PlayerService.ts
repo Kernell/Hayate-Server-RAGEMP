@@ -10,95 +10,95 @@
 *
 *********************************************************/
 
-import * as Entity                       from "../Entity";
-import { ServiceBase }                   from "./ServiceBase";
-import { DatabaseService }               from "./DatabaseService";
+import * as ORM                   from "typeorm";
+import * as Entity                from "../Entity";
+import { ServiceBase }            from "./ServiceBase";
+import { DatabaseService }        from "./DatabaseService";
+import { CharacterNameValidator } from "../Security/Validator/CharacterNameValidator";
 
 export class PlayerService extends ServiceBase
 {
-	public static PlayersOnline = new Array< Entity.Player >();
+	private playerExperience : [ { Level : number, Experience : number } ];
+	private repository       : ORM.Repository< Entity.Player >      = null;
 
-	constructor()
+	private static playersOnline = new Array< Entity.Player >();
+
+	public static GetAll() : Array< Entity.Player >
 	{
-		super();
+		return this.playersOnline;
+	}
+	
+	public static GetByID( id : number ) : Entity.Player
+	{
+		return this.Find( player => player.GetID() == id );
+	}
 
-		this.WrapEvent( "playerJoin",     this.OnPlayerJoin );
-		this.WrapEvent( "playerQuit",     this.OnPlayerQuit );
-		this.WrapEvent( "playerDeath",    this.OnPlayerDeath );
-		this.WrapEvent( "playerSpawn",    this.OnPlayerSpawn ); 
-		this.WrapEvent( "playerChat",     this.OnPlayerChat );
+	public static GetByName( name : string ) : Entity.Player
+	{
+		return this.Find( player => player.GetName() == name );
+	}
+
+	public static Find( predicate: ( player : Entity.Player, index : number, obj : Array< Entity.Player > ) => boolean ) : Entity.Player
+	{
+		return this.playersOnline.find( predicate );
+	}
+
+	public static ValidateName( name : string ) : void
+	{
+		let nameValidator = new CharacterNameValidator();
+
+		nameValidator.Validate( name );
 	}
 
 	public async Start() : Promise< any >
 	{
-		for( let player of mp.players.toArray() )
+		this.playerExperience = require( "../../Config/playerExperience.json" );
+		this.repository       = DatabaseService.GetRepository( Entity.Player );
+	}
+
+	public async InitPlayer( player : Entity.Player ) : Promise< any >
+	{
+		let level = 1;
+		let exp   = player.GetExperience();
+
+		while( level < this.playerExperience.length && exp >= this.playerExperience[ level ].Experience )
 		{
-			this.OnPlayerJoin( Entity.Player.FindOrCreate< Entity.Player >( player ) );
+			++level;
 		}
 
-		return null;
+		player.SetLevel( level );
+
+		PlayerService.playersOnline.push( player );
 	}
 
-	public async Stop() : Promise< any >
+	public PlayerEnterWorld( player : Entity.Player ) : void
 	{
-		PlayerService.PlayersOnline.map( player => this.OnPlayerQuit( player, "server stopped", "" ) );
-
-		return null;
 	}
 
-	private async OnPlayerJoin( player : Entity.Player ) : Promise< any >
+	public PlayerEndGame( player : Entity.Player ) : void
 	{
-		PlayerService.PlayersOnline.push( player );
+		player.SetPosition( player.GetPosition() );
+		player.SetRotation( player.GetRotation() );
+		player.SetDimension( player.GetDimension() );
 
-		player.OutputChatBox( "<span style='color: #FF8000;'>Use /login for sign in or /register to sign up</span>" );
+		this.repository.persist( player );
 
-		return null;
+		PlayerService.playersOnline.remove( player );
 	}
 
-	private async OnPlayerQuit( player : Entity.Player, reason : string, kickReason : string ) : Promise< any >
+	public CreateCharacter( connection : IConnection, name : string ) : void
 	{
-		if( player.GetCharacter() != null )
-		{
-			Event.Call( "playerCharacterLogout", player, player.GetCharacter() );
-		}
+		let player = new Entity.Player();
 
-		PlayerService.PlayersOnline.remove( player );
+		player.SetName( name );
 
-		player.Destroy();
-	
-		return null;
+        connection.Account.Players.push( player );
+
+		this.repository.persist( player );
 	}
 
-	private async OnPlayerDeath( player : Entity.Player, reason : string, killer : Entity.Player ) : Promise< any >
+	public PlayerDeath( player : Entity.Player, reason : string, killer : Entity.Player ) : void
 	{
-		const char = player.GetCharacter();
-
-		if( char )
-		{
-			char.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ), new Vector3(), 0 );
-		}
-
-		return null;
-	}
-
-	private async OnPlayerSpawn( player : Entity.Player ) : Promise< any >
-	{
-		return null;
-	}
-
-	private async OnPlayerChat( player : Entity.Player, text : string ) : Promise< any >
-	{
-		text = text
-			.replace( /&/g, "&amp;" )
-			.replace( />/g, "&gt;" )
-			.replace( /</g, "&lt;" )
-			.replace( /"/g, "&quot;" )
-			.replace( /'/g, "&#039;" );
-
-		const line = `<span style='color: #E4C1C0;'>[Мир] ${player.GetName()}: ${text}</span>`;
-
-		PlayerService.PlayersOnline.map( player => player.OutputChatBox( line ) );
-
-		return null;
+		player.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ), new Vector3(), 0 );
 	}
 }

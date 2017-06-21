@@ -10,11 +10,12 @@
 *
 *********************************************************/
 
-export * from "./Command/ConsoleCommand";
-export * from "./Command/Interior";
-export * from "./Command/Character";
-export * from "./Command/Player";
-export * from "./Command/User";
-export * from "./Command/Vehicle";
-export * from "./Command/Login";
-export * from "./Command/Register";
+export abstract class ServerPacket implements IServerPacket
+{
+	public GetName() : string
+	{
+		return this.constructor.name;
+	}
+
+	public abstract ToJSON() : Object;
+}

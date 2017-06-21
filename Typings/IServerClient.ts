@@ -10,11 +10,6 @@
 *
 *********************************************************/
 
-interface AuthenticationProviderInterface
+interface IServerClient extends mp.Player
 {
-	Authenticate( token : TokenInterface ) : Promise< TokenInterface >;
-
-	RetrieveUser( username : string, token : TokenInterface ) : Promise< AccountInterface >;
-
-	Supports( token : TokenInterface ) : boolean;
 }

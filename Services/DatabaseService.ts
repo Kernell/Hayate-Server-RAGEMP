@@ -17,18 +17,11 @@ import { ServiceBase } from "./ServiceBase";
 
 export class DatabaseService extends ServiceBase
 {
-	private connection : ORM.Connection;
-
-	constructor()
-	{
-		super();
-
-		this.connection = null;
-	}
+	private static connection : ORM.Connection = null;
 
 	public async Start() : Promise< any >
 	{
-		if( this.connection == null )
+		if( DatabaseService.connection == null )
 		{
 			return ORM.createConnection(
 				{
@@ -46,7 +39,7 @@ export class DatabaseService extends ServiceBase
 						Entity.Account,
 						Entity.AccountRole,
 						Entity.AccountAuth,
-						Entity.Character,
+						Entity.Player,
 						Entity.Vehicle,
 					],
 					autoSchemaSync : true,
@@ -54,15 +47,13 @@ export class DatabaseService extends ServiceBase
 			).then(
 				( connection ) =>
 				{
-					this.connection = connection;
+					DatabaseService.connection = connection;
 				}
 			);
 		}
-
-		return null;
 	}
 
-	public GetRepository< Entity >( entityClassOrName : ORM.ObjectType< Entity > | string ) : ORM.Repository< Entity >
+	public static GetRepository< Entity >( entityClassOrName : ORM.ObjectType< Entity > | string ) : ORM.Repository< Entity >
 	{
 		return this.connection.getRepository( entityClassOrName );
 	}

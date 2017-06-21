@@ -12,6 +12,10 @@
 
 interface AccountInterface
 {
+	Connection         : IConnection;
+	Players            : Array< PlayerInterface >;
+	readonly IsOnline  : boolean;
+
 	GetID              () : number;
 	GetName            () : string;
 	GetEmail           () : string;

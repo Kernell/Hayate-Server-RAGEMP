@@ -59,7 +59,13 @@
     <Content Include="Config\interiors.json">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Config\playerExperience.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Config\production.json">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Config\test.json">
       <SubType>Code</SubType>
     </Content>
     <Content Include="package.json" />
@@ -74,19 +80,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Command\Character.ts">
+    <TypeScriptCompile Include="Logic\Admin\Commands\Interior.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Command\Interior.ts">
+    <TypeScriptCompile Include="Logic\Admin\Commands\Player.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Command\Login.ts">
+    <TypeScriptCompile Include="Globals\ChatType.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Command\Player.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Command\Register.ts" />
     <TypeScriptCompile Include="Globals\Exception.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -94,40 +96,52 @@
       <SubType>Code</SubType>
       <TestFramework>ExportRunner</TestFramework>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Logic\PlayerLogic.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Connection.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\IConnection.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\IServerPacket.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\OpCodes.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Server\ChatMessage.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Server\ServerPacket.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ScsServer.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Services\AccountService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Entity\EntityInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Entity\AccountAuth.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Entity\AccountRole.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Entity\PlayerInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Entity\UserAuth.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Entity\UserRole.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Game\Character\CharacterInterface.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Services\CharacterService.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Game\Vehicle\VehicleInterface.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Security\Authentication\AuthenticationManagerInterface.ts">
+    <TypeScriptCompile Include="Entity\VehicleInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Security\Authentication\AuthenticationProvider.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Security\Authentication\AuthenticationProviderInterface.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Security\Authentication\AuthenticationProviderManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Security\Encoders\PasswordEncoderInterface.ts">
@@ -142,13 +156,13 @@
     <TypeScriptCompile Include="Security\Token\UsernamePasswordToken.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Security\User\UserInterface.ts">
+    <TypeScriptCompile Include="Security\Account\AccountInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Security\User\UserManagerInterface.ts">
+    <TypeScriptCompile Include="Security\Account\AccountManagerInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Security\User\UserRoleInterface.ts">
+    <TypeScriptCompile Include="Security\Account\AccountRoleInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Security\Validator\CharacterNameValidator.ts">
@@ -163,20 +177,16 @@
     <TypeScriptCompile Include="Security\Validator\UserPasswordValidator.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="ServerInterface.ts">
-      <SubType>Code</SubType>
-      <TestFramework>ExportRunner</TestFramework>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="SharedUtils\Array.ts">
+    <TypeScriptCompile Include="Globals\Array.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SharedUtils\Date.ts">
+    <TypeScriptCompile Include="Globals\Date.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Globals\Color.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Command\Vehicle.ts">
+    <TypeScriptCompile Include="Logic\Admin\Commands\Vehicle.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Services\DatabaseService.ts">
@@ -194,7 +204,7 @@
     <TypeScriptCompile Include="Services\VehicleService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Entity\Character.ts">
+    <TypeScriptCompile Include="Entity\Player.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Entity.ts">
@@ -203,10 +213,7 @@
     <TypeScriptCompile Include="Entity\Entity.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Entity\Player.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Entity\User.ts">
+    <TypeScriptCompile Include="Entity\Account.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Entity\Vehicle.ts">
@@ -215,31 +222,22 @@
     <TypeScriptCompile Include="Server.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Command.ts">
+    <TypeScriptCompile Include="Logic\Admin\AdminCommand.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Command\ConsoleCommand.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Command\User.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Services\CommandService.ts">
+    <TypeScriptCompile Include="Logic\Admin\AdminLogic.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Globals\Console.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SharedUtils.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="Globals\IdentifiedPool.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SharedUtils\Math.ts">
+    <TypeScriptCompile Include="Globals\Math.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SharedUtils\String.ts">
+    <TypeScriptCompile Include="Globals\String.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Globals\GUID.ts">
@@ -270,27 +268,31 @@
     <TypeScriptCompile Include="Globals\WeaponsTint.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Typings\IServerClient.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Typings\Rage.d.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Command\" />
+    <Folder Include="Logic\Admin\Commands\" />
     <Folder Include="Entity\" />
     <Folder Include="Config\" />
-    <Folder Include="Game\" />
-    <Folder Include="Game\Character\" />
-    <Folder Include="Game\Vehicle\" />
+    <Folder Include="Network\" />
+    <Folder Include="Logic\" />
+    <Folder Include="Logic\Admin\" />
+    <Folder Include="Network\Packets\" />
+    <Folder Include="Network\Packets\Server\" />
     <Folder Include="Services\" />
     <Folder Include="Security\" />
     <Folder Include="Security\Encoders\" />
     <Folder Include="Security\Authentication\" />
     <Folder Include="Security\Token\" />
-    <Folder Include="Security\User\" />
+    <Folder Include="Security\Account\" />
     <Folder Include="Security\Validator\" />
     <Folder Include="Globals\" />
     <Folder Include="Typings\" />
-    <Folder Include="SharedUtils\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />

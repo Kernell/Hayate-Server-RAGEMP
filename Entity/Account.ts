@@ -13,8 +13,6 @@
 import * as ORM          from "typeorm";
 import * as Entity       from "../Entity";
 
-import { UsernamePasswordToken } from "../Security/Token/UsernamePasswordToken";
-
 @ORM.Entity( "accounts" )
 export class Account implements AccountInterface
 {
@@ -33,9 +31,6 @@ export class Account implements AccountInterface
 	@ORM.Column()
 	protected salt : string;
 
-	@ORM.OneToMany( type => Entity.AccountAuth, token => token[ "account" ] )
-	protected tokens : Entity.AccountAuth[];
-
 	@ORM.Column( { name: "roles", type: "simple_array", default: null, nullable: true } )
 	protected _roles : number[];
 	
@@ -47,9 +42,17 @@ export class Account implements AccountInterface
 
 	protected roles : Map< number, AccountRoleInterface >;
 
+	public Players : Array< Entity.Player > = new Array< Entity.Player >();
+
+	public Connection : IConnection;
+
+	public get IsOnline() : boolean
+	{
+		return this.Connection != null;
+	}
+
 	public constructor()
 	{
-		this.tokens = [];
 		this.roles = new Map< number, AccountRoleInterface >();
 	}
 
@@ -141,17 +144,5 @@ export class Account implements AccountInterface
 		}
 
 		return false;
-	}
-
-	public Login( token : UsernamePasswordToken ) : void
-	{
-		let auth = new Entity.AccountAuth();
-
-		auth.SetAccount( this );
-		auth.SetDeviceID( token.GetDeviceID() );
-		auth.SetIP( token.GetIP() );
-		auth.SetToken( token.GetGUID().toString() );
-
-		this.tokens.push( auth );
 	}
 }

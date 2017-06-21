@@ -10,7 +10,8 @@
 *
 *********************************************************/
 
-interface AuthenticationManagerInterface
+interface IServerPacket
 {
-	Authenticate( token : TokenInterface ) : Promise< TokenInterface >
+	GetName() : string;
+	ToJSON() : any;
 }

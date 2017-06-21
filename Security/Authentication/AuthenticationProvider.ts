@@ -16,7 +16,7 @@ import { UserNameValidator }     from "../Validator/UserNameValidator";
 import { UserPasswordValidator } from "../Validator/UserPasswordValidator";
 import { UsernamePasswordToken } from "../Token/UsernamePasswordToken";
 
-export class AuthenticationProvider implements AuthenticationProviderInterface
+export class AuthenticationProvider
 {
 	protected encoder      : UserPasswordEncoder;
 	protected userProvider : AccountManagerInterface;
@@ -79,17 +79,4 @@ export class AuthenticationProvider implements AuthenticationProviderInterface
 
 		return this.encoder.IsPasswordValid( user.GetPassword(), password, user.GetSalt() );
 	}
-
-	public Supports( token : TokenInterface ) : boolean
-	{
-		return true;
-	}
-
-    public OnAuthenticationSuccess( token : TokenInterface, providerKey : string ) : void
-    {
-    }
-
-    public OnAuthenticationFailure( exception : Error ) : void
-    {
-    }
 }

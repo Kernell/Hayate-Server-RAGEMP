@@ -12,12 +12,11 @@
 
 import * as ORM            from "typeorm";
 import * as Entity         from "../Entity";
-import { Server }          from "../Server";
+import { PlayerLogic }     from "../Logic/PlayerLogic";
 import { PlayerService }   from "./PlayerService";
 import { ServiceBase }     from "./ServiceBase";
 import { DatabaseService } from "./DatabaseService";
 
-import { AuthenticationProviderManager } from "../Security/Authentication/AuthenticationProviderManager";
 import { AuthenticationProvider }        from "../Security/Authentication/AuthenticationProvider";
 import { UsernamePasswordToken }         from "../Security/Token/UsernamePasswordToken";
 import { UserEmailValidator }            from "../Security/Validator/UserEmailValidator";
@@ -26,35 +25,30 @@ import { UserPasswordValidator }         from "../Security/Validator/UserPasswor
 
 export class AccountService extends ServiceBase implements AccountManagerInterface
 {
-	private roles                 : Entity.AccountRole[];
+	private roles                  : Entity.AccountRole[];
 
-	private database              : DatabaseService                   = null;
-	private repository            : ORM.Repository< AccountInterface >   = null;
-	private repositoryRole        : ORM.Repository< Entity.AccountRole > = null;
-	private authenticationManager : AuthenticationProviderManager     = null;
+	private database               : DatabaseService                      = null;
+	private repository             : ORM.Repository< Entity.Account >     = null;
+	private repositoryRole         : ORM.Repository< Entity.AccountRole > = null;
+	private repositoryAuth         : ORM.Repository< Entity.AccountAuth > = null;
+	private authenticationProvider : AuthenticationProvider               = null;
 
 	public constructor()
 	{
 		super();
 
-		this.roles      = [];
-
-		this.database   = Server.DatabaseService as DatabaseService;
-
-		this.RegisterEvent( "playerTryLogin", this.OnPlayerTryLogin );
-		this.RegisterEvent( "playerLogin",    this.OnPlayerLogin );
-		this.RegisterEvent( "playerLogout",   this.OnPlayerLogout );
-		this.RegisterEvent( "playerRegister", this.OnPlayerRegister );
+		this.roles = [];
 	}
 
 	public async Start() : Promise< any >
 	{
-		this.repository     = this.database.GetRepository( Entity.Account );
-		this.repositoryRole = this.database.GetRepository( Entity.AccountRole );
+		this.repository     = DatabaseService.GetRepository( Entity.Account );
+		this.repositoryRole = DatabaseService.GetRepository( Entity.AccountRole );
+		this.repositoryAuth = DatabaseService.GetRepository( Entity.AccountAuth );
 
-		this.authenticationManager = new AuthenticationProviderManager( [ new AuthenticationProvider( this ) ], true );
+		this.authenticationProvider = new AuthenticationProvider( this );
 
-		return this.repositoryRole.find().then( roles => this.roles = roles );
+		this.roles = await this.repositoryRole.find();
 	}
 
 	public LoadByUsername( name : string ) : Promise< AccountInterface >
@@ -67,73 +61,76 @@ export class AccountService extends ServiceBase implements AccountManagerInterfa
 		return this.repository.findOne( { email: login } );
 	}
 
-	private async OnPlayerTryLogin( player : PlayerInterface, login : string, password : string ) : Promise< any >
+	private async TryAuthorize( connection : IConnection, accountName : string, password : string ) : Promise< any >
 	{
-		if( player.GetAccount() )
+		if( connection.Account != null )
 		{
 			throw new Exception( "Вы уже авторизованы" );
 		}
 
-		let token = new UsernamePasswordToken( login, password, player.GetIP(), "N/A" );
+		let token = new UsernamePasswordToken( accountName, password, connection.GetIP(), "N/A" );
 
-		return this.authenticationManager.Authenticate( token ).then(
-			( token : UsernamePasswordToken ) =>
+		return this.Authorize( token ).then(
+			( account : Entity.Account ) =>
 			{
-				player.Login( token );
+				account[ '_roles' ].forEach( roleId => this.roles[ roleId ] && account.AddRole( this.roles[ roleId ] ) );
 
-				let user = token.GetAccount();
+				this.Authorized( connection, account );
 
-				user[ '_roles' ].map( roleId => this.roles[ roleId ] && user.AddRole( this.roles[ roleId ] ) );
+				let auth = new Entity.AccountAuth();
 
-				let repositoryAuth = this.database.GetRepository( Entity.AccountAuth );
+				auth.SetAccount( account );
+				auth.SetDeviceID( token.GetDeviceID() );
+				auth.SetIP( token.GetIP() );
+				auth.SetToken( token.GetGUID().toString() );
 
-				return repositoryAuth.persist( user[ 'tokens' ][ 0 ] );
+				return this.repositoryAuth.persist( auth );
 			}
 		);
 	}
 
-	private async OnPlayerLogin( player : PlayerInterface, user : AccountInterface ) : Promise< any >
+	private async Authorize( token : TokenInterface ) : Promise< AccountInterface >
 	{
-		let userId = user.GetID();
+        let authorizedToken : TokenInterface = null;
 
-		for( let p of PlayerService.PlayersOnline )
+		try
 		{
-			if( p != player && p.GetAccount().GetID() == userId )
-			{
-				p.Logout();
-
-				break;
-			}
+			authorizedToken = await this.authenticationProvider.Authenticate( token );
+		}
+		catch( e )
+		{
+			throw new Exception( e );
 		}
 
-		let repository = this.database.GetRepository( Entity.Character );
-
-		return repository.find( { user_id: userId } ).then(
-			( characters : Entity.Character[] ) =>
-			{
-				player.OutputChatBox( "Используйте /char create [name] для создания персонажа" );
-
-				if( characters.length != 0 )
-				{
-					player.OutputChatBox( "Используйте /char login [id] для выбора персонажа" );
-
-					for( let char of characters )
-					{
-						player.OutputChatBox( `ID: ${char.GetID()}, Name: ${char.GetName()}` );
-					}
-				}
-			}
-		);
+        return authorizedToken.GetAccount();
 	}
 
-	private async OnPlayerLogout( player : PlayerInterface, user : AccountInterface ) : Promise< any >
+	private async Authorized( connection : IConnection, account : AccountInterface ) : Promise< any >
 	{
-		return null;
+		let player = PlayerService.Find( player => player == connection.Player || player.GetAccount().GetID() == account.GetID() );
+
+		if( player != null )
+		{
+			player.Connection.Close();
+		}
+
+		connection.Account         = account;
+		connection.Account.Players = await DatabaseService.GetRepository( Entity.Player ).find();
 	}
 
-	private async OnPlayerRegister( player : PlayerInterface, name : string, email : string, password : string ) : Promise< any >
+	public static ExitPlayer( connection : IConnection ) : void
+    {
+		PlayerLogic.PlayerEndGame( connection.Player as Entity.Player );
+    }
+
+	public static ClientDisconnected( connection : IConnection ) : void
 	{
-		if( player.GetAccount() )
+		PlayerLogic.PlayerEndGame( connection.Player as Entity.Player );
+	}
+
+	public async Register( connection : IConnection, name : string, email : string, password : string ) : Promise< any >
+	{
+		if( connection.Account != null )
 		{
 			throw new Exception( "Вы уже авторизованы" );
 		}
@@ -146,33 +143,26 @@ export class AccountService extends ServiceBase implements AccountManagerInterfa
 		validatorEmail.Validate( email );
 		validatorPassw.Validate( password );
 
-		let repository = this.database.GetRepository( Entity.Account );
-
-		let countEmail = await repository.count( { email: email } );
+		let countEmail = await this.repository.count( { email: email } );
 
 		if( countEmail != 0 )
 		{
 			throw new Exception( "Пользователь с этим email уже существует" );
 		}
 						
-		let countName  = await repository.count( { name: name } );
+		let countName  = await this.repository.count( { name: name } );
 
 		if( countName != 0 )
 		{
 			throw new Exception( "Этот имя пользователя уже занято, попробуйте другое" );
 		}
 
-		let user = new Entity.Account();
+		let account = new Entity.Account();
 
-		user.SetName( name );
-		user.SetEmail( email );
-		user.SetPassword( password );
+		account.SetName( name );
+		account.SetEmail( email );
+		account.SetPassword( password );
 
-		return repository.persist( user ).then(
-			( user : AccountInterface ) =>
-			{
-				return this.OnPlayerTryLogin( player, email, password );
-			}
-		);
+		return this.repository.persist( account );
 	}
 }

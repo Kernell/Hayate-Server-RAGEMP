@@ -10,7 +10,7 @@
 *
 *********************************************************/
 
-class Console extends IdentifiedPool implements PlayerInterface
+class Console implements IConnection
 {
 	public static Reset      = "\x1b[0m";
 	
@@ -39,82 +39,71 @@ class Console extends IdentifiedPool implements PlayerInterface
 	public static BgCyan     = "\x1b[46m";
 	public static BgWhite    = "\x1b[47m";
 
-	private account : AccountInterface;
+	private _account : AccountInterface;
+	private _player  : PlayerInterface;
 
-	constructor()
+	public get Account() : AccountInterface
 	{
-		let entity =
+		return this._account;
+	}
+
+	public set Account( account : AccountInterface )
+	{
+		this._account = account;
+		this._account.Connection = this;
+	}
+
+	public get Player() : PlayerInterface
+	{
+		return this._player;
+	}
+
+	public set Player( player : PlayerInterface )
+	{
+		this._player = player;
+		this._player.Connection = this;
+
+		player[ "entity" ] = this.client;
+	}
+
+	protected client : IServerClient;
+
+	public Close() : void
+	{
+	}
+
+	public Send( packet : IServerPacket ) : void
+	{
+		if( packet.constructor.name == "ChatMessage" )
 		{
-			id   : 0,
-			type : "console"
-		};
+			let p = packet.ToJSON();
 
-		super( entity as mp.Entity );
+			let color = () =>
+			{
+				switch( p.type )
+				{
+					case ChatType.Notice: return Console.FgRed;
+					default: '';
+				}
+			}
+
+			Console.WriteLine( `${color()}%s${Console.Reset}`, p.message );
+		}
 	}
 
-	public Destroy() : void
-	{
-		throw new Error();
-	}
-
-	public IsValid() : boolean
-	{
-		return true;
-	}
-
-	public GetEntity() : mp.Entity
-	{
-		return this.entity;
-	}
-
-	public GetType() : string
-	{
-		return this.entity.type;
-	}
-
-	public GetModel() : number
-	{
-		return 0;
-	}
-
-	public SetModel() : void
+	public Invoke( hash : string, ...args : any[] ) : void
 	{
 	}
 
-	public GetAlpha() : number
-	{
-		return 255;
-	}
-
-	public SetAlpha( alpha : number ) : void
+	public CallEvent( eventName : string, ...args : any[] ) : void
 	{
 	}
 
-	public GetCharacter() : CharacterInterface
-	{
-		return null;
-	}
-
-	public SetCharacter( char : CharacterInterface )
+	public Notify( message : string ) : void
 	{
 	}
 
-	public GetID() : number
-	{
-		return this.entity.id;
-	}
-	
-	public GetName() : string
-	{
-		return "Console";
-	}
-	
-	public GetAccount() : AccountInterface
-	{
-		return this.account;
-	}
-
-	public GetPing() : number
+	public Ping() : number
 	{
 		return 0;
 	}
@@ -122,56 +111,6 @@ class Console extends IdentifiedPool implements PlayerInterface
 	public GetIP() : string
 	{
 		return "127.0.0.1";
-	}
-
-	public GetPosition() : Vector3
-	{
-		return new Vector3( 0, 0, 0 );
-	}
-
-	public SetPosition( position : Vector3 ) : void
-	{
-	}
-
-	public GetRotation() : Vector3
-	{
-		return new Vector3( 0, 0, 0 );
-	}
-
-	public SetRotation( rotation : Vector3 ) : void
-	{
-	}
-
-	public GetDimension() : number
-	{
-		return 0;
-	}
-
-	public SetDimension( dimension : number ) : void
-	{
-	}
-
-	public OutputChatBox( text : string ) : void
-	{
-		console.log( text );
-	}
-
-	public Login( token : TokenInterface ) : void
-	{
-		this.account = token.GetAccount();
-	}
-
-	public Logout() : void
-	{
-		this.account = null;
-	}
-
-	public Kick( reason : string ) : void
-	{
-	}
-
-	public Ban( reason : string ) : void
-	{
 	}
 
 	public static Write( buffer : string, ...params : any[] ) : void

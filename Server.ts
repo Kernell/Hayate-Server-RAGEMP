@@ -16,6 +16,7 @@ import * as Config          from "nconf";
 import { ScsServer }        from "./ScsServer";
 import { ServiceBase }      from "./Services/ServiceBase";
 import { AccountService }   from "./Services/AccountService";
+import { ChatService }      from "./Services/ChatService";
 import { DatabaseService }  from "./Services/DatabaseService";
 import { PlayerService }    from "./Services/PlayerService";
 import { VehicleService }   from "./Services/VehicleService";
@@ -28,6 +29,7 @@ export class Server
 	public static DatabaseService    : DatabaseService;
 	public static PlayerService      : PlayerService;
 	public static AccountService     : AccountService;
+	public static ChatService        : ChatService;
 	public static VehicleService     : VehicleService;
 	public static AdminLogic         : AdminLogic;
 
@@ -61,6 +63,7 @@ export class Server
 
 		Server.DatabaseService  = new DatabaseService();
 		Server.AccountService   = new AccountService();
+		Server.ChatService      = new ChatService();
 		Server.PlayerService    = new PlayerService();
 		Server.VehicleService   = new VehicleService();
 

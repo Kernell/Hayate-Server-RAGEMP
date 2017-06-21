@@ -126,6 +126,6 @@ export class PlayerLogic
             return;
 		}
 
-        //Server.ChatService.ProcessMessage( connection, message, type );
+        Server.ChatService.ProcessMessage( connection, message, type );
     }
 }

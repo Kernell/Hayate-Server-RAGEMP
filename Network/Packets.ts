@@ -12,3 +12,5 @@
 
 export * from "./Packets/Server/ServerPacket";
 export * from "./Packets/Server/ChatMessage";
+export * from "./Packets/Server/ChatPrivate";
+export * from "./Packets/Server/ChatInfo";

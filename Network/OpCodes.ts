@@ -21,7 +21,7 @@ export class OpCodes
 	{
 		// Chat
 		this.Send.set( typeof ServerPackets.ChatMessage,   0x5703 );
-	//	this.Send.set( typeof ServerPackets.ChatPrivate,   0xA082 );
-	//	this.Send.set( typeof ServerPackets.ChatInfo,      0xE321 );
+		this.Send.set( typeof ServerPackets.ChatPrivate,   0xA082 );
+		this.Send.set( typeof ServerPackets.ChatInfo,      0xE321 );
 	}
 }

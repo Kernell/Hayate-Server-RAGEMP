@@ -47,6 +47,8 @@ export class Server
 
 	public static async Main() : Promise< void >
 	{
+		let tick = new Date().getTime();
+
 		Config.argv().env().defaults(
 			{
 				'NODE_ENV': 'development',
@@ -69,6 +71,8 @@ export class Server
 
 		Server.AdminLogic       = new AdminLogic();
 
+		Console.WriteLine( "-----------------------------------------------------------------------------" );
+
 		try
 		{
 			await Server.StartAll();
@@ -79,6 +83,10 @@ export class Server
 		}
 
 		Server.ScsServer.BeginListening();
+
+		Console.WriteLine( "-----------------------------------------------------------------------------" );
+		Console.WriteLine( "Server started in %5.3f ms", ( new Date().getTime() - tick ) / 1000 );
+		Console.WriteLine( "-----------------------------------------------------------------------------" );
 	
 		Server.doPulseTimer = setInterval( () => this.DoPulse(), 1000 );
 	}
@@ -97,7 +105,7 @@ export class Server
 
 			service.State = ServiceState.None;
 			
-			Console.Write( `Starting %-70s`, name );
+			Console.Write( `Starting %-50s`, name );
 
 			try
 			{
@@ -137,7 +145,7 @@ export class Server
 			let tick = new Date().getTime();
 			let name = service.constructor.name + ":";
 
-			Console.Write( `Stopping %-70s`, name );
+			Console.Write( `Stopping %-50s`, name );
 
 			try
 			{

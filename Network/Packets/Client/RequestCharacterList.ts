@@ -10,9 +10,16 @@
 *
 *********************************************************/
 
-export * from "./RecvPacket";
-export * from "./RequestAuth";
-export * from "./RequestCharacterList";
-export * from "./CreateCharacter";
-export * from "./CheckCharacterName";
-export * from "./DeleteCharacter";
+import { RecvPacket } from "./RecvPacket";
+import { Server }     from "../../../Server";
+
+export class RequestCharacterList extends RecvPacket
+{
+	public Read() : void
+	{
+	}
+
+	public async Process() : Promise< any >
+	{
+	}
+}

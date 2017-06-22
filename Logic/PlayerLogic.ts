@@ -18,13 +18,16 @@ import { DatabaseService }        from "../Services/DatabaseService";
 
 export class PlayerLogic
 {
-	public static CheckName( connection : IConnection, name : string ) : void
+	public static async CheckName( connection : IConnection, name : string ) : Promise< any >
 	{
 		PlayerService.ValidateName( name );
-	}
 
-	public static CheckNameForUse( connection : IConnection, name : string ) : void
-	{
+		let count = await DatabaseService.GetRepository( Entity.Player ).count( { name: name } );
+
+		if( count > 0 )
+		{
+			throw new Exception( "Это имя уже занято" );
+		}
 	}
 
 	public static async PlayerSelected( connection : IConnection, playerId : number ) : Promise< any >
@@ -101,13 +104,6 @@ export class PlayerLogic
 		}
 
 		this.CheckName( connection, name );
-
-		let count = await DatabaseService.GetRepository( Entity.Player ).count( { name: name } );
-
-		if( count > 0 )
-		{
-			throw new Exception( "Это имя уже занято" );
-		}
 
 		Server.PlayerService.CreateCharacter( connection, name );
 	}

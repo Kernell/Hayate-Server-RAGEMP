@@ -12,6 +12,7 @@
 
 export * from "./RecvPacket";
 export * from "./RequestAuth";
+export * from "./CreateAccount";
 export * from "./RequestCharacterList";
 export * from "./CreateCharacter";
 export * from "./CheckCharacterName";

@@ -123,6 +123,9 @@
     <TypeScriptCompile Include="Network\Packets\Client\ChatPrivate.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Client\CreateAccount.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\index.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

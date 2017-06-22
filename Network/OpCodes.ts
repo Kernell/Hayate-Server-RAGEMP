@@ -23,6 +23,7 @@ export class OpCodes
 
 		// Auth
 		this.Recv.set( 0xC644, Packets.Client.RequestAuth );
+		this.Recv.set( 0x83E0, Packets.Client.CreateAccount );
 
 		// Character
 		this.Recv.set( 0xE5E4, Packets.Client.RequestCharacterList );

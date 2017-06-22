@@ -27,7 +27,7 @@ export class ScsServer
 
 		mp.events.add( "playerJoin",       ( client : IServerClient ) => this.OnConnected( client ) );
 		mp.events.add( "playerQuit",       ( client : IServerClient, type : string, reason : string ) => this.OnDisconnected( client, type, reason ) );
-		mp.events.add( "playerPacketSend", ( client : IServerClient, message : number ) => this.OnMessageReceived( client, message ) );
+		mp.events.add( "playerPacketSend", ( client : IServerClient, opcode : number, data : any ) => this.OnMessageReceived( client, opcode, data ) );
 	}
 
 	public ShutdownServer() : void
@@ -57,13 +57,13 @@ export class ScsServer
 		}
 	}
 
-	private OnMessageReceived( client : IServerClient, message : number ) : void
+	private OnMessageReceived( client : IServerClient, opcode : number, data : any ) : void
 	{
 		let connection = this.connections[ client.id ];
 
 		if( connection != null )
 		{
-			connection.OnMessageReceived( message );
+			connection.OnMessageReceived( opcode, data );
 		}
 	}
 }

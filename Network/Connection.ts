@@ -76,8 +76,16 @@ export class Connection implements IConnection
 		Connection.Connections.remove( this );
 	}
 
-	public OnMessageReceived( message : number ) : void
+	public OnMessageReceived( opcode : number, data : Object ) : void
 	{
+        if( OpCodes.Recv[ opcode ] == null )
+		{
+			Console.WriteLine( Console.FgYellow + "Unknown packet opcode 0x%X", opcode );
+
+			return;
+		}
+
+		( new OpCodes.Recv[ opcode ]( data ) ).Process( this );
 	}
 
 	public Close() : void
@@ -87,7 +95,7 @@ export class Connection implements IConnection
 
 	public Send( packet : IServerPacket ) : void
 	{
-		let opcode : number = OpCodes.Send[ packet.GetName() ];
+		let opcode : number = OpCodes.Send.get( packet.constructor );
 
 		if( opcode == null )
         {

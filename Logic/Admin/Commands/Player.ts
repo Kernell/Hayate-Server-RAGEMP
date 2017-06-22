@@ -13,7 +13,7 @@
 import * as printf        from "printf";
 import * as Config        from "nconf";
 import * as Entity        from "../../../Entity";
-import * as ServerPacket  from "../../../Network/Packets";
+import * as Packets       from "../../../Network/Packets";
 import { AdminCommand }   from "../AdminCommand";
 
 export class Player extends AdminCommand
@@ -44,7 +44,7 @@ export class Player extends AdminCommand
 
 		if( args.length < 3 )
 		{
-			connection.Send( new ServerPacket.ChatMessage( "Syntax: /" + this.name + " clothes [component] [drawable] [texture] [palette = 0]", ChatType.Notice ) );
+			connection.Send( new Packets.Server.ChatMessage( "Syntax: /" + this.name + " clothes [component] [drawable] [texture] [palette = 0]", ChatType.Notice ) );
 
 			return;
 		}
@@ -66,7 +66,7 @@ export class Player extends AdminCommand
 
 		if( args.length < 3 )
 		{
-			connection.Send( new ServerPacket.ChatMessage( "Syntax: /" + this.name + " prop [prop] [drawable] [texture]", ChatType.Notice ) );
+			connection.Send( new Packets.Server.ChatMessage( "Syntax: /" + this.name + " prop [prop] [drawable] [texture]", ChatType.Notice ) );
 
 			return;
 		}
@@ -87,7 +87,7 @@ export class Player extends AdminCommand
 
 		if( args.length < 2 )
 		{
-			connection.Send( new ServerPacket.ChatMessage( "Syntax: /" + this.name + " haircolor [first] [second]", ChatType.Notice ) );
+			connection.Send( new Packets.Server.ChatMessage( "Syntax: /" + this.name + " haircolor [first] [second]", ChatType.Notice ) );
 
 			return;
 		}

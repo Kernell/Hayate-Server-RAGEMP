@@ -13,7 +13,7 @@
 import * as printf        from "printf";
 import * as Config        from "nconf";
 import * as Entity        from "../../../Entity";
-import * as ServerPacket  from "../../../Network/Packets";
+import * as Packets       from "../../../Network/Packets";
 import { AdminCommand }   from "../AdminCommand";
 
 export class Interior extends AdminCommand
@@ -46,7 +46,7 @@ export class Interior extends AdminCommand
 			
 			connection.Player.SetPosition( position );
 
-			connection.Send( new ServerPacket.ChatMessage( "Location ID: " + id + ", Name: " + interior.name, ChatType.Notice ) );
+			connection.Send( new Packets.Server.ChatMessage( "Location ID: " + id + ", Name: " + interior.name, ChatType.Notice ) );
 		}
 	}
 

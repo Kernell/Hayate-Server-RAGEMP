@@ -10,9 +10,8 @@
 *
 *********************************************************/
 
-export * from "./Packets/Client/RecvPacket";
+import * as Client from "./Packets/Client";
+import * as Server from "./Packets/Server";
 
-export * from "./Packets/Server/ServerPacket";
-export * from "./Packets/Server/ChatMessage";
-export * from "./Packets/Server/ChatPrivate";
-export * from "./Packets/Server/ChatInfo";
+export { Client };
+export { Server };

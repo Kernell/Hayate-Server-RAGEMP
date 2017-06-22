@@ -16,7 +16,7 @@ import { AdminCommand }   from "../AdminCommand";
 import * as Entity        from "../../../Entity";
 import { VehicleService } from "../../../Services/VehicleService";
 import { Server }         from "../../../Server"
-import * as ServerPacket  from "../../../Network/Packets";
+import * as Packets       from "../../../Network/Packets";
 
 export class Vehicle extends AdminCommand
 {
@@ -65,7 +65,7 @@ export class Vehicle extends AdminCommand
 					throw new Exception( "Internal server error" );
 				}
 
-				connection.Send( new ServerPacket.ChatMessage( vehicle.GetName() + " создан, ID: " + vehicle.GetID(), ChatType.Notice ) );
+				connection.Send( new Packets.Server.ChatMessage( vehicle.GetName() + " создан, ID: " + vehicle.GetID(), ChatType.Notice ) );
 			}
 		);
 	}
@@ -86,7 +86,7 @@ export class Vehicle extends AdminCommand
 			this.service.Remove( vehicle );
 		}
 
-		connection.Send( new ServerPacket.ChatMessage( "Vehicle " + vehicle.GetName() + " deleted", ChatType.Notice ) );
+		connection.Send( new Packets.Server.ChatMessage( "Vehicle " + vehicle.GetName() + " deleted", ChatType.Notice ) );
 
 		vehicle.Persist( this.service.GetRepository() );
 	}
@@ -107,7 +107,7 @@ export class Vehicle extends AdminCommand
 
 		vehicle.Restore();
 
-		connection.Send( new ServerPacket.ChatMessage( "Vehicle " + vehicle.GetName() + " restored", ChatType.Notice ) );
+		connection.Send( new Packets.Server.ChatMessage( "Vehicle " + vehicle.GetName() + " restored", ChatType.Notice ) );
 	}
 
 	private Option_warp( connection : IConnection, option : string, args : any[] ) : void
@@ -188,14 +188,14 @@ export class Vehicle extends AdminCommand
 		{
 			this.service.GetAll().forEach( vehicle => vehicle.Respawn() );
 
-			connection.Send( new ServerPacket.ChatMessage( `All vehicles respawned`, ChatType.Notice ) );
+			connection.Send( new Packets.Server.ChatMessage( `All vehicles respawned`, ChatType.Notice ) );
 
 			return;
 		}
 
 		vehicle.Respawn();
 
-		connection.Send( new ServerPacket.ChatMessage( `Vehicle ${vehicle.GetID()} respawned`, ChatType.Notice ) );
+		connection.Send( new Packets.Server.ChatMessage( `Vehicle ${vehicle.GetID()} respawned`, ChatType.Notice ) );
 	}
 
 	private Option_fix( connection : IConnection, option : string, args : any[] ) : void
@@ -214,7 +214,7 @@ export class Vehicle extends AdminCommand
 
 		vehicle.Fix();
 
-		connection.Send( new ServerPacket.ChatMessage( `Vehicle ${vehicle.GetName()} [${vehicle.GetID()}] fixed`, ChatType.Notice ) );
+		connection.Send( new Packets.Server.ChatMessage( `Vehicle ${vehicle.GetName()} [${vehicle.GetID()}] fixed`, ChatType.Notice ) );
 	}
 
 	private Option_flip( connection : IConnection, option : string, args : any[] ) : void
@@ -267,7 +267,7 @@ export class Vehicle extends AdminCommand
 		vehicle.SetColor( new VehicleColor( color1, color2 ) );
 		vehicle.Persist( this.service.GetRepository() );
 
-		connection.Send( new ServerPacket.ChatMessage( `Vehicle ${vehicle.GetName()} (ID ${vehicle.GetID()}) color changed to (${vehicle.GetColor().toString()})`, ChatType.Notice ) );
+		connection.Send( new Packets.Server.ChatMessage( `Vehicle ${vehicle.GetName()} (ID ${vehicle.GetID()}) color changed to (${vehicle.GetColor().toString()})`, ChatType.Notice ) );
 	}
 
 	private Option_setmodel( connection : IConnection, option : string, args : any[] ) : void
@@ -296,7 +296,7 @@ export class Vehicle extends AdminCommand
 			throw new Exception( "Invalid vehicle model name\\hash " + args[ 1 ] );
         }
 
-		connection.Send( new ServerPacket.ChatMessage( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) model changed to ` + VehicleModel[ model ], ChatType.Notice ) );
+		connection.Send( new Packets.Server.ChatMessage( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) model changed to ` + VehicleModel[ model ], ChatType.Notice ) );
 	
 		vehicle.SetModel( model );
 		vehicle.Persist( this.service.GetRepository() );
@@ -326,7 +326,7 @@ export class Vehicle extends AdminCommand
 
 		vehicle.Persist( this.service.GetRepository() );
 
-		connection.Send( new ServerPacket.ChatMessage( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) default spawn changed`, ChatType.Notice ) );
+		connection.Send( new Packets.Server.ChatMessage( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) default spawn changed`, ChatType.Notice ) );
 	}
 
 	private Option_spawn( connection : IConnection, option : string, args : any[] ) : void
@@ -382,7 +382,7 @@ export class Vehicle extends AdminCommand
 
 		this.service.Add( vehicle );
 
-		connection.Send( new ServerPacket.ChatMessage( "Временный '" + vehicle.GetName() + "' создан, ID: " + vehicle.GetID(), ChatType.Notice ) );
+		connection.Send( new Packets.Server.ChatMessage( "Временный '" + vehicle.GetName() + "' создан, ID: " + vehicle.GetID(), ChatType.Notice ) );
 	}
 
 	private Option_setplate( connection : IConnection, option : string, args : any[] ) : void
@@ -410,11 +410,11 @@ export class Vehicle extends AdminCommand
 		vehicle.SetPlate( plateText );
 		vehicle.Persist( this.service.GetRepository() );
 
-		connection.Send( new ServerPacket.ChatMessage( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) plate text changed to ${plateText}`, ChatType.Notice ) );
+		connection.Send( new Packets.Server.ChatMessage( `Vehicle ${vehicle.GetName()} (ID: ${vehicle.GetID()}) plate text changed to ${plateText}`, ChatType.Notice ) );
 	}
 
 	private Option_undefined( connection : IConnection, option : string, args : any[] )
 	{
-		connection.Send( new ServerPacket.ChatMessage( "Syntax: /" + this.name + " <option>", ChatType.Notice ) );
+		connection.Send( new Packets.Server.ChatMessage( "Syntax: /" + this.name + " <option>", ChatType.Notice ) );
 	}
 }

@@ -117,6 +117,13 @@
     <TypeScriptCompile Include="Network\IRecvPacket.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Client\index.ts" />
+    <TypeScriptCompile Include="Network\Packets\Client\RecvPacket.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Client\RequestAuth.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\ChatInfo.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -124,6 +131,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\ChatPrivate.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Server\index.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\ServerPacket.ts">

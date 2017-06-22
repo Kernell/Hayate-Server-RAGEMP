@@ -14,9 +14,9 @@ import { ServerPacket } from "./ServerPacket";
 
 export class ChatMessage extends ServerPacket
 {
-    protected player   : PlayerInterface;
-    protected message  : string;
-    protected type     : ChatType;
+	protected player   : PlayerInterface;
+	protected message  : string;
+	protected type     : ChatType;
 
 	public constructor( player : PlayerInterface, message : string, type : ChatType );
 	public constructor( message : string, type : ChatType );

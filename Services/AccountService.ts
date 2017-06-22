@@ -61,7 +61,7 @@ export class AccountService extends ServiceBase implements AccountManagerInterfa
 		return this.repository.findOne( { email: login } );
 	}
 
-	private async TryAuthorize( connection : IConnection, accountName : string, password : string ) : Promise< any >
+	public async TryAuthorize( connection : IConnection, accountName : string, password : string ) : Promise< any >
 	{
 		if( connection.Account != null )
 		{

@@ -12,7 +12,7 @@
 
 import * as ORM            from "typeorm";
 import * as Entity         from "../Entity";
-import * as ServerPackets  from "../Network/Packets";
+import * as Packets        from "../Network/Packets";
 import { Server }          from "../Server";
 import { PlayerLogic }     from "../Logic/PlayerLogic";
 import { ServiceBase }     from "./ServiceBase";
@@ -31,7 +31,7 @@ export class ChatService extends ServiceBase
 			}
 			case ChatType.PrivateWhispered:
 			{
-				connection.Send( new ServerPackets.ChatMessage( connection.Player, message, type ) );
+				connection.Send( new Packets.Server.ChatMessage( connection.Player, message, type ) );
 				
 				break;
 			}
@@ -55,7 +55,7 @@ export class ChatService extends ServiceBase
 			}
 			default:
 			{
-				let packet = new ServerPackets.ChatMessage( connection.Player, message, type );
+				let packet = new Packets.Server.ChatMessage( connection.Player, message, type );
 				
 				PlayerService.GetAll().forEach( player => player.Connection.Send( packet ) );
 
@@ -70,14 +70,14 @@ export class ChatService extends ServiceBase
 
 		if( player == null )
 		{
-			connection.Send( new ServerPackets.ChatMessage( "Player not found", ChatType.Notice ) );
+			connection.Send( new Packets.Server.ChatMessage( "Player not found", ChatType.Notice ) );
 
 			return;
 		}
 
 		this.ProcessMessage( connection, message, ChatType.PrivateWhispered );
 
-		player.Connection.Send( new ServerPackets.ChatPrivate( connection.Player.GetName(), player.GetName(), message ) );
+		player.Connection.Send( new Packets.Server.ChatPrivate( connection.Player.GetName(), player.GetName(), message ) );
 	}
 
 	public SendChatInfo( connection : IConnection, type : number, name : string ) : void
@@ -89,6 +89,6 @@ export class ChatService extends ServiceBase
 			return;
 		}
 
-		connection.Send( new ServerPackets.ChatInfo( player, type ) );
+		connection.Send( new Packets.Server.ChatInfo( player, type ) );
 	}
 }

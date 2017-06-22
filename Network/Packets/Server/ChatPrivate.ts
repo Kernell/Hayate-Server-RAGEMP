@@ -15,8 +15,8 @@ import { ServerPacket } from "./ServerPacket";
 export class ChatPrivate extends ServerPacket
 {
 	protected sender  : string;
-    protected sended  : string;
-    protected message : string;
+	protected sended  : string;
+	protected message : string;
 
 	public constructor( sender : string, targetName : string, message : string )
 	{

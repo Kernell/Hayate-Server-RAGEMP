@@ -13,7 +13,7 @@
 import * as Entity         from "../../Entity";
 import { Server }          from "../../Server";
 import { DatabaseService } from "../../Services/DatabaseService";
-import * as ServerPacket   from "../../Network/Packets";
+import * as Packets        from "../../Network/Packets";
 
 import { AdminCommand }    from "./AdminCommand";
 import { Interior }        from "./Commands/Interior";
@@ -92,7 +92,7 @@ export class AdminLogic
 
 		if( !this.Execute( connection, commandName, commandArgv ) )
 		{
-			connection.Send( new ServerPacket.ChatMessage( `${commandName}: command not found`, ChatType.Notice ) );
+			connection.Send( new Packets.Server.ChatMessage( `${commandName}: command not found`, ChatType.Notice ) );
 		}
 
 		return true;
@@ -113,7 +113,7 @@ export class AdminLogic
 
 				if( !connection.Account.IsGranted( 'command.' + command.GetName() ) )
 				{
-					connection.Send( new ServerPacket.ChatMessage( `Access denied to command '${command.GetName()}'`, ChatType.Notice ) );
+					connection.Send( new Packets.Server.ChatMessage( `Access denied to command '${command.GetName()}'`, ChatType.Notice ) );
 				}
 			}
 
@@ -127,13 +127,13 @@ export class AdminLogic
                 {
 					if( error instanceof Exception )
 					{
-						connection.Send( new ServerPacket.ChatMessage( `${error.message}`, ChatType.Notice ) );
+						connection.Send( new Packets.Server.ChatMessage( `${error.message}`, ChatType.Notice ) );
 					}
 					else
 					{
 						let msg = "Что-то пошло не так. Мы работаем над тем, чтобы исправить это как можно скорее. Вы сможете попробовать снова спустя какое-то время";
 
-						connection.Send( new ServerPacket.ChatMessage( msg, ChatType.Notice ) );
+						connection.Send( new Packets.Server.ChatMessage( msg, ChatType.Notice ) );
 
 						Console.WriteLine( Console.FgRed + '%s' + Console.Reset, error.stack );
 					}

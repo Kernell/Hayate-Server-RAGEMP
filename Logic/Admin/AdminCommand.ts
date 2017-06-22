@@ -10,7 +10,7 @@
 *
 *********************************************************/
 
-import * as ServerPacket from "../../Network/Packets";
+import * as Packets from "../../Network/Packets";
 
 export class AdminCommand
 {
@@ -43,7 +43,7 @@ export class AdminCommand
 
 	public Alert( connection : IConnection, chatMessage : string ) : void
     {
-        connection.Send( new ServerPacket.ChatMessage( chatMessage, ChatType.System ) );
+        connection.Send( new Packets.Server.ChatMessage( chatMessage, ChatType.System ) );
     }
 
 	public GetName() : string

@@ -10,7 +10,5 @@
 *
 *********************************************************/
 
-interface IRecvPacket
-{
-	GetName() : string;
-}
+export * from "./RecvPacket";
+export * from "./RequestAuth";

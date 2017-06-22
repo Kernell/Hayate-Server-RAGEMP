@@ -85,7 +85,7 @@ export class Connection implements IConnection
 			return;
 		}
 
-		( new OpCodes.Recv[ opcode ]( data ) ).Process( this );
+		( new OpCodes.Recv[ opcode ]( this, data ) );
 	}
 
 	public Close() : void

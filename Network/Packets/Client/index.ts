@@ -16,3 +16,7 @@ export * from "./RequestCharacterList";
 export * from "./CreateCharacter";
 export * from "./CheckCharacterName";
 export * from "./DeleteCharacter";
+export * from "./ChatMessage";
+export * from "./ChatInfo";
+export * from "./ChatPrivate";
+export * from "./ChatBlock";

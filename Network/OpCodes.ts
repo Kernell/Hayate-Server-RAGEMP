@@ -19,6 +19,8 @@ export class OpCodes
 
 	public static Init() : void
 	{
+		/*** Client ***/
+
 		// Auth
 		this.Recv.set( 0xC644, Packets.Client.RequestAuth );
 
@@ -27,6 +29,14 @@ export class OpCodes
 		this.Recv.set( 0x6755, Packets.Client.CreateCharacter );
 		this.Recv.set( 0x8844, Packets.Client.CheckCharacterName );
 		this.Recv.set( 0xBC40, Packets.Client.DeleteCharacter );
+
+		// Chat
+		this.Recv.set( 0xFBE6, Packets.Client.ChatMessage );
+		this.Recv.set( 0xE932, Packets.Client.ChatInfo );
+		this.Recv.set( 0xA8FA, Packets.Client.ChatPrivate );
+		this.Recv.set( 0xAF9D, Packets.Client.ChatBlock );
+
+		/*** Server ***/
 
 		// Chat
 		this.Send.set( Packets.Server.ChatMessage,   0x5703 );

@@ -10,8 +10,8 @@
 *
 *********************************************************/
 
-import * as Client from "./Packets/Client";
-import * as Server from "./Packets/Server";
+import * as Client from "./Client";
+import * as Server from "./Server";
 
 export { Client };
 export { Server };

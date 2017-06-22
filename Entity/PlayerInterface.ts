@@ -15,6 +15,8 @@ interface PlayerInterface
 	Connection : IConnection;
 
 	GetID() : number;
+	GetCreatedAt() : Date;
+	GetDeletedAt() : Date;
 	GetName() : string;
 	SetName( name : string, lastname : string ) : void;
 	Delete() : void;

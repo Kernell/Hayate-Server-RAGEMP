@@ -10,8 +10,9 @@
 *
 *********************************************************/
 
-import { RecvPacket } from "./RecvPacket";
-import { Server }     from "../../../Server";
+import { RecvPacket }  from "./RecvPacket";
+import { Server }      from "../../../Server";
+import { PlayerLogic } from "../../../Logic/PlayerLogic";
 
 export class RequestCharacterList extends RecvPacket
 {
@@ -21,5 +22,6 @@ export class RequestCharacterList extends RecvPacket
 
 	public async Process() : Promise< any >
 	{
+		return PlayerLogic.CharacterList( this.connection );
 	}
 }

@@ -78,6 +78,16 @@ export class Player implements PlayerInterface
 		return this.id;
 	}
 
+	public GetCreatedAt() : Date
+	{
+		return this.createdAt;
+	}
+
+	public GetDeletedAt() : Date
+	{
+		return this.deletedAt;
+	}
+
 	public GetName() : string
 	{
 		return this.name;

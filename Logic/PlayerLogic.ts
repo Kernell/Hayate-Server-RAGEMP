@@ -12,6 +12,7 @@
 
 import * as Config                from "nconf";
 import * as Entity                from "../Entity";
+import * as Packets               from "../Network/Packets";
 import { Server }                 from "../Server";
 import { PlayerService }          from "../Services/PlayerService";
 import { DatabaseService }        from "../Services/DatabaseService";
@@ -64,7 +65,27 @@ export class PlayerLogic
 
 		//Server.FeedbackService.SendCharRemove( connection );
 	}
+	
+	public static async CreateCharacter( connection : IConnection, name : string ) : Promise< any >
+	{
+		if( !connection.Account.IsGranted( Permission.UnlimitedCharacters ) )
+		{
+			if( connection.Account.Players.length > Config.get( "characters:max_per_user" ) )
+			{
+				throw new Exception( "Вы не можете создавать больше персонажей" );
+			}
+		}
 
+		this.CheckName( connection, name );
+
+		Server.PlayerService.CreateCharacter( connection, name );
+	}
+
+	public static async CharacterList( connection : IConnection ) : Promise< void >
+	{
+		connection.Send( new Packets.Server.CharacterList( connection ) );
+	}
+	
 	public static PlayerEnterWorld( player : Entity.Player ) : void
 	{
 		//Server.MapService.PlayerEnterWorld( player );
@@ -92,21 +113,6 @@ export class PlayerLogic
 
         //Server.DuelService.PlayerLeaveWorld( player );
     }
-
-	public static async CreateCharacter( connection : IConnection, name : string ) : Promise< any >
-	{
-		if( !connection.Account.IsGranted( Permission.UnlimitedCharacters ) )
-		{
-			if( connection.Account.Players.length > Config.get( "characters:max_per_user" ) )
-			{
-				throw new Exception( "Вы не можете создавать больше персонажей" );
-			}
-		}
-
-		this.CheckName( connection, name );
-
-		Server.PlayerService.CreateCharacter( connection, name );
-	}
 
 	public static ProcessChatMessage( connection : IConnection, message : string, type : ChatType ) : void
     {

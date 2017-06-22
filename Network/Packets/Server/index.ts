@@ -14,3 +14,5 @@ export * from "./ServerPacket";
 export * from "./ChatMessage";
 export * from "./ChatPrivate";
 export * from "./ChatInfo";
+
+export * from "./CharacterList";

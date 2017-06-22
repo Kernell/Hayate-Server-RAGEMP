@@ -120,7 +120,7 @@ class Console implements IConnection
 
 	public static WriteLine( line : String, ...params : any[] ) : void
 	{
-		console.log( printf( line, ...params ) );
+		console.log( printf( line + Console.Reset, ...params ) );
 	}
 }
 

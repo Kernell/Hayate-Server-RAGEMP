@@ -114,6 +114,9 @@
     <TypeScriptCompile Include="Network\Packets.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\IRecvPacket.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\ChatInfo.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -292,6 +295,7 @@
     <Folder Include="Logic\" />
     <Folder Include="Logic\Admin\" />
     <Folder Include="Network\Packets\" />
+    <Folder Include="Network\Packets\Client\" />
     <Folder Include="Network\Packets\Server\" />
     <Folder Include="Services\" />
     <Folder Include="Security\" />

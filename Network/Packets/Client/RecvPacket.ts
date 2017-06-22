@@ -10,9 +10,12 @@
 *
 *********************************************************/
 
-export * from "./Packets/Client/RecvPacket";
+export abstract class RecvPacket implements IRecvPacket
+{
+	public GetName() : string
+	{
+		return this.constructor.name;
+	}
 
-export * from "./Packets/Server/ServerPacket";
-export * from "./Packets/Server/ChatMessage";
-export * from "./Packets/Server/ChatPrivate";
-export * from "./Packets/Server/ChatInfo";
+	public abstract Process( connection : IConnection ) : void;
+}

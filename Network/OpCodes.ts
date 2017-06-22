@@ -14,14 +14,14 @@ import * as ServerPackets from "./Packets";
 
 export class OpCodes
 {
-	public static Recv : Map< number, string > = new Map< number, string >();
-	public static Send : Map< string, number>  = new Map< string, number >();
+	public static Recv : Map< number, Function > = new Map< number, Function >();
+	public static Send : Map< Function, number>  = new Map< Function, number >();
 
 	public static Init() : void
 	{
 		// Chat
-		this.Send.set( typeof ServerPackets.ChatMessage,   0x5703 );
-		this.Send.set( typeof ServerPackets.ChatPrivate,   0xA082 );
-		this.Send.set( typeof ServerPackets.ChatInfo,      0xE321 );
+		this.Send.set( ServerPackets.ChatMessage,   0x5703 );
+		this.Send.set( ServerPackets.ChatPrivate,   0xA082 );
+		this.Send.set( ServerPackets.ChatInfo,      0xE321 );
 	}
 }

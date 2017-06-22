@@ -10,9 +10,8 @@
 *
 *********************************************************/
 
-export * from "./Packets/Client/RecvPacket";
-
-export * from "./Packets/Server/ServerPacket";
-export * from "./Packets/Server/ChatMessage";
-export * from "./Packets/Server/ChatPrivate";
-export * from "./Packets/Server/ChatInfo";
+interface IRecvPacket
+{
+	GetName() : string;
+	Process( connection : IConnection ) : void;
+}

@@ -85,7 +85,7 @@ export class Server
 		Server.ScsServer.BeginListening();
 
 		Console.WriteLine( "-----------------------------------------------------------------------------" );
-		Console.WriteLine( "Server started in %5.3f ms", ( new Date().getTime() - tick ) / 1000 );
+		Log.Trace        ( "Server started in %5.3f ms", ( new Date().getTime() - tick ) / 1000 );
 		Console.WriteLine( "-----------------------------------------------------------------------------" );
 	
 		Server.doPulseTimer = setInterval( () => this.DoPulse(), 1000 );
@@ -98,6 +98,18 @@ export class Server
 
 	private static async StartAll() : Promise< any >
 	{
+		let getTime = () =>
+		{
+			let date = new Date();
+
+			let h  = date.getHours();
+			let i  = date.getMinutes();
+			let s  = date.getSeconds();
+			let ms = date.getMilliseconds();
+
+			return printf( "%02d:%02d:%02d.%04d", h, i, s, ms );
+		}
+
 		for( let service of Server.services )
 		{
 			let tick = new Date().getTime();
@@ -105,7 +117,7 @@ export class Server
 
 			service.State = ServiceState.None;
 			
-			Console.Write( `Starting %-50s`, name );
+			Console.Write( `%s | Starting %-35s`, getTime(), name );
 
 			try
 			{
@@ -115,7 +127,7 @@ export class Server
 
 				let tick_count = ( new Date().getTime() - tick ) / 1000;
 
-				Console.Write( `[  ${Console.FgGreen}OK${Console.Reset}  ] % 5.3f ms\n`, tick_count );
+				Console.Write( `[  ${Console.FgGreen}OK${Console.Reset}  ] %5.3f ms\n`, tick_count );
 			}
 			catch( error )
 			{
@@ -135,6 +147,18 @@ export class Server
 
 	private static async StopAll() : Promise< any >
 	{
+		let getTime = () =>
+		{
+			let date = new Date();
+
+			let h  = date.getHours();
+			let i  = date.getMinutes();
+			let s  = date.getSeconds();
+			let ms = date.getMilliseconds();
+
+			return printf( "%02d:%02d:%02d.%04d", h, i, s, ms );
+		}
+
 		for( let service of Server.services )
 		{
 			if( service.State != ServiceState.OK )
@@ -145,7 +169,7 @@ export class Server
 			let tick = new Date().getTime();
 			let name = service.constructor.name + ":";
 
-			Console.Write( `Stopping %-50s`, name );
+			Console.Write( `%s | Stopping %-35s`, getTime(), name );
 
 			try
 			{

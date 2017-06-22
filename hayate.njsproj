@@ -80,6 +80,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Globals\Log.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Logic\Admin\Commands\Interior.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

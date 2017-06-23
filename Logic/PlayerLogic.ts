@@ -86,8 +86,10 @@ export class PlayerLogic
 		connection.Send( new Packets.Server.CharacterList( connection ) );
 	}
 	
-	public static PlayerEnterWorld( player : Entity.Player ) : void
+	public static PlayerEnterWorld( connection : IConnection ) : void
 	{
+		let player = connection.Player as Entity.Player;
+
 		//Server.MapService.PlayerEnterWorld( player );
 		Server.PlayerService.PlayerEnterWorld( player );
 		//Server.ControllerService.PlayerEnterWorld( player );
@@ -98,7 +100,7 @@ export class PlayerLogic
 		//Server.DuelService.PlayerLeaveWorld( player );
 	}
 
-	public static PlayerEndGame( player : Entity.Player ) : void
+	public static PlayerEndGame( connection : IConnection, player : Entity.Player ) : void
     {
         if( player == null )
 		{

@@ -120,12 +120,12 @@ export class AccountService extends ServiceBase implements AccountManagerInterfa
 
 	public static ExitPlayer( connection : IConnection ) : void
     {
-		PlayerLogic.PlayerEndGame( connection.Player as Entity.Player );
+		PlayerLogic.PlayerEndGame( connection, connection.Player as Entity.Player );
     }
 
 	public static ClientDisconnected( connection : IConnection ) : void
 	{
-		PlayerLogic.PlayerEndGame( connection.Player as Entity.Player );
+		PlayerLogic.PlayerEndGame( connection, connection.Player as Entity.Player );
 	}
 
 	public async Register( connection : IConnection, name : string, email : string, password : string ) : Promise< any >

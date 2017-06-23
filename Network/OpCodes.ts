@@ -30,6 +30,8 @@ export class OpCodes
 		this.Recv.set( 0x6755, Packets.Client.CreateCharacter );
 		this.Recv.set( 0x8844, Packets.Client.CheckCharacterName );
 		this.Recv.set( 0xBC40, Packets.Client.DeleteCharacter );
+		this.Recv.set( 0x8D6A, Packets.Client.SelectCharacter );
+		this.Recv.set( 0xBCC4, Packets.Client.EnterWorld );
 
 		// Chat
 		this.Recv.set( 0xFBE6, Packets.Client.ChatMessage );

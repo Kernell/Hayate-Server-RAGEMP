@@ -129,6 +129,12 @@
     <TypeScriptCompile Include="Network\Packets\Client\CreateAccount.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Client\EnterWorld.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Client\SelectCharacter.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\index.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

@@ -8,6 +8,10 @@
         "password": "QRLY5ZUWtwr87stj",
         "database": "hayate_dev"
     },
+    "gameplay":
+    {
+        "level_cap": 50
+    },
     "characters":
     {
         "max_per_user": 100

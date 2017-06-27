@@ -14,6 +14,7 @@ interface PlayerInterface
 {
 	Connection : IConnection;
 
+	IsOnline() : boolean;
 	GetID() : number;
 	GetCreatedAt() : Date;
 	GetDeletedAt() : Date;
@@ -37,10 +38,14 @@ interface PlayerInterface
 	SetDimension( dimension : number ) : void;
 	GetRotation() : Vector3;
 	SetRotation( rotation : Vector3 ) : void;
+	GetStamina() : number;
+	SetStamina( stamina : number ) : void
 	GetHealth() : number;
 	SetHealth( health : number ) : void;
 	GetArmor() : number;
 	SetArmor( armor : number ) : void;
+	GetMana() : number;
+	SetMana( mana : number );
 	GetEyeColor() : number;
 	SetEyeColor( eyeColor : number ) : void;
 	GetHairColor() : number;

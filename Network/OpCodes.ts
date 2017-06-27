@@ -39,11 +39,26 @@ export class OpCodes
 		this.Recv.set( 0xA8FA, Packets.Client.ChatPrivate );
 		this.Recv.set( 0xAF9D, Packets.Client.ChatBlock );
 
+		// Party
+		this.Recv.set( 0x86BD, Packets.Client.PartyLeave );
+		this.Recv.set( 0x4F34, Packets.Client.PartyDisband );
+		this.Recv.set( 0xF86C, Packets.Client.PartyKick );
+		this.Recv.set( 0xBA24, Packets.Client.PartyPromote );
+
 		/*** Server ***/
 
 		// Chat
-		this.Send.set( Packets.Server.ChatMessage,   0x5703 );
-		this.Send.set( Packets.Server.ChatPrivate,   0xA082 );
-		this.Send.set( Packets.Server.ChatInfo,      0xE321 );
+		this.Send.set( Packets.Server.ChatMessage,         0x5703 );
+		this.Send.set( Packets.Server.ChatPrivate,         0xA082 );
+		this.Send.set( Packets.Server.ChatInfo,            0xE321 );
+
+		// Party
+		this.Send.set( Packets.Server.PartyList,           0xBD9C );
+		this.Send.set( Packets.Server.PartyRemoveMember,   0xE230 );
+		this.Send.set( Packets.Server.PartyStats,          0xA908 );
+		this.Send.set( Packets.Server.PartyLeave,          0xC5A1 );
+		this.Send.set( Packets.Server.PartyMemberPosition, 0xACC1 );
+
+		this.Send.set( Packets.Server.UpdateExp,           0x8FC7 );
 	}
 }

@@ -132,4 +132,11 @@ export class PlayerLogic
 
         Server.ChatService.ProcessMessage( connection, message, type );
     }
+
+	public static LevelUp( player : PlayerInterface ) : void
+	{
+        // StreamerService.Send( player, new ServerPackets.LevelUp( player ) );
+		// StatsService.UpdateStats( player );
+		// QuestEngine.PlayerLevelUp( player );
+	}
 }

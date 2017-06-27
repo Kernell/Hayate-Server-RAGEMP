@@ -10,11 +10,14 @@
 *
 *********************************************************/
 
+import * as Config                from "nconf";
 import * as ORM                   from "typeorm";
 import * as Entity                from "../Entity";
+import * as ServerPackets         from "../Network/Packets/Server";
 import { ServiceBase }            from "./ServiceBase";
 import { DatabaseService }        from "./DatabaseService";
 import { CharacterNameValidator } from "../Security/Validator/CharacterNameValidator";
+import { PlayerLogic }            from "../Logic/PlayerLogic";
 
 export class PlayerService extends ServiceBase
 {
@@ -49,6 +52,37 @@ export class PlayerService extends ServiceBase
 
 		nameValidator.Validate( name );
 	}
+
+	public GetExperience( level : number ) : number
+	{
+		return this.playerExperience[ level - 1 ].Experience;
+	}
+
+	public GetExpShown( player : Entity.Player ) : number
+    {
+		let level = player.GetLevel();
+		let exp   = player.GetExperience();
+
+        if( level == this.playerExperience.length - 1 )
+		{
+            return this.playerExperience[ level ].Experience;
+		}
+
+        return exp - this.playerExperience[ level - 1 ].Experience;
+    }
+
+    public GetExpNeed( player : Entity.Player ) : number
+    {
+		let level = player.GetLevel();
+		let exp   = player.GetExperience();
+
+        if( level == this.playerExperience.length - 1 )
+		{
+            return this.playerExperience[ level ].Experience;
+		}
+
+        return this.playerExperience[ level ].Experience - this.playerExperience[ level - 1 ].Experience;
+    }
 
 	public async Start() : Promise< any >
 	{
@@ -101,4 +135,49 @@ export class PlayerService extends ServiceBase
 	{
 		player.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ), new Vector3(), 0 );
 	}
+
+	public AddExperience( player : Entity.Player, value : number, npc : Entity.Npc = null ) : void
+	{
+		if( player.GetLevel() >= Config.get( "gameplay:level_cap" ) )
+		{
+			return;
+		}
+        
+		this.SetExp( player, player.GetExperience() + value, npc );
+	}
+
+	public SetExp( player : Entity.Player, add : number, npc : Entity.Npc ) : void
+    {
+		let maxLevel = this.playerExperience.length - 1;
+
+		let maxExp = this.playerExperience[ maxLevel - 1 ].Experience;
+
+		let level = 1;
+
+		if( add > maxExp )
+		{
+			add = maxExp;
+		}
+
+		while( ( level + 1 ) != maxLevel && add >= this.playerExperience[ level ].Experience )
+		{
+			++level;
+		}
+
+		let added = add - player.GetExperience();
+
+		if( level != player.GetLevel() )
+		{
+			player.SetLevel( level );
+			player.SetExperience( add );
+
+			PlayerLogic.LevelUp( player );
+		}
+		else
+		{
+			player.SetExperience( add );
+		}
+
+		player.Connection.Send( new ServerPackets.UpdateExp( player, added, npc ) );
+    }
 }

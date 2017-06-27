@@ -10,9 +10,4 @@
 *
 *********************************************************/
 
-export * from "./Entity/Account";
-export * from "./Entity/AccountRole";
-export * from "./Entity/AccountAuth";
-export * from "./Entity/Entity";
-export * from "./Entity/Player";
-export * from "./Entity/Vehicle";
+export * from "./Party";

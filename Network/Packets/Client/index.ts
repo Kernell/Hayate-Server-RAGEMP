@@ -23,3 +23,7 @@ export * from "./ChatMessage";
 export * from "./ChatInfo";
 export * from "./ChatPrivate";
 export * from "./ChatBlock";
+export * from "./PartyLeave";
+export * from "./PartyDisband";
+export * from "./PartyKick";
+export * from "./PartyPromote";

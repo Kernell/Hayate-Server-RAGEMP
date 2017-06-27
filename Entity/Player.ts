@@ -15,6 +15,7 @@ import * as ORM from "typeorm";
 import { Entity } from "./Entity";
 import { Vehicle } from "./Vehicle";
 import { Account } from "./Account";
+import { Party }   from "./World/Party";
 
 @ORM.Entity( "characters" )
 export class Player implements PlayerInterface
@@ -53,9 +54,15 @@ export class Player implements PlayerInterface
 	
 	@ORM.Column( "float" )
 	protected health : number = 1000;
-
+	
 	@ORM.Column( "float" )
 	protected armor : number = 0;
+
+	@ORM.Column( "float" )
+	protected mana : number = 0;
+
+	@ORM.Column( "float" )
+	protected stamina : number = 0;
 
 	@ORM.Column( { name: "eye_color", type: "int" } )
 	protected eyeColor : number = 0;
@@ -69,9 +76,26 @@ export class Player implements PlayerInterface
 	@ORM.Column( { type: "datetime", name: "deleted_at", nullable: true, default: null } )
 	protected deletedAt : Date;
 
+	protected party : Party;
+
+	public get Party() : Party
+	{
+		return this.party;
+	}
+
+	public set Party( value : Party )
+	{
+		this.party = value;
+	}
+
 	public Connection : IConnection;
 
 	private entity : mp.Player;
+
+	public IsOnline() : boolean
+	{
+		return this.Connection != null;
+	}
 
 	public GetID() : number
 	{
@@ -264,6 +288,26 @@ export class Player implements PlayerInterface
 	public SetArmor( armor : number ) : void
 	{
 		this.entity.armour = this.armor = armor;
+	}
+
+	public GetMana() : number
+	{
+		return this.mana;
+	}
+
+	public SetMana( mana : number ) : void
+	{
+		this.mana = mana;
+	}
+
+	public GetStamina() : number
+	{
+		return this.stamina;
+	}
+
+	public SetStamina( stamina : number ) : void
+	{
+		this.stamina = stamina;
 	}
 
 	public GetEyeColor() : number

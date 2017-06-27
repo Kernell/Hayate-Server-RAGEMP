@@ -19,6 +19,7 @@ import { AccountService }   from "./Services/AccountService";
 import { ChatService }      from "./Services/ChatService";
 import { DatabaseService }  from "./Services/DatabaseService";
 import { PlayerService }    from "./Services/PlayerService";
+import { PartyService }     from "./Services/PartyService";
 import { VehicleService }   from "./Services/VehicleService";
 import { AdminLogic }       from "./Logic/Admin/AdminLogic";
 
@@ -28,9 +29,11 @@ export class Server
 
 	public static DatabaseService    : DatabaseService;
 	public static PlayerService      : PlayerService;
+	public static PartyService       : PartyService;
 	public static AccountService     : AccountService;
 	public static ChatService        : ChatService;
 	public static VehicleService     : VehicleService;
+
 	public static AdminLogic         : AdminLogic;
 
 	public static COUNTDOWN_NONE     = 0;
@@ -67,6 +70,7 @@ export class Server
 		Server.AccountService   = new AccountService();
 		Server.ChatService      = new ChatService();
 		Server.PlayerService    = new PlayerService();
+		Server.PartyService     = new PartyService();
 		Server.VehicleService   = new VehicleService();
 
 		Server.AdminLogic       = new AdminLogic();

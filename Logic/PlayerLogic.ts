@@ -58,7 +58,7 @@ export class PlayerLogic
 
 		connection.Account.Players.remove( player );
 
-		//Server.FeedbackService.SendCharRemove( connection );
+		connection.Send( new Packets.Server.CharacterDelete() );
 	}
 	
 	public static async CreateCharacter( connection : IConnection, name : string ) : Promise< any >

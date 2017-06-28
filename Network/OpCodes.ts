@@ -54,6 +54,7 @@ export class OpCodes
 		this.Send.set( Packets.Server.CharacterList,            0xB38E );
 		this.Send.set( Packets.Server.CharacterNameCheckResult, 0xE315 );
 		this.Send.set( Packets.Server.CharacterCreateResult,    0xC075 );
+		this.Send.set( Packets.Server.CharacterDelete,          0xEFE4 );
 
 		// Chat
 		this.Send.set( Packets.Server.ChatMessage,              0x5703 );

@@ -19,6 +19,7 @@ export * from "./ChatInfo";
 export * from "./CharacterList";
 export * from "./CharacterNameCheckResult";
 export * from "./CharacterCreateResult";
+export * from "./CharacterDelete";
 
 export * from "./PartyList";
 export * from "./PartyRemoveMember";

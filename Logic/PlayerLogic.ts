@@ -89,7 +89,7 @@ export class PlayerLogic
 		Server.PlayerService.PlayerEnterWorld( player );
 		//Server.ControllerService.PlayerEnterWorld( player );
 
-		//Server.PartyService.UpdateParty( player.GetParty() );
+		Server.PartyService.Update( player.Party );
 		//Server.GuildService.OnPlayerEnterWorld( player );
 
 		//Server.DuelService.PlayerLeaveWorld( player );
@@ -106,7 +106,7 @@ export class PlayerLogic
         //Server.MapService.PlayerLeaveWorld( player );
         //Server.ControllerService.PlayerEndGame( player );
 
-        //Server.PartyService.UpdateParty( player.GetParty() );
+        Server.PartyService.Update( player.Party );
 
         //Server.DuelService.PlayerLeaveWorld( player );
     }

@@ -215,11 +215,11 @@ export class PartyService extends ServiceBase
 
 		for( let partyMember of party.Members )
 		{
-			if( partyMember.Connection != null )
+			if( partyMember.IsOnline() )
 			{
 				for( let member of party.Members )
 				{
-					if( member.Connection != null )
+					if( member.IsOnline() )
 					{
 						partyMember.Connection.Send( new ServerPackets.PartyStats( member ) );
 					}

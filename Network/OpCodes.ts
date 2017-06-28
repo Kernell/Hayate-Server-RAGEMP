@@ -47,6 +47,9 @@ export class OpCodes
 
 		/*** Server ***/
 
+		// Auth
+		this.Send.set( Packets.Server.AuthComplete,        0xC061 );
+
 		// Chat
 		this.Send.set( Packets.Server.ChatMessage,         0x5703 );
 		this.Send.set( Packets.Server.ChatPrivate,         0xA082 );

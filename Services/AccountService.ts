@@ -12,6 +12,7 @@
 
 import * as ORM            from "typeorm";
 import * as Entity         from "../Entity";
+import * as Network        from "../Network";
 import { PlayerLogic }     from "../Logic/PlayerLogic";
 import { PlayerService }   from "./PlayerService";
 import { ServiceBase }     from "./ServiceBase";
@@ -116,6 +117,8 @@ export class AccountService extends ServiceBase implements AccountManagerInterfa
 
 		connection.Account         = account;
 		connection.Account.Players = await DatabaseService.GetRepository( Entity.Player ).find();
+
+		connection.Send( new Network.Packets.Server.AuthComplete() );
 	}
 
 	public static ExitPlayer( connection : IConnection ) : void

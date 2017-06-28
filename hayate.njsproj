@@ -182,6 +182,9 @@
     <TypeScriptCompile Include="Network\Packets\Client\RequestCharacterList.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Server\AuthComplete.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\CharacterList.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

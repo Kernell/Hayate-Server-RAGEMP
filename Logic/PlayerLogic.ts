@@ -42,7 +42,7 @@ export class PlayerLogic
 
 	public static async RemovePlayer( connection : IConnection, playerId : number ) : Promise< any >
 	{
-		let player = connection.Account.Players.find( player => player.GetID() == playerId );
+		let player = connection.Account.Players.find( player => player.GetID() == playerId ) as Entity.Player;
 
 		if( player == null )
 		{
@@ -51,9 +51,9 @@ export class PlayerLogic
 
 		player.Delete();
 
-		DatabaseService.GetRepository( Entity.Player ).persist( player as Entity.Player );
+		DatabaseService.GetRepository( Entity.Player ).persist( player );
 
-		//Server.PartyService.LeaveParty( player );
+		Server.PartyService.Leave( player );
 		//Server.GuildService.LeaveGuild( player, player.GetGuild() );
 
 		connection.Account.Players.remove( player );

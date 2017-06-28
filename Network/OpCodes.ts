@@ -48,20 +48,24 @@ export class OpCodes
 		/*** Server ***/
 
 		// Auth
-		this.Send.set( Packets.Server.AuthComplete,        0xC061 );
+		this.Send.set( Packets.Server.AuthComplete,             0xC061 );
+
+		// Character
+		this.Send.set( Packets.Server.CharacterList,            0xB38E );
+		this.Send.set( Packets.Server.CharacterNameCheckResult, 0x0000 );
 
 		// Chat
-		this.Send.set( Packets.Server.ChatMessage,         0x5703 );
-		this.Send.set( Packets.Server.ChatPrivate,         0xA082 );
-		this.Send.set( Packets.Server.ChatInfo,            0xE321 );
+		this.Send.set( Packets.Server.ChatMessage,              0x5703 );
+		this.Send.set( Packets.Server.ChatPrivate,              0xA082 );
+		this.Send.set( Packets.Server.ChatInfo,                 0xE321 );
 
 		// Party
-		this.Send.set( Packets.Server.PartyList,           0xBD9C );
-		this.Send.set( Packets.Server.PartyRemoveMember,   0xE230 );
-		this.Send.set( Packets.Server.PartyStats,          0xA908 );
-		this.Send.set( Packets.Server.PartyLeave,          0xC5A1 );
-		this.Send.set( Packets.Server.PartyMemberPosition, 0xACC1 );
+		this.Send.set( Packets.Server.PartyList,                0xBD9C );
+		this.Send.set( Packets.Server.PartyRemoveMember,        0xE230 );
+		this.Send.set( Packets.Server.PartyStats,               0xA908 );
+		this.Send.set( Packets.Server.PartyLeave,               0xC5A1 );
+		this.Send.set( Packets.Server.PartyMemberPosition,      0xACC1 );
 
-		this.Send.set( Packets.Server.UpdateExp,           0x8FC7 );
+		this.Send.set( Packets.Server.UpdateExp,                0x8FC7 );
 	}
 }

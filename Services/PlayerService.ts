@@ -16,7 +16,6 @@ import * as Entity                from "../Entity";
 import * as ServerPackets         from "../Network/Packets/Server";
 import { ServiceBase }            from "./ServiceBase";
 import { DatabaseService }        from "./DatabaseService";
-import { CharacterNameValidator } from "../Security/Validator/CharacterNameValidator";
 import { PlayerLogic }            from "../Logic/PlayerLogic";
 
 export class PlayerService extends ServiceBase
@@ -46,11 +45,51 @@ export class PlayerService extends ServiceBase
 		return this.playersOnline.find( predicate );
 	}
 
-	public static ValidateName( name : string ) : void
+	public static async CheckName( name : string ) : Promise< PlayerNameCheckResult >
 	{
-		let nameValidator = new CharacterNameValidator();
+		if( name.length < 3 )
+		{
+			return PlayerNameCheckResult.MinimumLengthError;
+		}
 
-		nameValidator.Validate( name );
+		if( name.length > 16 )
+		{
+			return PlayerNameCheckResult.MaximumLengthError;
+		}
+
+		name = name.toUpperCase();
+
+		for( let i = 0; i < name.length; ++i )
+		{
+			if( name[ i ] == ' ' )
+			{
+				return PlayerNameCheckResult.SpacesInName;
+			}
+		}
+
+		if( /[^A-ZА-Я0-9]/.test( name ) )
+		{
+			return PlayerNameCheckResult.UnavaliableLetter;
+		}
+
+		if( !/[^0-9]/.test( name ) )
+		{
+			return PlayerNameCheckResult.UnavaliableLetter;
+		}
+
+		if( !/[^A-Z0-9]/.test( name ) == !/[^А-Я0-9]/.test( name ) )
+		{
+			return PlayerNameCheckResult.MultipleLanguages;
+		}
+
+		let count = await DatabaseService.GetRepository( Entity.Player ).count( { name: name } );
+
+		if( count > 0 )
+		{
+			return PlayerNameCheckResult.NotAcceptableName;
+		}
+
+		return PlayerNameCheckResult.Ok;
 	}
 
 	public GetExperience( level : number ) : number

@@ -21,14 +21,9 @@ export class PlayerLogic
 {
 	public static async CheckName( connection : IConnection, name : string ) : Promise< any >
 	{
-		PlayerService.ValidateName( name );
+		let result = await PlayerService.CheckName( name );
 
-		let count = await DatabaseService.GetRepository( Entity.Player ).count( { name: name } );
-
-		if( count > 0 )
-		{
-			throw new Exception( "Это имя уже занято" );
-		}
+		connection.Send( new Packets.Server.CharacterNameCheckResult( name, result ) );
 	}
 
 	public static async PlayerSelected( connection : IConnection, playerId : number ) : Promise< any >

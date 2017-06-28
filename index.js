@@ -17,28 +17,44 @@ if( process.env.NODE_ENV == 'development' )
 
 global.printf = require( "printf" );
 
-const fs = require( 'fs' );
+const FileSystem = require( 'fs' );
+const Path       = require( 'path' );
 
-let include = ( fileName ) =>
+let include = ( file ) =>
 {
-	if( fileName.substr( fileName.length - 2, 2 ) != 'js' )
-    {
-		return;
-    }
-
-	let typeName = fileName.replace( /\.js$/i, '' );
-
-	let _export = require( './bin/Globals/' + fileName );
+	let _export = require( './bin/' + file );
 
 	if( typeof _export != "undefined" )
 	{
-		global[ typeName ] = _export;
+		global[ Path.basename( file, ".js" ) ] = _export;
 	}
 }
 
-include( 'IdentifiedPool.js' );
+const base_path = './packages/hayate/bin/';
 
-fs.readdirSync( './packages/hayate/bin/Globals/' ).forEach( include );
+let loadGlobals = ( path ) =>
+{
+	FileSystem.readdirSync( base_path + path ).forEach(
+		( file ) =>
+		{
+			let stat = FileSystem.statSync( base_path + path + '/' + file );
+
+			if( stat.isDirectory() )
+			{
+				return loadGlobals( path + '/' + file );
+			}
+
+			if( file.substr( file.length - 2, 2 ) == 'js' )
+			{
+				include( path + '/' + file );
+			}
+		}
+	);
+}
+
+include( 'Globals/IdentifiedPool.js' );
+
+loadGlobals( 'Globals' );
 
 // Temp fix for old RAGE builds
 Vector3 = global[ "Vector3" ];
@@ -46,9 +62,7 @@ Vector3 = global[ "Vector3" ];
 setTimeout(
 	() => 
 	{
-		let Server = require( "./bin/Server" ).Server;
-
-		Server.Main();
+		require( "./bin/Server" ).Server.Main();
 	},
 	100
 );

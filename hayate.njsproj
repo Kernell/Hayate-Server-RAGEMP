@@ -89,6 +89,9 @@
     <TypeScriptCompile Include="Entity\World\Party.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Globals\Enums\Player\PlayerNameCheckResult.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Globals\Log.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -188,6 +191,9 @@
     <TypeScriptCompile Include="Network\Packets\Server\CharacterList.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Server\CharacterNameCheckResult.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\ChatInfo.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -264,9 +270,6 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Security\Account\AccountRoleInterface.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Security\Validator\CharacterNameValidator.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Security\Validator\UserEmailValidator.ts">
@@ -384,6 +387,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entity\World\" />
+    <Folder Include="Globals\Enums\" />
+    <Folder Include="Globals\Enums\Player\" />
     <Folder Include="Logic\Admin\Commands\" />
     <Folder Include="Entity\" />
     <Folder Include="Config\" />

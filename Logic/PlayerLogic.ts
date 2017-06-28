@@ -67,13 +67,24 @@ export class PlayerLogic
 		{
 			if( connection.Account.Players.length > Config.get( "characters:max_per_user" ) )
 			{
-				throw new Exception( "Вы не можете создавать больше персонажей" );
+				connection.Send( new Packets.Server.CharacterCreateResult( PlayerCreateResult.CharacterLimit ) );
+
+				return;
 			}
 		}
 
-		this.CheckName( connection, name );
+		let result = await PlayerService.CheckName( name );
 
+		if( result != PlayerNameCheckResult.Ok )
+		{
+			connection.Send( new Packets.Server.CharacterCreateResult( PlayerCreateResult.NameCheckFailed ) );
+
+			return;
+		}
+	
 		Server.PlayerService.CreateCharacter( connection, name );
+	
+		connection.Send( new Packets.Server.CharacterCreateResult( PlayerCreateResult.Ok ) );
 	}
 
 	public static async CharacterList( connection : IConnection ) : Promise< void >

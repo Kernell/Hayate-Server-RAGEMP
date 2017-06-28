@@ -89,6 +89,9 @@
     <TypeScriptCompile Include="Entity\World\Party.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Globals\Enums\Player\PlayerCreateResult.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Globals\Enums\Player\PlayerNameCheckResult.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -186,6 +189,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\AuthComplete.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Server\CharacterCreateResult.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\CharacterList.ts">

@@ -52,7 +52,7 @@ export class OpCodes
 
 		// Character
 		this.Send.set( Packets.Server.CharacterList,            0xB38E );
-		this.Send.set( Packets.Server.CharacterNameCheckResult, 0x0000 );
+		this.Send.set( Packets.Server.CharacterNameCheckResult, 0xE315 );
 
 		// Chat
 		this.Send.set( Packets.Server.ChatMessage,              0x5703 );

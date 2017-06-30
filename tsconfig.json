@@ -1,16 +1,24 @@
 {
-	"compilerOptions":
-	{
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"module": "commonjs",
-		"noEmitOnError": true,
-		"noImplicitAny": false,
-		"outDir": "./bin",
-		"removeComments": false,
-		"sourceMap": true,
-		"target": "es2016"
-	},
+    "compilerOptions":
+    {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "module": "commonjs",
+        "noEmitOnError": true,
+        "noImplicitAny": false,
+        "outDir": "./bin",
+        "removeComments": false,
+        "sourceMap": true,
+        "target": "es2016",
+        "baseUrl": ".",
+        "paths":
+        {
+            "*":
+            [
+                "*"
+            ]
+        }
+    },
 	"compileOnSave": true,
 	"exclude":
 	[

@@ -146,6 +146,7 @@ export class PlayerService extends ServiceBase
 
 	public PlayerEnterWorld( player : Entity.Player ) : void
 	{
+		player.Spawn();
 	}
 
 	public PlayerEndGame( player : Entity.Player ) : void

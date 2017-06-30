@@ -197,6 +197,9 @@
     <TypeScriptCompile Include="Network\Packets\Server\CharacterDelete.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Server\CharacterInit.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\CharacterList.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

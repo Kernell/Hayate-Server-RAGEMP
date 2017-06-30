@@ -37,7 +37,11 @@ export class PlayerLogic
 
 		connection.Player.Connection = connection;
 
-		return Server.PlayerService.InitPlayer( connection.Player as Entity.Player );
+		await Server.PlayerService.InitPlayer( connection.Player as Entity.Player );
+
+		connection.Send( new Packets.Server.CharacterInit( connection.Player as Entity.Player ) );
+
+		//Server.QuestLogic.ResendQuestData( connection.Player );
 	}
 
 	public static async RemovePlayer( connection : IConnection, playerId : number ) : Promise< any >

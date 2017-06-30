@@ -65,6 +65,9 @@
     <Content Include="Config\production.json">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Config\RespawnPoints.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Config\test.json">
       <SubType>Code</SubType>
     </Content>
@@ -192,6 +195,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\CharacterCreateResult.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Server\CharacterDeath.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\CharacterDelete.ts">

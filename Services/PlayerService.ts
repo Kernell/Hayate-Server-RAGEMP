@@ -18,9 +18,12 @@ import { ServiceBase }            from "./ServiceBase";
 import { DatabaseService }        from "./DatabaseService";
 import { PlayerLogic }            from "../Logic/PlayerLogic";
 
+type RespawnPoint = { Position : Vector3, Rotation : Vector3, Dimension : number };
+
 export class PlayerService extends ServiceBase
 {
 	private playerExperience : [ { Level : number, Experience : number } ];
+	private respawnPoints    : RespawnPoint[];
 	private repository       : ORM.Repository< Entity.Player >      = null;
 
 	private static playersOnline = new Array< Entity.Player >();
@@ -127,6 +130,19 @@ export class PlayerService extends ServiceBase
 	{
 		this.playerExperience = require( "../../Config/playerExperience.json" );
 		this.repository       = DatabaseService.GetRepository( Entity.Player );
+		let respawnPoints     = require( "../../Config/respawnPoints.json" );
+
+		for( let point of respawnPoints )
+		{
+			let newPoint =
+			{
+				Position  : new Vector3( point.Position[ 0 ], point.Position[ 1 ], point.Position[ 2 ] ),
+				Rotation  : new Vector3( point.Rotation[ 0 ], point.Rotation[ 1 ], point.Rotation[ 2 ] ),
+				Dimension : point.Dimension,
+			};
+
+			this.respawnPoints.push( newPoint as RespawnPoint );
+		}
 	}
 
 	public async InitPlayer( player : Entity.Player ) : Promise< any >
@@ -173,7 +189,40 @@ export class PlayerService extends ServiceBase
 
 	public PlayerDeath( player : Entity.Player, reason : string, killer : Entity.Player ) : void
 	{
-		player.Spawn( new Vector3( -425.517, 1123.620, 325.8544 ), new Vector3(), 0 );
+		player.Connection.Send( new ServerPackets.CharacterDeath() );
+	}
+
+	public Resurrect( player : Entity.Player, type : number ) : void
+	{
+		let respawnPoint = this.GetRespawnPoint( player );
+
+		if( respawnPoint == null )
+		{
+			return;
+		}
+
+		player.Spawn( respawnPoint.Position, respawnPoint.Rotation, respawnPoint.Dimension );
+	}
+
+	public GetRespawnPoint( player : Entity.Player ) : RespawnPoint
+	{
+		let respawnPoint : RespawnPoint = null;
+
+		let position = player.GetPosition();
+		let distance = Number.MAX_VALUE;
+
+		for( let point of this.respawnPoints )
+		{
+			let dist = position.Distance( point.Position );
+
+			if( dist < distance )
+			{
+				distance     = dist;
+				respawnPoint = point;
+			}
+		}
+
+		return respawnPoint;
 	}
 
 	public AddExperience( player : Entity.Player, value : number, npc : Entity.Npc = null ) : void

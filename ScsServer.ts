@@ -10,6 +10,8 @@
 *
 *********************************************************/
 
+import * as Entity    from "./Entity";
+import { Server }     from "./Server";
 import { Connection } from "./Network/Connection";
 
 export class ScsServer
@@ -28,6 +30,8 @@ export class ScsServer
 		mp.events.add( "playerJoin",       ( client : IServerClient ) => this.OnConnected( client ) );
 		mp.events.add( "playerQuit",       ( client : IServerClient, type : string, reason : string ) => this.OnDisconnected( client, type, reason ) );
 		mp.events.add( "playerPacketSend", ( client : IServerClient, opcode : number, data : any ) => this.OnMessageReceived( client, opcode, data ) );
+
+		mp.events.add( "playerDeath",      ( client : IServerClient, reason : string, killer : IServerClient ) => this.OnPlayerDeath( client, reason, killer ) );
 	}
 
 	public ShutdownServer() : void
@@ -64,6 +68,23 @@ export class ScsServer
 		if( connection != null )
 		{
 			connection.OnMessageReceived( opcode, data );
+		}
+	}
+
+	private OnPlayerDeath( client : IServerClient, reason : string, killer : mp.Entity ) : void
+	{
+		let connection = this.connections[ client.id ];
+		
+		if( connection != null )
+		{
+			let killerConnection = null;
+			
+			if( killer.type == "player" )
+			{
+				killerConnection = this.connections[ killer.id ];
+			}
+
+			Server.PlayerService.PlayerDeath( connection.Player as Entity.Player, reason, killerConnection ? killerConnection.Player as Entity.Player : null );
 		}
 	}
 }

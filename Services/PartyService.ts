@@ -189,7 +189,12 @@ export class PartyService extends ServiceBase
 
 		for( let member of party.Members )
 		{
-			if( member.GetID() != sender.GetID() && member.Connection != null )
+			if( !member.IsOnline() )
+			{
+				continue;
+			}
+
+			if( sender == null || member.GetID() != sender.GetID() )
 			{
 				member.Connection.Send( packet );
 			}

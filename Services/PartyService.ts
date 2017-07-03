@@ -10,13 +10,14 @@
 *
 *********************************************************/
 
-import * as Entity         from "../Entity";
-import * as ServerPackets  from "../Network/Packets/Server";
-import { Server }          from "../Server";
-import { PlayerLogic }     from "../Logic/PlayerLogic";
-import { PlayerService }   from "./PlayerService";
-import { ServiceBase }     from "./ServiceBase";
-import { DatabaseService } from "./DatabaseService";
+import * as Entity         from "Entity";
+import * as ServerPackets  from "Network/Packets/Server";
+import { SystemMessages }  from "Network/SystemMessages";
+import { Server }          from "Server";
+import { PlayerLogic }     from "Logic/PlayerLogic";
+import { PlayerService }   from "Services/PlayerService";
+import { ServiceBase }     from "Services/ServiceBase";
+import { DatabaseService } from "Services/DatabaseService";
 
 type Party = Entity.World.Party;
 
@@ -42,7 +43,7 @@ export class PartyService extends ServiceBase
 		{
 			if( sendErrors )
 			{
-				//player.Connection.Send( SystemMessages.ThePartyIsFull );
+				player.Connection.Send( SystemMessages.ThePartyIsFull );
 			}
 
 			return false;
@@ -149,9 +150,9 @@ export class PartyService extends ServiceBase
 			return;
 		}
 
-		this.Remove( player.Party );
+		this.SendPacketToPartyMembers( player.Party, SystemMessages.PartyDisbanded );
 
-		// TODO: System message
+		this.Remove( player.Party );
 	}
 
 	public PromotePlayer( promoter : Entity.Player, promotedId : number ) : void
@@ -173,7 +174,7 @@ export class PartyService extends ServiceBase
 			promoter.Party.Members.remove( promoted );
 			promoter.Party.Members.unshift( promoted );
 
-			// TODO: sytem message
+			this.SendPacketToPartyMembers( promoter.Party, SystemMessages.PartyPlayerPromoted( promoter, promoted ) );
 
 			this.Update( promoter.Party );
 		}
@@ -261,7 +262,7 @@ export class PartyService extends ServiceBase
 	{
 		if( player.Party == null )
 		{
-			//player.Connection.Send( SystemMessages.YoureNotInAParty );
+			player.Connection.Send( SystemMessages.YoureNotInAParty );
 
 			return;
 		}

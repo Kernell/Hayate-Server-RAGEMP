@@ -81,5 +81,7 @@ export class OpCodes
 		// Request
 		this.Send.set( Packets.Server.RequestInvite,            0x7EA4 );
 		this.Send.set( Packets.Server.RequestHide,              0xD627 );
+
+		this.Send.set( Packets.Server.SystemMessage,            0xF8D3 );
 	}
 }

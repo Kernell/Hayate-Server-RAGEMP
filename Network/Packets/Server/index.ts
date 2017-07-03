@@ -33,3 +33,5 @@ export * from "./UpdateExp";
 
 export * from "./RequestInvite";
 export * from "./RequestHide";
+
+export * from "./SystemMessage";

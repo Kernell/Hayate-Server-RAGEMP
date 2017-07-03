@@ -274,7 +274,13 @@
     <TypeScriptCompile Include="Network\Packets\Server\ServerPacket.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Server\SystemMessage.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\UpdateExp.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\SystemMessages.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ScsServer.ts">

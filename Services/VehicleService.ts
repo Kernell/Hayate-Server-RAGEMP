@@ -57,17 +57,14 @@ export class VehicleService extends ServiceBase
 	{
 		this.repository = DatabaseService.GetRepository( Vehicle );
 
-		return this.repository.find().then(
-			( vehicles ) =>
-            {
-				for( let vehicle of vehicles )
-				{
-					vehicle.Create();
+		let vehicles = await this.repository.find();
 
-					this.list.push( vehicle );
-				}
-            }
-		);
+		for( let vehicle of vehicles )
+		{
+			vehicle.Create();
+
+			this.list.push( vehicle );
+		}
 	}
 
 	public async Stop() : Promise< any >

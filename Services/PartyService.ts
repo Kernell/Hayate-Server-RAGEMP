@@ -174,7 +174,7 @@ export class PartyService extends ServiceBase
 			promoter.Party.Members.remove( promoted );
 			promoter.Party.Members.unshift( promoted );
 
-			this.SendPacketToPartyMembers( promoter.Party, SystemMessages.PartyPlayerPromoted( promoter, promoted ) );
+			this.SendPacketToPartyMembers( promoter.Party, SystemMessages.PartyPlayerPromoted( promoted, promoter ) );
 
 			this.Update( promoter.Party );
 		}

@@ -94,7 +94,11 @@ export class VehicleService extends ServiceBase
 		return vehicle.Persist( this.repository );
 	}
 
-	private async PlayerExitVehicle( player : PlayerInterface ) : Promise< void >
+	public async PlayerEnterVehicle( player : PlayerInterface, vehicle : Vehicle ) : Promise< void >
+    {
+    }
+
+	public async PlayerExitVehicle( player : PlayerInterface ) : Promise< void >
 	{
 		let vehicle = player.GetVehicle() as Vehicle;
 		let seat    = player.GetVehicleSeat();

@@ -32,6 +32,9 @@ export class ScsServer
 		mp.events.add( "playerPacketSend", ( client : IServerClient, opcode : number, data : any ) => this.OnMessageReceived( client, opcode, data ) );
 
 		mp.events.add( "playerDeath",      ( client : IServerClient, reason : string, killer : IServerClient ) => this.OnPlayerDeath( client, reason, killer ) );
+
+		mp.events.add( "playerEnteredVehicle", ( client : IServerClient, vehicle : mp.Vehicle ) => this.OnPlayerEnterVehicle( client, vehicle ) );
+		mp.events.add( "playerExitVehicle",    ( client : IServerClient ) => this.OnPlayerExitVehicle( client ) );
 	}
 
 	public ShutdownServer() : void
@@ -87,4 +90,24 @@ export class ScsServer
 			Server.PlayerService.PlayerDeath( connection.Player as Entity.Player, reason, killerConnection ? killerConnection.Player as Entity.Player : null );
 		}
 	}
+
+	private OnPlayerEnterVehicle( client : IServerClient, vehicle : mp.Vehicle )
+    {
+		let connection = this.connections[ client.id ];
+		
+		if( connection != null )
+		{
+			Server.VehicleService.PlayerEnterVehicle( connection.Player, Entity.Vehicle.FindOrCreate< Entity.Vehicle >( vehicle ) );
+		}
+    }
+
+	private OnPlayerExitVehicle( client : IServerClient ) : void
+    {
+		let connection = this.connections[ client.id ];
+		
+		if( connection != null )
+		{
+			Server.VehicleService.PlayerExitVehicle( connection.Player );
+		}
+    }
 }

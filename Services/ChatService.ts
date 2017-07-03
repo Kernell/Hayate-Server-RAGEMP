@@ -43,7 +43,7 @@ export class ChatService extends ServiceBase
 			}
 			case ChatType.Party:
 			{
-			//	Server.PartyService.HandleChatMessage( connection, message );
+				Server.PartyService.HandleChatMessage( connection.Player as Entity.Player, message );
 
 				break;
 			}

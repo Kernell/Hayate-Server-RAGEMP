@@ -18,11 +18,11 @@ export class SystemMessage extends ServerPacket
 {
 	private message : string;
 
-	public constructor( message : string )
+	public constructor( message : string, ...args : any[] )
 	{
 		super();
 
-		this.message = message;
+		this.message = printf( message, ...args );
 	}
 
 	public ToJSON()

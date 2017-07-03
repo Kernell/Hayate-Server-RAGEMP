@@ -17,5 +17,5 @@ export class SystemMessages
 	public static YoureNotInAParty                         = new SystemMessage( "Вы не состоите в группе" );
 	public static ThePartyIsFull                           = new SystemMessage( "Нет места в этой группе" );
 	public static PartyDisbanded                           = new SystemMessage( "Группа была расформирована лидером" );
-	public static PartyPlayerPromoted                      = ( promoted : PlayerInterface, promoter : PlayerInterface ) => new SystemMessage( "Группа была расформирована лидером" );
+	public static PartyPlayerPromoted                      = ( promoted : PlayerInterface, promoter : PlayerInterface ) => new SystemMessage( "%s назначил %s лидером группы", promoter.GetName(), promoted.GetName() );
 }

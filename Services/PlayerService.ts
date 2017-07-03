@@ -132,6 +132,8 @@ export class PlayerService extends ServiceBase
 		this.repository       = DatabaseService.GetRepository( Entity.Player );
 		let respawnPoints     = require( "../../Config/respawnPoints.json" );
 
+		this.respawnPoints = [];
+
 		for( let point of respawnPoints )
 		{
 			let newPoint =

@@ -21,12 +21,12 @@ export class RequestAccept extends RecvPacket
 	private id : GUID;
 
 	public Read() : void
-    {
+	{
 		this.id = new GUID( this.data.id as string );
-    }
+	}
 
 	public async Process() : Promise< any >
-    {
+	{
 		Server.RequestLogic.ProcessRequest( this.id, false, this.connection.Player as Entity.Player );
-    }
+	}
 }

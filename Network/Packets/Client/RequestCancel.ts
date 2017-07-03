@@ -21,12 +21,12 @@ export class RequestCancel extends RecvPacket
 	private id : GUID;
 
 	public Read() : void
-    {
+	{
 		this.id = new GUID( this.data.id as string );
-    }
+	}
 
 	public async Process() : Promise< any >
-    {
+	{
 		let request = Server.RequestLogic.GetRequest( this.id );
 
 		if( request == null )
@@ -35,10 +35,10 @@ export class RequestCancel extends RecvPacket
 		}
 
 		if( request.Owner != this.connection.Player )
-        {
+		{
 			return;
-        }
+		}
 
 		Server.RequestLogic.RemoveRequest( request );
-    }
+	}
 }

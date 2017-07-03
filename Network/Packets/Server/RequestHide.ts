@@ -18,14 +18,14 @@ export class RequestHide extends ServerPacket
 	private request : Request;
 
 	public constructor( request : Request )
-    {
+	{
 		super();
 
 		this.request = request;
-    }
+	}
 
 	public ToJSON()
-    {
+	{
 		let result =
 		{
 			id     : this.request.ID,
@@ -35,5 +35,5 @@ export class RequestHide extends ServerPacket
 		};
 
 		return result;
-    }
+	}
 }

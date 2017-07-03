@@ -26,13 +26,13 @@ export class Party extends Request
 	public Accept() : void
 	{
 		if( this.Owner.Party == null && this.Target.Party == null )
-        {
-            Server.PartyService.CreateParty( this.Owner, this.Target );
-        }
-        else if( this.Owner.Party != null )
-        {
-            Server.PartyService.AddPlayerToParty( this.Target, this.Owner.Party );
-        }
+		{
+			Server.PartyService.CreateParty( this.Owner, this.Target );
+		}
+		else if( this.Owner.Party != null )
+		{
+			Server.PartyService.AddPlayerToParty( this.Target, this.Owner.Party );
+		}
 	}
 
 	public Reject() : void

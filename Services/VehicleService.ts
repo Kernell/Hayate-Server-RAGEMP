@@ -35,7 +35,12 @@ export class VehicleService extends ServiceBase
 
 	public Get( id : number ) : Vehicle
 	{
-		return this.list.find( vehicle => vehicle.GetID() == id );
+		return this.Find( vehicle => vehicle.GetID() == id );
+	}
+
+	public Find( predicate : ( vehicle : Vehicle, index : number, obj : Array< Vehicle > ) => boolean ) : Vehicle
+	{
+		return this.list.find( predicate );
 	}
 
 	public GetAll() : Array< Vehicle >

@@ -11,10 +11,10 @@
 *********************************************************/
 
 import * as ORM            from "typeorm";
-import { Server }          from "../Server";
-import { Vehicle }         from "../Entity/Vehicle";
-import { ServiceBase }     from "./ServiceBase";
-import { DatabaseService } from "./DatabaseService";
+import { Server }          from "Server";
+import { Vehicle }         from "Entity/Vehicle";
+import { ServiceBase }     from "Services/ServiceBase";
+import { DatabaseService } from "Services/DatabaseService";
 
 export class VehicleService extends ServiceBase
 {
@@ -94,20 +94,15 @@ export class VehicleService extends ServiceBase
 		return vehicle.Persist( this.repository );
 	}
 
-	private async PlayerExitVehicle( connection : IConnection ) : Promise< void >
+	private async PlayerExitVehicle( player : PlayerInterface ) : Promise< void >
 	{
-		if( connection.Player != null )
+		let vehicle = player.GetVehicle() as Vehicle;
+		let seat    = player.GetVehicleSeat();
+
+		if( seat == 0 && vehicle != null )
 		{
-			let vehicle = connection.Player.GetVehicle() as Vehicle;
-			let seat    = connection.Player.GetVehicleSeat();
-
-			if( seat == 0 && vehicle != null )
-			{
-				vehicle.Persist( this.repository );
-			}
+			vehicle.Persist( this.repository );
 		}
-
-		return null;
 	}
 
 	public static GetRandomNumberPlate() : string

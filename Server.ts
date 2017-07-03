@@ -13,15 +13,16 @@
 import "reflect-metadata";
 
 import * as Config          from "nconf";
-import { ScsServer }        from "./ScsServer";
-import { ServiceBase }      from "./Services/ServiceBase";
-import { AccountService }   from "./Services/AccountService";
-import { ChatService }      from "./Services/ChatService";
-import { DatabaseService }  from "./Services/DatabaseService";
-import { PlayerService }    from "./Services/PlayerService";
-import { PartyService }     from "./Services/PartyService";
-import { VehicleService }   from "./Services/VehicleService";
-import { AdminLogic }       from "./Logic/Admin/AdminLogic";
+import { ScsServer }        from "ScsServer";
+import { ServiceBase }      from "Services/ServiceBase";
+import { AccountService }   from "Services/AccountService";
+import { ChatService }      from "Services/ChatService";
+import { DatabaseService }  from "Services/DatabaseService";
+import { PlayerService }    from "Services/PlayerService";
+import { PartyService }     from "Services/PartyService";
+import { VehicleService }   from "Services/VehicleService";
+import { AdminLogic }       from "Logic/Admin/AdminLogic";
+import { RequestLogic }     from "Logic/Request/RequestLogic";
 
 export class Server
 {
@@ -35,6 +36,7 @@ export class Server
 	public static VehicleService     : VehicleService;
 
 	public static AdminLogic         : AdminLogic;
+	public static RequestLogic       : RequestLogic;
 
 	public static COUNTDOWN_NONE     = 0;
 	public static COUNTDOWN_SHUTDOWN = 1;
@@ -74,6 +76,7 @@ export class Server
 		Server.VehicleService   = new VehicleService();
 
 		Server.AdminLogic       = new AdminLogic();
+		Server.RequestLogic     = new RequestLogic();
 
 		Console.WriteLine( "-----------------------------------------------------------------------------" );
 

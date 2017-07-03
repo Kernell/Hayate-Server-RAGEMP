@@ -45,6 +45,12 @@ export class OpCodes
 		this.Recv.set( 0xF86C, Packets.Client.PartyKick );
 		this.Recv.set( 0xBA24, Packets.Client.PartyPromote );
 
+		// Request
+		this.Recv.set( 0xF9A9, Packets.Client.RequestSend );
+		this.Recv.set( 0x5879, Packets.Client.RequestCancel );
+		this.Recv.set( 0x5B72, Packets.Client.RequestAccept );
+		this.Recv.set( 0xB32B, Packets.Client.RequestReject );
+
 		/*** Server ***/
 
 		// Auth
@@ -71,5 +77,9 @@ export class OpCodes
 		this.Send.set( Packets.Server.PartyMemberPosition,      0xACC1 );
 
 		this.Send.set( Packets.Server.UpdateExp,                0x8FC7 );
+
+		// Request
+		this.Send.set( Packets.Server.RequestInvite,            0x7EA4 );
+		this.Send.set( Packets.Server.RequestHide,              0xD627 );
 	}
 }

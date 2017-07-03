@@ -17,6 +17,8 @@ import { Vehicle } from "./Vehicle";
 import { Account } from "./Account";
 import { Party }   from "./World/Party";
 
+import { Request } from "Logic/Request/Request";
+
 @ORM.Entity( "characters" )
 export class Player implements PlayerInterface
 {
@@ -88,9 +90,16 @@ export class Player implements PlayerInterface
 		this.party = value;
 	}
 
+	public Requests : Array< Request >;
+
 	public Connection : IConnection;
 
 	private entity : mp.Player;
+
+	public constructor()
+	{
+		this.Requests = new Array< Request >();
+	}
 
 	public IsOnline() : boolean
 	{

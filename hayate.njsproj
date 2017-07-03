@@ -98,7 +98,13 @@
     <TypeScriptCompile Include="Globals\Enums\Player\PlayerNameCheckResult.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Globals\Enums\RequestType.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Globals\Log.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Globals\Promise.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Logic\Admin\Commands\Interior.ts">
@@ -118,6 +124,14 @@
       <TestFramework>ExportRunner</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Logic\PlayerLogic.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Logic\Request\RequestLogic.ts" />
+    <TypeScriptCompile Include="Logic\Request\Requests\index.ts" />
+    <TypeScriptCompile Include="Logic\Request\Requests\Party.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Logic\Request\Request.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Connection.ts">
@@ -163,7 +177,19 @@
     <TypeScriptCompile Include="Network\Packets\Client\PartyPromote.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Client\RequestAccept.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Client\RequestCancel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Client\RequestReject.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Client\SelectCharacter.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Client\RequestSend.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\index.ts">
@@ -237,6 +263,12 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\PartyStats.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Server\RequestHide.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Server\RequestInvite.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\ServerPacket.ts">
@@ -410,6 +442,8 @@
     <Folder Include="Logic\Admin\Commands\" />
     <Folder Include="Entity\" />
     <Folder Include="Config\" />
+    <Folder Include="Logic\Request\" />
+    <Folder Include="Logic\Request\Requests\" />
     <Folder Include="Network\" />
     <Folder Include="Logic\" />
     <Folder Include="Logic\Admin\" />

@@ -21,6 +21,7 @@ import { DatabaseService }  from "Services/DatabaseService";
 import { PlayerService }    from "Services/PlayerService";
 import { PartyService }     from "Services/PartyService";
 import { VehicleService }   from "Services/VehicleService";
+import { VisibleService }   from "Services/VisibleService";
 import { AdminLogic }       from "Logic/Admin/AdminLogic";
 import { RequestLogic }     from "Logic/Request/RequestLogic";
 
@@ -34,6 +35,7 @@ export class Server
 	public static AccountService     : AccountService;
 	public static ChatService        : ChatService;
 	public static VehicleService     : VehicleService;
+	public static VisibleService     : VisibleService;
 
 	public static AdminLogic         : AdminLogic;
 	public static RequestLogic       : RequestLogic;
@@ -74,6 +76,7 @@ export class Server
 		Server.PlayerService    = new PlayerService();
 		Server.PartyService     = new PartyService();
 		Server.VehicleService   = new VehicleService();
+		Server.VisibleService   = new VisibleService();
 
 		Server.AdminLogic       = new AdminLogic();
 		Server.RequestLogic     = new RequestLogic();

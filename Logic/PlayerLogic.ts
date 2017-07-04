@@ -11,11 +11,11 @@
 *********************************************************/
 
 import * as Config                from "nconf";
-import * as Entity                from "../Entity";
-import * as Packets               from "../Network/Packets";
-import { Server }                 from "../Server";
-import { PlayerService }          from "../Services/PlayerService";
-import { DatabaseService }        from "../Services/DatabaseService";
+import * as Entity                from "Entity";
+import * as Packets               from "Network/Packets";
+import { Server }                 from "Server";
+import { PlayerService }          from "Services/PlayerService";
+import { DatabaseService }        from "Services/DatabaseService";
 
 export class PlayerLogic
 {
@@ -143,9 +143,9 @@ export class PlayerLogic
         Server.ChatService.ProcessMessage( connection, message, type );
     }
 
-	public static LevelUp( player : PlayerInterface ) : void
+	public static LevelUp( player : Entity.Player ) : void
 	{
-        // StreamerService.Send( player, new ServerPackets.LevelUp( player ) );
+         Server.VisibleService.SendPacket( player, new Packets.Server.CharacterLevelUp( player ) );
 		// StatsService.UpdateStats( player );
 		// QuestEngine.PlayerLevelUp( player );
 	}

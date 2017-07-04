@@ -61,7 +61,7 @@ export class ChatService extends ServiceBase
 			}
 			case ChatType.Say:
 			{
-			//	Server.VisibleService.Send( connection, new ServerPackets.ChatMessage( connection.Player, message, type ) );
+				Server.VisibleService.SendPacket( connection.Player as Entity.Player, new Packets.Server.ChatMessage( connection.Player, message, type ) );
 
 				break;
 			}

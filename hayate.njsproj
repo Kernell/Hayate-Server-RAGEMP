@@ -232,6 +232,9 @@
     <TypeScriptCompile Include="Network\Packets\Server\CharacterInit.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Network\Packets\Server\CharacterLevelUp.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Network\Packets\Server\CharacterList.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -432,6 +435,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Globals\WeaponsTint.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Services\VisibleService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Typings\IServerClient.ts">

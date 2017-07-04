@@ -22,6 +22,7 @@ export * from "./CharacterCreateResult";
 export * from "./CharacterDelete";
 export * from "./CharacterInit";
 export * from "./CharacterDeath";
+export * from "./CharacterLevelUp";
 
 export * from "./PartyList";
 export * from "./PartyRemoveMember";

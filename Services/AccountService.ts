@@ -11,18 +11,18 @@
 *********************************************************/
 
 import * as ORM            from "typeorm";
-import * as Entity         from "../Entity";
-import * as Network        from "../Network";
-import { PlayerLogic }     from "../Logic/PlayerLogic";
-import { PlayerService }   from "./PlayerService";
-import { ServiceBase }     from "./ServiceBase";
-import { DatabaseService } from "./DatabaseService";
+import * as Entity         from "Entity";
+import * as Network        from "Network";
+import { PlayerLogic }     from "Logic/PlayerLogic";
+import { PlayerService }   from "Services/PlayerService";
+import { ServiceBase }     from "Services/ServiceBase";
+import { DatabaseService } from "Services/DatabaseService";
 
-import { AuthenticationProvider }        from "../Security/Authentication/AuthenticationProvider";
-import { UsernamePasswordToken }         from "../Security/Token/UsernamePasswordToken";
-import { UserEmailValidator }            from "../Security/Validator/UserEmailValidator";
-import { UserNameValidator }             from "../Security/Validator/UserNameValidator";
-import { UserPasswordValidator }         from "../Security/Validator/UserPasswordValidator";
+import { AuthenticationProvider } from "Security/Authentication/AuthenticationProvider";
+import { UsernamePasswordToken }  from "Security/Token/UsernamePasswordToken";
+import { UserEmailValidator }     from "Security/Validator/UserEmailValidator";
+import { UserNameValidator }      from "Security/Validator/UserNameValidator";
+import { UserPasswordValidator }  from "Security/Validator/UserPasswordValidator";
 
 export class AccountService extends ServiceBase implements AccountManagerInterface
 {
@@ -41,7 +41,7 @@ export class AccountService extends ServiceBase implements AccountManagerInterfa
 		this.roles = [];
 	}
 
-	public async Start() : Promise< any >
+	public async Start() : Promise< void >
 	{
 		this.repository     = DatabaseService.GetRepository( Entity.Account );
 		this.repositoryRole = DatabaseService.GetRepository( Entity.AccountRole );
@@ -50,6 +50,14 @@ export class AccountService extends ServiceBase implements AccountManagerInterfa
 		this.authenticationProvider = new AuthenticationProvider( this );
 
 		this.roles = await this.repositoryRole.find();
+	}
+
+	public async Stop() : Promise< void >
+	{
+	}
+
+	public DoPulse() : void
+	{
 	}
 
 	public LoadByUsername( name : string ) : Promise< AccountInterface >

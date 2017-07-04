@@ -82,6 +82,10 @@ export class VehicleService extends ServiceBase
 		}
 	}
 
+	public DoPulse() : void
+	{
+	}
+
 	public async Create( model : VehicleModel, position : Vector3, rotation : Vector3, dimension : number ) : Promise< Vehicle >
 	{
 		let color = new VehicleColor();

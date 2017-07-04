@@ -27,6 +27,18 @@ export class PartyService extends ServiceBase
 
 	private partyList = new Array<Party>();
 
+	public async Start() : Promise< void >
+	{
+	}
+
+	public async Stop() : Promise< void >
+	{
+	}
+
+	public DoPulse() : void
+	{
+	}
+
 	public CanPlayerJoinParty( player : Entity.Player, party : Party, sendErrors : boolean = true ) : boolean
 	{
 		if( player.Party != null )

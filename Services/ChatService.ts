@@ -11,16 +11,28 @@
 *********************************************************/
 
 import * as ORM            from "typeorm";
-import * as Entity         from "../Entity";
-import * as Packets        from "../Network/Packets";
-import { Server }          from "../Server";
-import { PlayerLogic }     from "../Logic/PlayerLogic";
-import { ServiceBase }     from "./ServiceBase";
-import { PlayerService }   from "./PlayerService";
-import { DatabaseService } from "./DatabaseService";
+import * as Entity         from "Entity";
+import * as Packets        from "Network/Packets";
+import { Server }          from "Server";
+import { PlayerLogic }     from "Logic/PlayerLogic";
+import { ServiceBase }     from "Services/ServiceBase";
+import { PlayerService }   from "Services/PlayerService";
+import { DatabaseService } from "Services/DatabaseService";
 
 export class ChatService extends ServiceBase
 {
+	public async Start() : Promise< void >
+	{
+	}
+
+	public async Stop() : Promise< void >
+	{
+	}
+
+	public DoPulse() : void
+	{
+	}
+
 	public ProcessMessage( connection : IConnection, message : string, type : ChatType ) : void
 	{
 		switch( type )

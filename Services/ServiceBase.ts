@@ -10,9 +10,9 @@
 *
 *********************************************************/
 
-import { Server } from "../Server";
+import { Server } from "Server";
 
-export class ServiceBase implements ServiceInterface
+export abstract class ServiceBase implements ServiceInterface
 {
 	public State : ServiceState;
 
@@ -28,17 +28,7 @@ export class ServiceBase implements ServiceInterface
 		return this.State;
 	}
 	
-	public async Start() : Promise< any >
-	{
-		return null;
-	}
-
-	public async Stop() : Promise< any >
-	{
-		return null;
-	}
-
-	public DoPulse( date : Date ) : void
-	{
-	}
+	public abstract async Start() : Promise< void >;
+	public abstract async Stop() : Promise< void >;
+	public abstract DoPulse( date : Date ) : void;
 }

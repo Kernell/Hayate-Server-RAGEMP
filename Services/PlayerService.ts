@@ -126,7 +126,7 @@ export class PlayerService extends ServiceBase
         return this.playerExperience[ level ].Experience - this.playerExperience[ level - 1 ].Experience;
     }
 
-	public async Start() : Promise< any >
+	public async Start() : Promise< void >
 	{
 		this.playerExperience = require( "../../Config/playerExperience.json" );
 		this.repository       = DatabaseService.GetRepository( Entity.Player );
@@ -145,6 +145,14 @@ export class PlayerService extends ServiceBase
 
 			this.respawnPoints.push( newPoint as RespawnPoint );
 		}
+	}
+
+	public async Stop() : Promise< void >
+	{
+	}
+
+	public DoPulse() : void
+	{
 	}
 
 	public async InitPlayer( player : Entity.Player ) : Promise< any >

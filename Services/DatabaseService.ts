@@ -12,8 +12,8 @@
 
 import * as Config     from "nconf";
 import * as ORM        from "typeorm";
-import * as Entity     from "../Entity";
-import { ServiceBase } from "./ServiceBase";
+import * as Entity     from "Entity";
+import { ServiceBase } from "Services/ServiceBase";
 
 export class DatabaseService extends ServiceBase
 {
@@ -51,6 +51,14 @@ export class DatabaseService extends ServiceBase
 				}
 			);
 		}
+	}
+
+	public async Stop() : Promise< void >
+	{
+	}
+
+	public DoPulse() : void
+	{
 	}
 
 	public static GetRepository< Entity >( entityClassOrName : ORM.ObjectType< Entity > | string ) : ORM.Repository< Entity >
